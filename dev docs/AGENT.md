@@ -13,7 +13,11 @@ CAD files met meerdere versie, die geexporteerd wordne als STL en vervolgens in 
 
 Printchill bied een intuitieve interface die browsen door 3D model thumbnails mogelijk maakt, zoeken, ook filteren op kenmerken of tags. eenmaal een model gekozen, en klik je er op kun je het 3D model rond draaien, zie je envelope afmetingen, kun je zelf wat zaken opmeten aan het 3D model.
 daarnaast kan ik zien welk 3FM file hierbij hoort, welke versies er zijn en welke de laatse is. welk STL file hier bij hoort en welke CAD file solidworks.Printchill managed versies, kan status toekennen om maturity aan te geven.  ook kan ik foto's toevoegen aan het object. om te laten zien dat bijvoorbeeld een bepaald print instelling wel of geen success was op bepaalde punten. jij als SW architect en lead developer gaat hier een MVP voor bouwen.
+- Ga voor nu uit voor solidworks 2026 als CAD applicatie
+- slicer Bambu Studio
 
+### Inspiratie
+doe ook vooral inspiratie op bij andere progammas als Manyfold, Windchill en het windchill part met relaties.
 
 
 # Organisatie en housekeeping
@@ -36,5 +40,35 @@ In deze file plannen we de verschillende use cases weg in de tijd mbt volgorde e
 - ruim niet gebruikte bestanden meteen op.
 
 # Quality control
+
+## Architecture
+-Respect existing module boundaries.
+-Avoid circular dependencies.
+-Prefer reusable services over duplicated logic.
+-Do not introduce new dependencies without justification.
+
+## Reliability
+-Preserve existing functionality when changing code.
+-define unit tests and other tests where use full
+-Add regression tests for confirmed bugs.
+-Handle expected errors and edge cases explicitly.
+-Protect data consistency and transactional integrity.
+
+## Security
+Validate untrusted input.
+Enforce authorization on the server.
+Never hardcode credentials or expose secrets.
+Code Review Rules
+Flag changes that break existing API contracts.
+Flag missing tests for critical business logic.
+Flag duplicated logic and unwanted coupling.
+Flag unsafe database operations.
+Flag missing error handling.
+Flag UI state changes that may cause data loss.
+
+## Verification
+-Run relevant tests and static checks.
+-Report checks that could not run.
+-Do not claim success without verification.
 
 
