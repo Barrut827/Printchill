@@ -1,5 +1,18 @@
 # PrintChill — Use cases
 
+## Inhoudsopgave
+
+- [Doel en scope](#doel-en-scope)
+- [Werkwijze](#werkwijze)
+- [Identificatie en traceerbaarheid](#identificatie-en-traceerbaarheid)
+- [Status en prioriteit](#status-en-prioriteit)
+- [Use-caseregister](#use-caseregister)
+- [Volledig use-casetemplate](#volledig-use-casetemplate)
+  - [UC-XXX — Template: werkwoord + gebruikersdoel](#uc-xxx)
+- [Controle vóór implementatie](#controle-vóór-implementatie)
+
+Concrete use cases worden hier met hun eigen ID en titel toegevoegd zodra ze zijn uitgewerkt.
+
 Dit document bevat de use cases van PrintChill en vormt de basis voor scope, ontwerp, implementatie en verificatie.
 
 ## Doel en scope
@@ -14,6 +27,7 @@ De eerste productcontext is SolidWorks 2026 en Bambu Studio. Dit betekent nog ni
 - Beschrijf het gebruikersdoel en waarneembaar systeemgedrag; leg technische ontwerpkeuzes vast in [[DJF]].
 - Gebruik één primaire gebruikersdoelstelling per use case.
 - Houd dit document, [[ROADMAP]] en de architectuurdocumentatie onderling consistent.
+- Voeg elke nieuwe use case toe aan de inhoudsopgave met een link naar de kop met het unieke ID, bijvoorbeeld `[UC-001 — Model importeren](#uc-001)`. Gebruik het ID als kop en plaats de titel op de regel eronder, zoals in het template. Behoud bovenaan en onderaan elke use case de link `[Back to top](#inhoudsopgave)`.
 - Onderstaande indeling is geïnspireerd op requirementsbeheer in IBM DOORS. Het is een projecttemplate, geen officieel IBM-template.
 
 ## Identificatie en traceerbaarheid
@@ -61,7 +75,11 @@ Er zijn nog geen concrete use cases uitgewerkt of goedgekeurd. Voeg hier bij elk
 > [!info] Gebruik van het template
 > Kopieer onderstaande sectie voor iedere nieuwe use case. Vervang `UC-XXX` door het volgende vrije ID en vul de velden in. Gebruik **Niet van toepassing** met een korte reden waar nodig. Markeer onbekende punten als **Nog te bepalen**; presenteer aannames niet als besluiten.
 
-### UC-XXX — [Werkwoord + gebruikersdoel]
+### UC-XXX
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** [Werkwoord + gebruikersdoel]
 
 #### Metadata
 
@@ -179,6 +197,8 @@ Maak criteria afzonderlijk toetsbaar. Dek relevante alternatieven, fouten, recht
 | Documentrevisie | Datum | Wijziging | Auteur |
 | --- | --- | --- | --- |
 | 0.1 | [JJJJ-MM-DD] | Eerste concept | [Naam of rol] |
+
+[Back to top](#inhoudsopgave)
 
 ## Controle vóór implementatie
 
