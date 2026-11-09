@@ -22,12 +22,13 @@ doe ook vooral inspiratie op bij andere progammas als Manyfold, Windchill en het
 
 # Organisatie en housekeeping
 De volgende bestanden zijn van cruciaal belang en zijn de fundatie van de printchill ontwikkeling. deze zijn te vinden in de dev map.
+alles wat je opschrijft dient kort en bondig en to the point te zijn. pas je schrijfstijl hier op aan.
 
 ## Use Cases.md
 In deze file staan alle use cases beschreven voor printchill. werk hier volgens het IBM Doors template als voorbeeld. voor nieuw features dient altijd eerst een Use Case te worden gemaakt. Geef ze een uniek ID, en houdt statussen bij.
 
 ## Architecture.md
-in deze file beschrijf je architectuur en crucicale elementen van de printchill. Deze houdt je continu up to date.
+in deze file beschrijf je architectuur en crucicale elementen van de printchill. Deze houdt je continu up to date. scrhijf zaken kort en bondig op. voorkom lange uitgebreide wollige teksten. kort bondig , to the point.
 
 ## DJF.md
 Design Justification File (DJF), hierin leg je de rationale vast achter keuzes die je maakt mbt architectuur en andere design keuzes.
