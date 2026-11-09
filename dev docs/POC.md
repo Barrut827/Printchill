@@ -7,6 +7,7 @@
 - [Beoogde flow](#beoogde-flow)
 - [Exportpakket en identificatie](#exportpakket-en-identificatie)
 - [Testplan](#testplan)
+- [POC-R01 — Resultaat STL-header en 3MF-inspectie](#poc-r01)
 - [Succescriteria en besluit](#succescriteria-en-besluit)
 - [Risico’s en open vragen](#risicos-en-open-vragen)
 - [Bronnen](#bronnen)
@@ -15,7 +16,7 @@
 
 Onderzoeken of een eenvoudige SolidWorks-macro de herkomst van een STL betrouwbaar kan vastleggen, en of die identificatie na handmatige import in Bambu Studio nog terug te vinden is in een opgeslagen 3MF-project.
 
-**Status:** testplan; nog niet geïmplementeerd of uitgevoerd. Een werkende macro, voorbeeldbestanden en resultaten moeten nog worden toegevoegd. Dit document beschrijft een technische proef, geen goedgekeurde productfeature. Voor productimplementatie wordt eerst een use case uitgewerkt volgens [[USECASES]].
+**Status:** gedeeltelijk uitgevoerd. Op 2026-11-08 is een bestaande STL van een header-ID voorzien en is het door de gebruiker teruggeleverde Bambu Studio-3MF onderzocht; zie POC-R01. De SolidWorks-macro en de volledige CAD → STL → 3MF-proef zijn nog niet gerealiseerd of geverifieerd. Architectuur wordt pas opgesteld nadat de POC is voltooid. Dit document beschrijft een technische proef, geen goedgekeurde productfeature. Voor productimplementatie wordt eerst een use case uitgewerkt volgens [[USECASES]].
 
 De centrale onderzoeksvraag is:
 
@@ -141,7 +142,7 @@ Registreer voor het opgeslagen printproject apart: projectrevisielabel, Bambu St
 
 ## Testplan
 
-Alle onderstaande tests hebben de status **Niet uitgevoerd**. Bewaar per testrun invoer, uitvoer, manifest, relevante metadatafragmenten en eventuele foutmeldingen.
+Onderstaande tabel beschrijft het testplan. De uitgevoerde deelcontroles staan in de resultaatregistratie; de overige controles zijn **Niet uitgevoerd**. Bewaar per testrun invoer, uitvoer, manifest, relevante metadatafragmenten en eventuele foutmeldingen.
 
 | ID | Handeling | Te controleren resultaat |
 | --- | --- | --- |
@@ -162,9 +163,53 @@ Alle onderstaande tests hebben de status **Niet uitgevoerd**. Bewaar per testrun
 
 | Testrun / datum | Test-ID | Softwareversies | Resultaat | Bewijs / beperking |
 | --- | --- | --- | --- | --- |
-| Nog te bepalen | Nog te bepalen | Nog te bepalen | Niet uitgevoerd | Nog geen testbestanden of werkende macro beschikbaar |
+| POC-R01 / 2026-11-08 | POC-T02, bytecontrole | PowerShell/.NET; SolidWorks niet gebruikt | Geslaagd | Alleen de 80-byte-header gewijzigd; overige bytes identiek; 5.920 driehoeken |
+| POC-R01 / 2026-11-08 | POC-T03, bestandsinspectie | Bambu Studio 02.08.02.61 volgens 3MF-metadata | Geslaagd (deelcontrole) | Bronbestandsnaam en mesh aanwezig; header-ID afwezig. Schaal in de UI en heropenen niet onafhankelijk gecontroleerd |
+| Nog niet uitgevoerd | POC-T01, POC-T04 t/m POC-T12; resterende controles POC-T02/03 | Nog te bepalen | Niet uitgevoerd | Geen volledige macroproef of onafhankelijke UI-verificatie |
 
 Gebruik als resultaat: **Geslaagd**, **Gefaald**, **Geblokkeerd** of **Niet uitgevoerd**. Het ontbreken van de header-ID in 3MF is een geldige onderzoeksuitkomst, maar betekent dat deze identificatieroute niet is aangetoond.
+
+## POC-R01
+
+**Titel:** Resultaat STL-header en 3MF-inspectie
+
+**Datum:** 2026-11-08. Deze deelproef gebruikt een bestaande STL; er is geen SolidWorks-macro gebruikt en geen CAD-bronrelatie bewezen. De gebruiker heeft het 3MF uit Bambu Studio teruggeleverd. Beide bronbestanden zijn alleen gelezen bij de inspectie.
+
+| Controle / parameter | Waarde / waarneming | Betekenis / beperking |
+| --- | --- | --- |
+| STL | `NEO_key_chain_PRCL.STL` | Kopie van bestaande STL; alleen de eerste 80 bytes aangepast |
+| Export-ID in STL-header | `bd87cf6f-f343-4d41-80e9-fd0518fdf1c7` | Niet aangetroffen in de uitgepakte inhoud van het 3MF |
+| 3MF | `NEO_key_chain_PRCL.3mf` | Aangeleverd vanaf de desktop van de gebruiker; niet naar de repository gekopieerd |
+| Applicatie | `BambuStudio-02.08.02.61` | Versie uit de projectmetadata |
+| `source_file` | `NEO_key_chain_PRCL.STL` | Bronverwijzing aanwezig; naam is geen uniek revisiebewijs |
+| Object- en partnaam | `NEO_key_chain_PRCL.STL` | Herkenningspunt, geen bewijs van identieke STL-bytes |
+| `source_object_id` / `source_volume_id` | `0` / `0` | Indexen binnen de bron |
+| `source_offset_x/y/z` | `23.135409861803055 / 23.320085763931274 / 2.7999999523162842` | Gebruikt om de ingebedde mesh terug te plaatsen voor vergelijking |
+| Part-UUID | `92e4941e-b431-42ad-9d35-f5f404e42fa9` | Projectidentificatie; geen bewezen relatie met de STL-export-ID |
+| Driehoeken | STL en 3MF: `5920` | Aantal komt overeen |
+| Geometrievergelijking | Geen verschil bij coördinaten afgerond op drie decimalen in mm, na optellen van source-offsets | Driehoeken als multiset vergeleken, onafhankelijk van volgorde van driehoeken en hoekpunten; geen byte-identiteit of algemene tolerantiebewijsvoering |
+| STL-afmetingen | Circa `46.26884 × 39.01367 × 5.60000 mm` | Meshafmetingen; eenheid geïnterpreteerd als mm |
+| Oorspronkelijke STL als archiefbestand | Niet aanwezig | Geometrie staat in `3D/Objects/object_1.model` |
+| Hash van de bron-STL in het 3MF | Niet gevonden | Exacte STL-revisie niet zelfstandig uit dit project bewezen |
+| Printer / nozzle | `Bambu Lab X1 Carbon` / `0.4 mm` | Printcontext |
+| Procesprofiel / laaghoogte | `BOL-0.20mm Standard @BBL X1C` / `0.2 mm` | Printcontext |
+
+**Conclusie:** de bronbestandsnaam en overeenkomende geometrie ondersteunen de relatie tussen deze STL en dit 3MF. De header-ID is voor deze testrun niet behouden als terugvindbare tekst. De exacte oorspronkelijke STL-bytes en CAD-revisie zijn hiermee niet bewezen. Heropenen, behoud van supports en behoud van bronverwijzingen na opnieuw opslaan zijn nog niet onafhankelijk geverifieerd.
+
+**Vervolgproef:** plaats een unieke export-ID in de STL-bestandsnaam en controleer `source_file` na import, heropenen en opnieuw opslaan. Dit is een te toetsen aanpak, geen vastgesteld productontwerp.
+
+### Bestandsidentificatie van de onderzochte invoer
+
+| Bestand | SHA-256 |
+| --- | --- |
+| NEO_key_chain_PRCL.STL | `BF33F4D7DAAB7F2E1BA440F6B83247B3E4CE132FFBFD63965C290668E134B082` |
+| NEO_key_chain_PRCL.3mf | `31BCB31E1BFCF568ACFAC07030C64CB52E56E6E8C209FF67C704BE49C01E8DA2` |
+
+### Volledig parameteroverzicht
+
+De volledige extractie staat in het [doorzoekbare HTML-parameteroverzicht](NEO_key_chain_PRCL_3mf_parameters.html). Open dit bestand in een browser. Het overzicht heeft een zoekveld, vaste kolomkoppen en afzonderlijk scrollbare, inklapbare secties. De grote geometriesectie is standaard ingeklapt. Alle tabelwaarden van POC-R01 zijn behouden. De oorspronkelijke Markdown-extractie staat in [het losse parameterbestand](../NEO_key_chain_PRCL_3mf_parameters.md).
+
+[Back to top](#inhoudsopgave)
 
 ## Succescriteria en besluit
 
@@ -194,7 +239,7 @@ Een geslaagde CAD → STL-proef maakt de volledige CAD → STL → 3MF-keten nog
 
 ## Risico’s en open vragen
 
-- **Behoud STL-header:** nog niet getest; Bambu Studio kan de geometrie inlezen zonder de oorspronkelijke header te bewaren.
+- **Behoud STL-header:** in POC-R01 is de header-ID niet teruggevonden in het teruggeleverde 3MF (Bambu Studio 02.08.02.61). Dit resultaat geldt voor deze testrun; behoud bij andere flows of versies is niet vastgesteld.
 - **ID versus inhoud:** een behouden ID kan bij gewijzigde geometrie horen. Gebruik de ID nooit als vervanging van inhoudscontrole.
 - **Eigen metadata in 3MF:** niet aannemen dat Bambu Studio onbekende velden bij opnieuw opslaan bewaart. In deze proef wijzigen we de 3MF niet.
 - **Printeroptimalisaties:** een nieuwe STL kan geschilderde supports, kleuring en andere geometriegebonden instellingen ongeldig maken. Geen automatische overname claimen.
