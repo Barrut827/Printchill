@@ -251,6 +251,7 @@ Een geslaagde CAD → STL-proef maakt de volledige CAD → STL → 3MF-keten nog
 
 ## Bronnen
 
+- [[3MF_METADATA_RESEARCH]] — vervolgonderzoek naar eigen 3MF-identificatie, standaardmetadata, verschillen tussen slicers en nog uit te voeren roundtriptests.
 - [SOLIDWORKS API-support](https://www.solidworks.com/sw/support/api-support.htm) — officiële ingang voor API-documentatie en ondersteuning.
 - [SolidWorks-exportvoorbeeld](https://www.codestack.net/solidworks-api/import-export/export-multi-formats/) — technisch voorbeeld van export via de API; geen validatie van onze macro.
 - [Bambu Studio 3MF-broncode](https://github.com/bambulab/BambuStudio/blob/master/src/libslic3r/Format/bbs_3mf.cpp) — onder meer projectmetadata en `source_file`; interne implementatie, geen garantie voor behoud van STL-headers.

@@ -7,11 +7,12 @@
 - [Identificatie en traceerbaarheid](#identificatie-en-traceerbaarheid)
 - [Status en prioriteit](#status-en-prioriteit)
 - [Use-caseregister](#use-caseregister)
+- [UC-001 — SolidWorks-metadata read-only naar JSON exporteren](#uc-001)
 - [Volledig use-casetemplate](#volledig-use-casetemplate)
   - [UC-XXX — Template: werkwoord + gebruikersdoel](#uc-xxx)
 - [Controle vóór implementatie](#controle-vóór-implementatie)
 
-Concrete use cases worden hier met hun eigen ID en titel toegevoegd zodra ze zijn uitgewerkt.
+Nieuwe use cases worden hier met hun eigen ID en titel toegevoegd zodra ze zijn uitgewerkt.
 
 Dit document bevat de use cases van PrintChill en vormt de basis voor scope, ontwerp, implementatie en verificatie.
 
@@ -65,10 +66,52 @@ Een status verandert alleen op basis van het bijbehorende resultaat. Een geslaag
 
 ## Use-caseregister
 
-Er zijn nog geen concrete use cases uitgewerkt of goedgekeurd. Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de detailbeschrijving.
+Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de detailbeschrijving.
 
 | ID | Titel | Primaire actor | Status | Prioriteit | Release | Afhankelijkheden |
 | --- | --- | --- | --- | --- | --- | --- |
+| UC-001 | SolidWorks-metadata read-only naar JSON exporteren | CAD-gebruiker | In uitvoering | Must | Metadata-POC | SolidWorks Design Premium 2026 SP0, Windows 64-bit |
+
+### UC-001
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** SolidWorks-metadata read-only naar JSON exporteren
+
+**Status:** In uitvoering — VBA-bron beschikbaar; compilatie en runtimeverificatie in de doelinstallatie staan nog open. **Prioriteit:** Must voor deze POC. Geen productrelease of formele goedkeuring vastgesteld.
+
+**Doel:** opgeslagen document- en configuratieproperties beschikbaar maken voor een volgende tool zonder het CAD-bronbestand te wijzigen.
+
+**Actor / trigger:** CAD-gebruiker start de macro in SolidWorks Design Premium 2026 SP0.
+
+**Voorwaarden:** een gesloten zelfstandig `.sldprt`, een schrijfbare uitvoermap en de lokale SolidWorks-typebibliotheken. Geen ander geopend document met dezelfde bestandsnaam.
+
+**Hoofdscenario:** gebruiker kiest een gesloten `.sldprt` via de Windows-bestandskiezer en een nieuwe JSON-locatie via een padprompt; macro opent read-only, leest documentproperties, configuratieproperties en summarygegevens, sluit alleen het eigen document zonder opslaan en schrijft UTF-8-JSON. Annuleren van de bestandskiezer stopt zonder export. Gecachete/onopgeloste waarden en uitleesfouten worden zichtbaar gerapporteerd.
+
+**Alternatieven en fouten:** annuleren stopt zonder export; een bestaand uitvoerbestand, al geopend bronbestand of niet-bevestigde read-only toestand blokkeert de export. Propertyfouten geven een gedeeltelijk rapport; een niet uitleesbare groep wordt `null` met foutmelding. Een fatale fout publiceert geen eindbestand en sluit alleen het door de macro geopende document.
+
+**Businessregels / garanties:** geen Save, rebuild, propertysetters of configuratiewissels. Gelijke propertynamen in verschillende scopes blijven apart. Geen afleiding van revisies uit bestandsnamen. Bronbestand blijft behouden; een eerdere gebruikerssave wordt niet teruggedraaid. Geen volledige geometrie- of cut-listdump in deze eerste versie.
+
+| ID | Gegeven / wanneer | Dan | Verificatie |
+| --- | --- | --- | --- |
+| UC-001-AC-01 | Een part met `test123_printchill` wordt uitgelezen | Naam, scope en waarde komen overeen met de Property-dialog | Niet uitgevoerd in SolidWorks |
+| UC-001-AC-02 | Dezelfde naam bestaat op meerdere niveaus | Document- en configuratiewaarden blijven afzonderlijk beschikbaar | Niet uitgevoerd |
+| UC-001-AC-03 | Export bevat Unicode, quotes en control characters | Een JSON-parser leest de oorspronkelijke tekst correct terug | Serializer statisch beoordeeld; runtime nog niet uitgevoerd |
+| UC-001-AC-04 | De uitleesrun wordt afgerond | Bronhash vóór/na gelijk; geen bestaand gebruikersdocument gesloten of opgeslagen | Niet uitgevoerd |
+| UC-001-AC-05 | Bron al geopend, uitvoer bestaat of gebruiker annuleert | Geen overschrijving, geen wijziging van gebruikersdocumenten | Niet uitgevoerd |
+| UC-001-AC-06 | Een waarde is gecachet of een veld is niet uitleesbaar | Status, waarschuwingen/fouten en scope maken de beperking zichtbaar | Niet uitgevoerd |
+
+**Open punten:** exacte API-werking en compilatie onder SP0, gedrag van externe add-ins en actuele versus gecachete properties. Zie [[SOLIDWORKS_JSON_POC]] voor contract en testplan. Ontwerpafweging: [[DJF]].
+
+**Scope-uitbreiding schema 0.2:** interne opslaggegevens, Windows-bestandsgegevens, configuratiedetails/materialen, releasehistorie, directe referenties, vergelijkingen, actieve feature-/cut-list-inventaris en bodygegevens. Daarmee vervangt deze uitbreiding de eerdere afbakening die cut-lists en alle geometriegegevens uitsloot. Volledige geometrie, massa en inactieve configuratiegeometrie blijven buiten scope. De basisexport is door de gebruiker uitgevoerd; uitbreiding nog niet runtimegeverifieerd. AC-04 blijft open: `read_only`/dirty-flags bewijzen geen gelijke bronhash.
+
+| ID | Gegeven / wanneer | Dan | Verificatie |
+| --- | --- | --- | --- |
+| UC-001-AC-07 | Part met ingevulde opslaggegevens | Interne last saved/by wordt apart van Windows-tijden en runtimeversie weergegeven | Niet uitgevoerd |
+| UC-001-AC-08 | Actieve configuratie bevat bodies en features | Inventaris, cut-list-properties en benaderende bounds zijn gelabeld met hun actieve-configuratiecontext | Niet uitgevoerd |
+| UC-001-AC-09 | Een optioneel veld is niet beschikbaar | De overige groepen worden geëxporteerd en de beperking verschijnt expliciet | Niet uitgevoerd |
+
+[Back to top](#inhoudsopgave)
 
 ## Volledig use-casetemplate
 
