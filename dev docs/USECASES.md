@@ -8,11 +8,11 @@
 - [Status en prioriteit](#status-en-prioriteit)
 - [Use-caseregister](#use-caseregister)
 - [UC-001 — SolidWorks-metadata read-only naar JSON exporteren](#uc-001)
+- [UC-002 — Part aanmaken, reviseren en voorbereiden voor printen](#uc-002)
+- [UC-003 — Feedback op een printrun vastleggen](#uc-003)
 - [Volledig use-casetemplate](#volledig-use-casetemplate)
   - [UC-XXX — Template: werkwoord + gebruikersdoel](#uc-xxx)
 - [Controle vóór implementatie](#controle-vóór-implementatie)
-
-Nieuwe use cases worden hier met hun eigen ID en titel toegevoegd zodra ze zijn uitgewerkt.
 
 Dit document bevat de use cases van PrintChill en vormt de basis voor scope, ontwerp, implementatie en verificatie.
 
@@ -71,6 +71,8 @@ Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de det
 | ID | Titel | Primaire actor | Status | Prioriteit | Release | Afhankelijkheden |
 | --- | --- | --- | --- | --- | --- | --- |
 | UC-001 | SolidWorks-metadata read-only naar JSON exporteren | CAD-gebruiker | In uitvoering | Must | Metadata-POC | SolidWorks Design Premium 2026 SP0, Windows 64-bit |
+| UC-002 | Part aanmaken, reviseren en voorbereiden voor printen | CAD-engineer | Concept | Nog te bepalen | Nog te bepalen | SolidWorks 2026, Bambu Studio, beheerde opslag |
+| UC-003 | Feedback op een printrun vastleggen | CAD-engineer / productiemedewerker | Concept | Nog te bepalen | Nog te bepalen | UC-002, 3MF-parameters en bijlagen |
 
 ### UC-001
 
@@ -240,6 +242,315 @@ Maak criteria afzonderlijk toetsbaar. Dek relevante alternatieven, fouten, recht
 | Documentrevisie | Datum | Wijziging | Auteur |
 | --- | --- | --- | --- |
 | 0.1 | [JJJJ-MM-DD] | Eerste concept | [Naam of rol] |
+
+[Back to top](#inhoudsopgave)
+
+
+
+
+### UC-002
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Part aanmaken, reviseren en voorbereiden voor printen
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-002 |
+| Titel | Part aanmaken, reviseren en voorbereiden voor printen |
+| Status | Concept |
+| Prioriteit | Nog te bepalen |
+| Beoogde release | Nog te bepalen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-12 |
+| Goedkeuring | Nog niet goedgekeurd |
+
+#### Doel en waarde
+
+De CAD-engineer bewaart een ontwerp met herleidbare CAD-, STL- en 3MF-revisies en ziet de printgegevens bij het part terug.
+
+#### Actoren
+
+| Rol | Betrokkenheid |
+| --- | --- |
+| Primaire actor | CAD-engineer |
+| Overige actoren | SolidWorks 2026, Bambu Studio en de door de engineer bediende printer |
+
+#### Trigger
+
+De engineer kiest in de SolidWorks-ribbon **Save to Printchill** voor een nieuw part of **Save & push to Printchill** voor een volgende revisie.
+
+#### Voorwaarden
+
+- SolidWorks bevat het te bewaren part en de gebruiker heeft STL-exportinstellingen gekozen.
+- De PrintChill-opslag is bereikbaar en schrijfbaar.
+- Bambu Studio is beschikbaar voor **Prepare to print**.
+
+#### Resultaat bij succes
+
+- Het partoverzicht toont partnummer, thumbnail, CAD- en STL-revisies en het gekoppelde 3MF-project met beschikbare printgegevens.
+- De engineer kan het voorbereide bestand naar de printer sturen en de status **First printed** vastleggen.
+
+#### Garanties bij mislukking
+
+- Eerdere geregistreerde revisies blijven beschikbaar.
+- Een gedeeltelijke opslag of export krijgt een foutstatus en kan gecontroleerd worden hervat.
+- Onzekere bronrelaties worden aan de gebruiker voorgelegd.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Maakt en tekent een nieuw part in SolidWorks | SolidWorks biedt het actieve part aan de PrintChill-integratie aan |
+| 2 | Kiest Save to Printchill | Controleert het partnummer in de partmetadata |
+| 3 | Bevestigt Generate part number bij een ontbrekend nummer | Genereert een willekeurig uniek partnummer en eerste revisie, hernoemt het part en slaat het op de PrintChill-locatie op |
+| 4 | Wacht op registratie | Schrijft partnummer en revisie in de afgesproken metadata, registreert een tijdstip en maakt een isometrische thumbnail |
+| 5 | Wacht op STL-export | Exporteert met de ingestelde SolidWorks-opties, bewaart de STL in PrintChill en neemt partnummer en revisie op in de STL-header |
+| 6 | Wijzigt het part en kiest Save & push to Printchill | Herkent het bestaande part, maakt op de achtergrond een Save As voor de nieuwe CAD-revisie en actualiseert de revisiemetadata |
+| 7 | Wacht op de nieuwe registratie | Registreert tijdstip en thumbnail, exporteert opnieuw en bewaart de STL als partnummer-naam-revisie.STL met identificatie in de header |
+| 8 | Opent het partoverzicht en kiest Prepare to print naast de gewenste STL | Toont de creatie met thumbnail, partnummer en bestanden en opent de gekozen STL in Bambu Studio |
+| 9 | Past printinstellingen aan en bewaart het project | Detecteert het 3MF-bestand, leest de bronverwijzing partnummer-naam-revisie.STL en koppelt de specifieke STL-revisie aan het printproject |
+| 10 | Bekijkt het partoverzicht | Toont beschikbaar printmateriaal, printduur, filamentgewicht, filamentlengte en aantal platen uit het 3MF |
+| 11 | Stuurt het bestand naar de printer en print het part | Houdt de geregistreerde bronrelaties beschikbaar |
+| 12 | Beoordeelt het geprinte part en constateert afwijkingen | Biedt de betreffende revisie en het printproject aan als context voor [[#UC-003]] |
+
+#### Alternatieve scenario’s
+
+| ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
+| --- | --- | --- | --- | --- |
+| A1 | 3 | Partnummer bestaat al | Gebruikt het bestaande nummer en bepaalt de volgende revisie | Verder bij stap 4 |
+| A2 | 3 | Gebruiker annuleert nummergeneratie | Beëindigt de registratie | Part blijft beschikbaar in SolidWorks |
+| A3 | 6 | Eerste revisie is gereed voor printen | Gebruiker opent direct het partoverzicht | Verder bij stap 8 |
+| A4 | 11 | Engineer wil de eerste print markeren | Zet de partstatus op First printed | Status zichtbaar in PrintChill |
+
+#### Fouten en uitzonderingen
+
+| ID | Vanaf stap | Foutconditie | Systeemreactie en herstel | Gevolg voor gegevens |
+| --- | --- | --- | --- | --- |
+| E1 | 3–7 | Opslag of export mislukt | Toont de mislukte stap en biedt herhalen aan | Eerdere revisies blijven behouden |
+| E2 | 8 | Bambu Studio kan de STL niet openen | Toont de fout en de gekozen STL | Geregistreerde bestanden blijven beschikbaar |
+| E3 | 9 | Bronverwijzing ontbreekt of is ambigu | Vraagt de gebruiker de bronrevisie te bevestigen | Relatie blijft open tot bevestiging |
+| E4 | 10 | Printgegevens ontbreken in 3MF | Toont welke gegevens beschikbaar en onbekend zijn | Beschikbare gegevens blijven zichtbaar |
+
+#### Businessregels
+
+- Het partnummer identificeert het part over revisies heen.
+- CAD, STL en 3MF hebben onafhankelijke revisies. Iedere afleiding verwijst naar concrete bronrevisies.
+- De STL-header draagt het partnummer en de revisie van de export.
+- De koppeling vanuit 3MF moet de gekozen STL-revisie herleiden.
+- Revisieregistratie bewaart een tijdstip en een isometrische thumbnail.
+
+#### Gegevens en relaties
+
+| Gegeven | Gebruik | Validatie of invariant |
+| --- | --- | --- |
+| Partnummer en revisiemetadata | Identiteit en herkenning | Uniek partnummer, concrete revisie, exacte veldnamen nog te bepalen |
+| SLDPRT-revisie | CAD-bron | Eerdere revisies blijven raadpleegbaar |
+| STL-revisie | Printgeometrie | Verwijst naar de gebruikte CAD-revisie |
+| 3MF-revisie | Slicerproject | Verwijst naar gebruikte STL-revisie(s) |
+| Thumbnail en tijdstip | Herkenning | Gebonden aan de geregistreerde revisie |
+| Printgegevens | Partoverzicht | Eenheden en plaatcontext zichtbaar |
+
+#### Rechten en kwaliteitsvoorwaarden
+
+- **Toegang:** engineer heeft lees- en schrijfrechten op de gekozen opslag.
+- **Dataconsistentie:** registratie maakt zichtbaar welke CAD-opslag en STL-export voltooid zijn.
+- **Gebruiksgemak en toegankelijkheid:** de gekozen revisie is herkenbaar naast Prepare to print.
+- **Prestaties en grenzen:** nog te bepalen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-002-AC-01 | Part zonder nummer | Engineer bevestigt nummergeneratie | Uniek nummer en revisie staan in metadata en het part is onder het nummer opgeslagen | Niet uitgevoerd |
+| UC-002-AC-02 | Opgeslagen part | STL-export slaagt | STL gebruikt de ingestelde exportopties en bevat nummer en revisie in de header | Niet uitgevoerd |
+| UC-002-AC-03 | Bestaand part met revisie | Engineer bewaart een wijziging | Nieuwe CAD- en STL-revisies, tijdstip en thumbnail zijn beschikbaar naast eerdere revisies | Niet uitgevoerd |
+| UC-002-AC-04 | Geregistreerde STL | Engineer kiest Prepare to print | Bambu Studio opent de gekozen STL | Niet uitgevoerd |
+| UC-002-AC-05 | 3MF met herleidbare bronverwijzing | Het project wordt gedetecteerd | De relatie wijst naar de gebruikte STL-revisie | Niet uitgevoerd |
+| UC-002-AC-06 | 3MF met printgegevens | Het project wordt geanalyseerd | Materiaal, duur, gram, meter en plaatcount verschijnen met eenheden en context | Niet uitgevoerd |
+| UC-002-AC-07 | Geprint part | Engineer kiest First printed | Partstatus is opgeslagen en zichtbaar | Niet uitgevoerd |
+| UC-002-AC-08 | Opslagfout of onzekere 3MF-bron | Registratie wordt uitgevoerd | Fout of open relatie is zichtbaar en eerdere revisies blijven beschikbaar | Niet uitgevoerd |
+
+#### Afhankelijkheden en afbakening
+
+- **Afhankelijk van:** SolidWorks-integratie, beheerde opslag, STL-export, Bambu Studio en 3MF-detectie.
+- **Gerelateerde use cases:** [[#UC-001]] levert metadataonderzoek, [[#UC-003]] registreert feedback na printen.
+- **Buiten scope:** printeraansturing vanuit PrintChill en automatische maatbeoordeling.
+- **Ontwerpbesluiten:** [[DJF]] en [[3MF_METADATA_RESEARCH]] leveren onderzoek voor de integratie.
+- **Planning:** nog te bepalen in [[ROADMAP]].
+
+#### Open vragen en aannames
+
+| ID | Vraag of aanname | Eigenaar | Status en besluit |
+| --- | --- | --- | --- |
+| UC-002-Q-01 | Welke metadata-veldnamen, nummernotatie en revisieregels gebruiken we? | Nog te bepalen | Open |
+| UC-002-Q-02 | Hoe detecteert PrintChill nieuwe 3MF-bestanden en welke opslaglocaties worden gevolgd? | Nog te bepalen | Open |
+| UC-002-Q-03 | Hoe betrouwbaar blijft de STL-bronverwijzing na opslaan, dupliceren en vervangen in Bambu Studio? | Nog te bepalen | Praktijktest open |
+| UC-002-Q-04 | Welke revisionering en totalen gelden bij meerdere onderdelen, platen en materialen? | Nog te bepalen | Open |
+| UC-002-Q-05 | Wat gebeurt met het actieve SolidWorks-document na Save As en hoe wordt een gedeeltelijke registratie hervat? | Nog te bepalen | Open |
+
+#### Verificatieresultaat
+
+| Datum | Acceptatiecriteria | Controle en resultaat | Bewijs of beperking |
+| --- | --- | --- | --- |
+| 2026-11-12 | UC-002-AC-01 t/m AC-08 | Niet uitgevoerd | Workflow beschreven als concept |
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-12 | Gebruikersworkflow uitgewerkt volgens het template | Gebruiker, redactie Codex |
+
+[Back to top](#inhoudsopgave)
+
+### UC-003
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Feedback op een printrun vastleggen
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-003 |
+| Titel | Feedback op een printrun vastleggen |
+| Status | Concept |
+| Prioriteit | Nog te bepalen |
+| Beoogde release | Nog te bepalen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-12 |
+| Goedkeuring | Nog niet goedgekeurd |
+
+#### Doel en waarde
+
+De engineer of productiemedewerker bewaart meetresultaten, notities, screenshots en foto's bij de daadwerkelijk geprinte revisie en de gebruikte procesinstellingen.
+
+#### Actoren
+
+| Rol | Betrokkenheid |
+| --- | --- |
+| Primaire actor | CAD-engineer of productiemedewerker van een klein bedrijf |
+| Overige actoren | Bambu Studio levert het 3MF-project, SolidWorks en Bambu Studio leveren screenshots |
+
+#### Trigger
+
+Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Create print run** bij het betreffende part.
+
+#### Voorwaarden
+
+- Part, geprinte revisie en gebruikt 3MF-project zijn beschikbaar in PrintChill.
+- De gebruiker heeft meetresultaten of observaties en mag een rapport opslaan.
+
+#### Resultaat bij succes
+
+- Een printrunrapport met procesparameters, metingen en bijlagen is opgeslagen bij de betreffende geprinte revisie.
+
+#### Garanties bij mislukking
+
+- Reeds opgeslagen rapporten blijven beschikbaar.
+- Bij een opslagfout blijft de invoer beschikbaar om opnieuw op te slaan.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Meet het geprinte onderdeel en constateert afwijkingen | Biedt zoeken naar het part aan |
+| 2 | Zoekt het part, opent de laatste opgeslagen versie en controleert de geprinte revisie | Toont revisie en gekoppelde 3MF-projecten |
+| 3 | Kiest Create print run bij de betreffende revisie en het gebruikte project | Opent een rapportvenster voor notities en meetresultaten |
+| 4 | Bekijkt de procesgegevens | Toont bovenaan laaghoogte, temperatuur, materiaal, walls, binnen- en buitenwandsnelheid, retractie-instellingen en first-layer speed uit het 3MF |
+| 5 | Vult gemeten maten en afwijkingen ten opzichte van het 3D-model in | Neemt waarden, eenheden en notities op in het rapport |
+| 6 | Kopieert screenshots uit SolidWorks en Bambu Studio en plakt met Ctrl+V | Voegt de afbeeldingen aan het rapport toe |
+| 7 | Uploadt een foto van het geprinte part | Toont de foto als bijlage |
+| 8 | Kiest + bij de parametertabel en zoekt een aanvullende parameter | Toont alle gevonden 3MF-parameters en filtert op de zoekopdracht |
+| 9 | Selecteert de gewenste parameter | Voegt de parameter met waarde en context aan de tabel toe |
+| 10 | Kiest Save print run en sluit het venster | Bewaart het rapport onder de geprinte revisie met verwijzing naar de gebruikte 3MF-revisie |
+
+#### Alternatieve scenario’s
+
+| ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
+| --- | --- | --- | --- | --- |
+| A1 | 2 | Een eerdere revisie is geprint | Gebruiker selecteert de betreffende revisie | Verder bij stap 3 |
+| A2 | 6–9 | Bijlagen of extra parameters zijn overbodig | Gebruiker slaat de optionele stappen over | Verder bij stap 10 |
+| A3 | 3 | Meerdere 3MF-projecten horen bij het part | Gebruiker selecteert het gebruikte project | Verder bij stap 4 |
+
+#### Fouten en uitzonderingen
+
+| ID | Vanaf stap | Foutconditie | Systeemreactie en herstel | Gevolg voor gegevens |
+| --- | --- | --- | --- | --- |
+| E1 | 4 | 3MF of parameter kan niet worden gelezen | Toont de ontbrekende gegevens en biedt opnieuw selecteren aan | Notities blijven beschikbaar |
+| E2 | 6–7 | Plakken of uploaden mislukt | Toont de fout en biedt opnieuw toevoegen aan | Overige rapportinhoud blijft beschikbaar |
+| E3 | 10 | Opslaan mislukt | Toont de fout en houdt het rapport open voor herhalen | Invoer blijft beschikbaar |
+| E4 | 10 | Revisie of 3MF-relatie ontbreekt | Vraagt selectie van de geprinte broncontext | Definitieve opslag wacht op de bronselectie |
+
+#### Businessregels
+
+- Iedere printrun verwijst naar de daadwerkelijk geprinte revisie en de gebruikte 3MF-revisie.
+- De gebruiker bevestigt de revisie wanneer de laatste opgeslagen versie afwijkt van het geprinte onderdeel.
+- Parameterwaarden behouden hun naam, eenheid en beschikbare object-, materiaal- of plaatcontext.
+- Metingen worden met eenheden en de referentiemaat of beschreven afwijking vastgelegd.
+
+#### Gegevens en relaties
+
+| Gegeven | Gebruik | Validatie of invariant |
+| --- | --- | --- |
+| Printrunrapport | Notities, metingen en afbeeldingen | Gebonden aan concrete part- en 3MF-revisie |
+| Procesparameters | Uitgelezen uit het gekozen 3MF | Herkomst en beschikbare context bewaard |
+| Meetwaarden | Vergelijking met het model | Eenheid en referentie herkenbaar |
+| Screenshots en foto's | Visueel bewijs | Bijlagen gekoppeld aan het rapport |
+
+#### Rechten en kwaliteitsvoorwaarden
+
+- **Toegang:** engineer of productiemedewerker met leesrecht op het part en schrijfrecht voor het rapport.
+- **Dataconsistentie:** rapport, bijlagen en revisieverwijzingen worden als samenhangend resultaat opgeslagen.
+- **Gebruiksgemak en toegankelijkheid:** screenshots zijn via Ctrl+V toe te voegen en parameters via naam te doorzoeken.
+- **Prestaties en grenzen:** ondersteunde afbeeldingsformaten, bestandsgrootten en zoektijd nog te bepalen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-003-AC-01 | Geprinte revisie met 3MF | Gebruiker kiest Create print run | Rapport opent met de geselecteerde broncontext | Niet uitgevoerd |
+| UC-003-AC-02 | Beschikbare procesparameters | Rapport wordt geopend | De genoemde standaardparameters verschijnen bovenaan met waarden en context | Niet uitgevoerd |
+| UC-003-AC-03 | Metingen en notities | Gebruiker vult het rapport in | Waarden, eenheden en afwijkingen zijn vastgelegd | Niet uitgevoerd |
+| UC-003-AC-04 | Screenshot op klembord en fotobestand | Gebruiker plakt en uploadt | Beide afbeeldingen verschijnen en blijven na opslaan beschikbaar | Niet uitgevoerd |
+| UC-003-AC-05 | Aanvullende parameter in 3MF | Gebruiker zoekt via + en selecteert | Parameter en waarde verschijnen in de tabel | Niet uitgevoerd |
+| UC-003-AC-06 | Volledig rapport | Gebruiker bewaart en heropent | Inhoud en bijlagen staan onder de geprinte revisie met de gebruikte 3MF-relatie | Niet uitgevoerd |
+| UC-003-AC-07 | Oudere geprinte revisie | Gebruiker selecteert deze voor registratie | Rapport wordt aan die revisie gekoppeld | Niet uitgevoerd |
+| UC-003-AC-08 | Opslagfout | Gebruiker kiest Save print run | Invoer blijft beschikbaar voor een nieuwe poging | Niet uitgevoerd |
+
+#### Afhankelijkheden en afbakening
+
+- **Afhankelijk van:** geregistreerde part- en 3MF-revisies, parameteruitlezing, klembord en bijlageopslag.
+- **Gerelateerde use cases:** [[#UC-002]] levert de printcontext.
+- **Buiten scope:** automatische CAD-wijzigingen en automatische tolerantiebeoordeling.
+- **Ontwerpbesluiten:** verdere uitwerking in [[DJF]].
+- **Planning:** nog te bepalen in [[ROADMAP]].
+
+#### Open vragen en aannames
+
+| ID | Vraag of aanname | Eigenaar | Status en besluit |
+| --- | --- | --- | --- |
+| UC-003-Q-01 | Welke parameters en eenheden gelden per object, plaat en materiaal? | Nog te bepalen | Open |
+| UC-003-Q-02 | Hoe kiest de gebruiker de werkelijk geprinte 3MF-revisie? | Nog te bepalen | Open |
+| UC-003-Q-03 | Welke meetvelden, bijlageformaten en opslaglimieten zijn vereist? | Nog te bepalen | Open |
+| UC-003-Q-04 | Hoe worden annuleren, rapportwijzigingen en gelijktijdig bewerken afgehandeld? | Nog te bepalen | Open |
+
+#### Verificatieresultaat
+
+| Datum | Acceptatiecriteria | Controle en resultaat | Bewijs of beperking |
+| --- | --- | --- | --- |
+| 2026-11-12 | UC-003-AC-01 t/m AC-08 | Niet uitgevoerd | Workflow beschreven als concept |
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-12 | Gebruikersworkflow uitgewerkt volgens het template | Gebruiker, redactie Codex |
 
 [Back to top](#inhoudsopgave)
 
