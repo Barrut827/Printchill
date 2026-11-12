@@ -10,6 +10,8 @@
 - [UC-001 — SolidWorks-metadata read-only naar JSON exporteren](#uc-001)
 - [UC-002 — Part aanmaken, reviseren en voorbereiden voor printen](#uc-002)
 - [UC-003 — Feedback op een printrun vastleggen](#uc-003)
+- [UC-004 — Een bestaand part openen in SolidWorks of Bambu Studio](#uc-004)
+- [UC-005 — Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren](#uc-005)
 - [Volledig use-casetemplate](#volledig-use-casetemplate)
   - [UC-XXX — Template: werkwoord + gebruikersdoel](#uc-xxx)
 - [Controle vóór implementatie](#controle-vóór-implementatie)
@@ -30,6 +32,7 @@ De eerste productcontext is SolidWorks 2026 en Bambu Studio. Dit betekent nog ni
 - Houd dit document, [[ROADMAP]] en de architectuurdocumentatie onderling consistent.
 - Voeg elke nieuwe use case toe aan de inhoudsopgave met een link naar de kop met het unieke ID, bijvoorbeeld `[UC-001 — Model importeren](#uc-001)`. Gebruik het ID als kop en plaats de titel op de regel eronder, zoals in het template. Behoud bovenaan en onderaan elke use case de link `[Back to top](#inhoudsopgave)`.
 - Onderstaande indeling is geïnspireerd op requirementsbeheer in IBM DOORS. Het is een projecttemplate, geen officieel IBM-template.
+- CRUD beschrijft het use-casetype. Gebruik CRUD-C voor aanmaken, CRUD-R voor lezen, CRUD-U voor bijwerken en CRUD-D voor verwijderen. Neem het type op in de metadata.
 
 ## Identificatie en traceerbaarheid
 
@@ -73,6 +76,8 @@ Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de det
 | UC-001 | SolidWorks-metadata read-only naar JSON exporteren | CAD-gebruiker | In uitvoering | Must | Metadata-POC | SolidWorks Design Premium 2026 SP0, Windows 64-bit |
 | UC-002 | Part aanmaken, reviseren en voorbereiden voor printen | CAD-engineer | Concept | Nog te bepalen | Nog te bepalen | SolidWorks 2026, Bambu Studio, beheerde opslag |
 | UC-003 | Feedback op een printrun vastleggen | CAD-engineer / productiemedewerker | Concept | Nog te bepalen | Nog te bepalen | UC-002, 3MF-parameters en bijlagen |
+| UC-004 | Een bestaand part openen in SolidWorks of Bambu Studio | CAD-engineer | Concept | Nog te bepalen | Nog te bepalen | UC-002, bestanden en applicaties |
+| UC-005 | Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren | CAD-engineer | Concept | Nog te bepalen | Nog te bepalen | UC-004, revisieregistratie en mapdetectie |
 
 ### UC-001
 
@@ -132,6 +137,7 @@ Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de det
 | --- | --- |
 | ID | UC-XXX |
 | Titel | [Korte, doelgerichte naam] |
+| Type | [CRUD-C, CRUD-R, CRUD-U, CRUD-D of combinatie volgens het gebruikersdoel] |
 | Status | Concept |
 | Prioriteit | Nog te bepalen |
 | Beoogde release | Nog te bepalen |
@@ -253,13 +259,13 @@ Maak criteria afzonderlijk toetsbaar. Dek relevante alternatieven, fouten, recht
 [Back to top](#inhoudsopgave)
 
 **Titel:** Part aanmaken, reviseren en voorbereiden voor printen
-
 #### Metadata
 
 | Veld | Waarde |
 | --- | --- |
 | ID | UC-002 |
 | Titel | Part aanmaken, reviseren en voorbereiden voor printen |
+| Type | CRUD-C |
 | Status | Concept |
 | Prioriteit | Nog te bepalen |
 | Beoogde release | Nog te bepalen |
@@ -551,6 +557,317 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 | Documentrevisie | Datum | Wijziging | Auteur |
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-12 | Gebruikersworkflow uitgewerkt volgens het template | Gebruiker, redactie Codex |
+
+[Back to top](#inhoudsopgave)
+
+
+### UC-004
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Een bestaand part openen in SolidWorks of Bambu Studio
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-004 |
+| Titel | Een bestaand part openen in SolidWorks of Bambu Studio |
+| Type | CRUD-R |
+| Status | Concept |
+| Prioriteit | Nog te bepalen |
+| Beoogde release | Nog te bepalen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-12 |
+| Goedkeuring | Nog niet goedgekeurd |
+
+#### Doel en waarde
+
+De engineer opent vanuit PrintChill het CAD-part of het bijbehorende 3MF-project om het te bekijken, te meten en eventueel opnieuw te printen.
+
+#### Actoren
+
+| Rol | Betrokkenheid |
+| --- | --- |
+| Primaire actor | CAD-engineer |
+| Overige actoren | SolidWorks 2026, Bambu Studio en eventueel de printer voor een herhaalprint |
+
+#### Trigger
+
+De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part en kiest het SolidWorks-symbool of Bambu-logo.
+
+#### Voorwaarden
+
+- Het part en de bijbehorende bestanden zijn geregistreerd en bereikbaar.
+- De gebruiker heeft leesrechten op de geselecteerde bestanden.
+- De gekozen applicatie is geïnstalleerd en kan het bestand openen.
+
+#### Resultaat bij succes
+
+- De geselecteerde revisie is in de gekozen applicatie geopend.
+- De engineer kan het model bekijken en maten inspecteren.
+- Bij openen van het 3MF kan de engineer besluiten het project opnieuw te printen en daarna Bambu Studio sluiten.
+
+#### Garanties bij mislukking
+
+- Geregistreerde revisies en relaties blijven beschikbaar.
+- PrintChill toont een mislukte openactie met de betrokken applicatie en het bestand.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Browset in PrintChill en klikt op de thumbnail | Opent de partdetails |
+| 2 | Bekijkt de partdetails | Selecteert automatisch de laatste partversie en toont de bijbehorende bestanden |
+| 3 | Klikt op het SolidWorks-partsymbool | Start SolidWorks of gebruikt de beschikbare sessie en opent het CAD-part van de geselecteerde revisie |
+| 4 | Bekijkt het part en meet kenmerken | SolidWorks biedt weergave en meetfuncties |
+| 5 | Sluit het part | SolidWorks sluit het document volgens de normale applicatieworkflow |
+
+#### Alternatieve scenario’s
+
+| ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
+| --- | --- | --- | --- | --- |
+| A1 | 3 | Engineer kiest het Bambu-logo | PrintChill start Bambu Studio en opent het bijbehorende 3MF van de geselecteerde versie. Engineer bekijkt het bestand, meet kenmerken, kan opnieuw printen en sluit Bambu Studio | Einde |
+| A2 | 2 | Engineer wil een oudere revisie bekijken | Selecteert de oudere revisie en het bijbehorende bestand | Verder bij stap 3 of A1 |
+| A3 | 4 | Engineer besluit wijzigingen te bewaren | Vervolgt met [[#UC-005]] | Nieuwe revisie volgens UC-005 |
+| A4 | 3 / A1 | Meerdere CAD- of 3MF-bestanden zijn gekoppeld | Engineer kiest het gewenste bestand binnen de geselecteerde revisie | Bestand opent in de gekozen applicatie |
+
+#### Fouten en uitzonderingen
+
+| ID | Vanaf stap | Foutconditie | Systeemreactie en herstel | Gevolg voor gegevens |
+| --- | --- | --- | --- | --- |
+| E1 | 2–3 | Bestand ontbreekt of leesrechten ontbreken | Toont welke revisie of welk bestand ontoegankelijk is | Registratie blijft beschikbaar |
+| E2 | 3 / A1 | Applicatie kan niet starten of bestand weigert te openen | Toont de fout en biedt opnieuw proberen aan | Geregistreerde bestanden blijven beschikbaar |
+| E3 | A1 | Bij de gekozen versie ontbreekt een 3MF | Toont dat een slicerproject moet worden geselecteerd of aangemaakt via [[#UC-002]] | Bronrelaties blijven beschikbaar |
+
+#### Businessregels
+
+- Het detailoverzicht opent standaard op de laatste partversie.
+- Het applicatiesymbool opent het bestand van de geselecteerde revisie.
+- Een herhaalprint gebruikt het geopende 3MF-project.
+- Bewaren van ontwerp- of slicerwijzigingen volgt [[#UC-005]].
+
+#### Gegevens en relaties
+
+| Gegeven | Gebruik | Validatie of invariant |
+| --- | --- | --- |
+| Part en revisie | Selectie in het detailoverzicht | Standaard laatste versie, expliciete selectie van oudere versie mogelijk |
+| SLDPRT | Openen in SolidWorks | Bestand behoort bij de geselecteerde revisie |
+| 3MF | Openen in Bambu Studio | Project behoort bij de geselecteerde revisie en bijbehorende bronrelaties |
+| Thumbnail en applicatiesymbolen | Navigatie | Acties verwijzen naar het getoonde part en de geselecteerde revisie |
+
+#### Rechten en kwaliteitsvoorwaarden
+
+- **Toegang:** leesrechten op de geselecteerde revisie en bestanden.
+- **Dataconsistentie:** de openactie gebruikt de in de UI geselecteerde broncontext.
+- **Gebruiksgemak en toegankelijkheid:** revisie en bestandskeuze zijn herkenbaar bij de applicatiesymbolen.
+- **Prestaties en grenzen:** starttijd en gedrag bij reeds geopende documenten nog te bepalen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-004-AC-01 | Part met meerdere revisies | Engineer klikt op de thumbnail | Partdetails tonen standaard de laatste versie | Niet uitgevoerd |
+| UC-004-AC-02 | Geselecteerde CAD-revisie | Engineer klikt op het SolidWorks-symbool | SolidWorks opent het betreffende part, waarna bekijken, meten en sluiten mogelijk zijn | Niet uitgevoerd |
+| UC-004-AC-03 | Geselecteerde versie met 3MF | Engineer klikt op het Bambu-logo | Bambu Studio opent het bijbehorende 3MF, waarna bekijken, meten, eventueel opnieuw printen en sluiten mogelijk zijn | Niet uitgevoerd |
+| UC-004-AC-04 | Eerdere revisie geselecteerd | Engineer opent een bestand | Het bestand van die revisie wordt geopend | Niet uitgevoerd |
+| UC-004-AC-05 | Ontbrekend bestand of falende applicatie | Engineer probeert te openen | PrintChill toont de fout met bestand en applicatie | Niet uitgevoerd |
+
+#### Afhankelijkheden en afbakening
+
+- **Afhankelijk van:** bestandsregistratie en relaties uit [[#UC-002]], bereikbare opslag en applicatie-integratie.
+- **Gerelateerde use cases:** [[#UC-005]] voor wijzigingen, [[#UC-003]] voor printfeedback.
+- **Afbakening:** bekijken, meten en starten van een herhaalprint gebeuren in de geopende applicatie.
+- **Ontwerpbesluiten:** applicatiestart en sessiehergebruik uitwerken in [[DJF]].
+- **Planning:** nog te bepalen in [[ROADMAP]].
+
+#### Open vragen en aannames
+
+| ID | Vraag of aanname | Eigenaar | Status en besluit |
+| --- | --- | --- | --- |
+| UC-004-Q-01 | Welke revisie geldt als laatste bij onafhankelijke CAD-, STL- en 3MF-revisies? | Nog te bepalen | Open |
+| UC-004-Q-02 | Hoe worden bestaande applicatiesessies, reeds geopende bestanden en lokale wijzigingen afgehandeld? | Nog te bepalen | Open |
+| UC-004-Q-03 | Hoe presenteert PrintChill meerdere gekoppelde 3MF-projecten binnen dezelfde versie? | Nog te bepalen | Open |
+
+#### Verificatieresultaat
+
+| Datum | Acceptatiecriteria | Controle en resultaat | Bewijs of beperking |
+| --- | --- | --- | --- |
+| 2026-11-12 | Alle criteria van UC-004 | Niet uitgevoerd | Gebruikersworkflow uitgewerkt, runtimeverificatie staat open |
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-12 | Gebruikersbeschrijving uitgewerkt volgens het template | Gebruiker, redactie Codex |
+
+[Back to top](#inhoudsopgave)
+
+### UC-005
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-005 |
+| Titel | Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren |
+| Type | CRUD-C |
+| Status | Concept |
+| Prioriteit | Nog te bepalen |
+| Beoogde release | Nog te bepalen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-12 |
+| Goedkeuring | Nog niet goedgekeurd |
+
+#### Doel en waarde
+
+De engineer bewaart kleine ontwerp- of printinstellingswijzigingen als nieuwe revisie in PrintChill, met de relatie tussen 3MF, STL en CAD.
+
+#### Actoren
+
+| Rol | Betrokkenheid |
+| --- | --- |
+| Primaire actor | CAD-engineer |
+| Overige actoren | SolidWorks 2026, Bambu Studio, PrintChill-database en gevolgde opslagmap |
+
+#### Trigger
+
+De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of de printinstellingen en kiest **Save PRC** in SolidWorks of **Save** in Bambu Studio.
+
+#### Voorwaarden
+
+- Het bestaande partnummer en de laatste geregistreerde revisie zijn in PrintChill beschikbaar.
+- De gekozen bronrevisie is geopend via [[#UC-004]].
+- De gebruiker heeft schrijfrechten op de gebruikte opslag.
+- Voor de slicerroute volgt PrintChill de map waarin Bambu Studio de 3MF bewaart.
+
+#### Resultaat bij succes
+
+- De CAD-route levert een nieuwe CAD-revisie en bijbehorende STL met identificatie in de header.
+- De slicerroute registreert de nieuwe 3MF-revisie en de relaties naar de gebruikte STL- en CAD-revisies.
+- De nieuwe versie-identificatie is zichtbaar in PrintChill.
+
+#### Garanties bij mislukking
+
+- Eerdere geregistreerde revisies en bronrelaties blijven beschikbaar.
+- Een gedeeltelijke registratie is herkenbaar en kan worden hervat.
+- De gebruiker kan een ontbrekende of ambigue bronrelatie aanvullen.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Opent het part in SolidWorks volgens [[#UC-004]] | Biedt het betreffende part en de bronrevisie aan |
+| 2 | Maakt kleine wijzigingen | SolidWorks bevat de gewijzigde ontwerpstaat |
+| 3 | Klikt op Save PRC | Zoekt het partnummer op in de database en leest de laatste version identifier variable, waarvan de exacte definitie nog te bepalen is |
+| 4 | Wacht op revisieregistratie | Maakt een nieuwe revisie van het bestaande partnummer en schrijft de nieuwe versie-identificatie in het SolidWorks-partattribuut |
+| 5 | Wacht op opslaan en export | Bewaart de nieuwe CAD-revisie, maakt de bijbehorende STL en schrijft partnummer en versie in de STL-header |
+| 6 | Bekijkt het resultaat in PrintChill | Toont de nieuwe revisie met de relatie tussen CAD en STL |
+
+#### Alternatieve scenario’s
+
+| ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
+| --- | --- | --- | --- | --- |
+| A1 | 1 | Wijziging betreft printinstellingen | Volg het onderstaande Bambu Studio-scenario | Nieuwe 3MF-revisie geregistreerd |
+| A2 | 3 | Partnummer is onbekend in de database | Vervolg registratie van het part via [[#UC-002]] | Hervat na registratie van de broncontext |
+| A3 | 5 | Engineer wil nieuwe geometrie in een bestaand Bambu-project herladen | Raadpleeg [[ISSUES#ISS-001]] over Reload from disk bij een gewijzigde STL-naam | Afhandeling wordt na de praktijktest bepaald |
+
+##### Bambu Studio-scenario A1
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| B1 | Opent het 3MF-project volgens [[#UC-004]] | Bambu Studio toont de gekozen projectrevisie |
+| B2 | Maakt kleine wijzigingen aan de printinstellingen | Bambu Studio bevat de aangepaste instellingen |
+| B3 | Klikt op Save in Bambu Studio | Bewaart het 3MF in de gevolgde map |
+| B4 | Wacht op detectie | PrintChill signaleert een nieuw of gewijzigd 3MF via het bestandstijdstip in die map en controleert de opgeslagen inhoud |
+| B5 | Wacht op analyse | Bepaalt welke STL-partnummers en versies in het 3MF worden genoemd |
+| B6 | Wacht op registratie | Legt relaties vast tussen de nieuwe 3MF-revisie, de gebruikte STL-revisie en de bijbehorende CAD-revisie |
+| B7 | Bekijkt de nieuwe versie | Verhoogt de PRC part version ID volgens de nog vast te stellen revisieregels en toont het resultaat |
+
+#### Fouten en uitzonderingen
+
+| ID | Vanaf stap | Foutconditie | Systeemreactie en herstel | Gevolg voor gegevens |
+| --- | --- | --- | --- | --- |
+| E1 | 4–5 | Metadata schrijven, opslaan of STL-export mislukt | Toont de mislukte stap en biedt gecontroleerd hervatten aan | Eerdere revisies blijven beschikbaar, gedeeltelijke registratie is zichtbaar |
+| E2 | B4 | 3MF is nog in opbouw of kan niet worden gelezen | Stelt analyse uit of toont een leesfout en probeert opnieuw zodra het bestand beschikbaar is | Registratie wacht op leesbare inhoud |
+| E3 | B5–B6 | STL-identificatie ontbreekt of verwijst naar meerdere kandidaten | Vraagt bevestiging van de concrete bronrevisie | Relatie blijft open tot bevestiging |
+| E4 | 4 / B7 | Revisie is ondertussen door een andere registratie verhoogd | Controleert opnieuw de actuele revisie en meldt een conflict indien nodig | Unieke revisie-identificatie blijft vereist |
+
+#### Businessregels
+
+- Het opgegeven type CRUD-C beschrijft het aanmaken van een nieuwe revisie bij een wijziging.
+- Het partnummer blijft de identiteit over de revisies heen.
+- De CAD-route schrijft de nieuwe versie in het partattribuut en in de STL-header.
+- De slicerroute bewaart de specifieke bronrelaties tussen 3MF, STL en CAD.
+- Het bestandstijdstip geeft aanleiding tot inhoudscontrole. De revisieregels bepalen wanneer een save een nieuwe revisie oplevert.
+- De door de gebruiker gevraagde verhoging van PRC part version ID bij een slicerwijziging wordt uitgewerkt met behoud van de onafhankelijke bestandsrevisies.
+
+#### Gegevens en relaties
+
+| Gegeven | Gebruik | Validatie of invariant |
+| --- | --- | --- |
+| Partnummer | Database-opzoeking | Verwijst naar het bestaande part |
+| Version identifier variable | Laatste en volgende versie bepalen | Naam, notatie en increment nog te bepalen |
+| SolidWorks-partattribuut | Opslag van de nieuwe versie | Komt overeen met de geregistreerde CAD-revisie |
+| STL-header | Partnummer en versie | Verwijst naar de bijbehorende CAD-export |
+| 3MF-bestand en tijdstip | Detectie en analyse | Inhoud leesbaar vóór definitieve registratie |
+| 3MF → STL → CAD | Traceerbaarheid | Relaties verwijzen naar concrete bestandsrevisies |
+
+#### Rechten en kwaliteitsvoorwaarden
+
+- **Toegang:** engineer heeft leesrecht op de bron en schrijfrecht voor nieuwe revisies.
+- **Dataconsistentie:** herhaalde detectie van dezelfde opgeslagen inhoud krijgt een gecontroleerde afhandeling, revisie-ID's blijven uniek.
+- **Gebruiksgemak en toegankelijkheid:** registratie toont de nieuwe versie of de stap die herstel vereist.
+- **Prestaties en grenzen:** detectievertraging, retrybeleid en ondersteunde maplocaties nog te bepalen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-005-AC-01 | Bestaand CAD-part geopend via UC-004 | Engineer wijzigt het part en kiest Save PRC | PrintChill vindt het partnummer en de laatste versie in de database | Niet uitgevoerd |
+| UC-005-AC-02 | Herkend partnummer | Nieuwe CAD-revisie wordt geregistreerd | Nieuwe versie staat in PrintChill en het SolidWorks-partattribuut | Niet uitgevoerd |
+| UC-005-AC-03 | Gewijzigd CAD-part | Opslaan en export slagen | Bijbehorende STL bevat partnummer en versie in de header en verwijst naar de opgeslagen CAD-revisie | Niet uitgevoerd |
+| UC-005-AC-04 | Bestaand 3MF geopend via UC-004 | Engineer wijzigt printinstellingen en bewaart in de gevolgde map | PrintChill signaleert de bestandswijziging via het tijdstip en analyseert de inhoud | Niet uitgevoerd |
+| UC-005-AC-05 | 3MF met herkenbare STL-bron | Registratie slaagt | Nieuwe 3MF-revisie is gekoppeld aan de juiste STL- en CAD-revisies en de PRC part version ID volgt de vastgestelde revisieregels | Niet uitgevoerd |
+| UC-005-AC-06 | Onzekere STL-bron of leesfout | Analyse wordt uitgevoerd | Fout of open bronrelatie is zichtbaar en herstel kan worden gestart | Niet uitgevoerd |
+| UC-005-AC-07 | Eerdere revisies aanwezig | Een nieuwe registratie deels faalt | Eerdere revisies blijven beschikbaar en gedeeltelijke registratie is herkenbaar | Niet uitgevoerd |
+| UC-005-AC-08 | Nieuwe STL met gewijzigde bestandsnaam | Reload from disk wordt onderzocht | Gedrag en vervolgaanpak staan met testbewijs bij ISS-001 | Niet uitgevoerd |
+
+#### Afhankelijkheden en afbakening
+
+- **Afhankelijk van:** [[#UC-004]], database, SolidWorks-integratie, STL-export en 3MF-mapdetectie.
+- **Gerelateerde use cases:** [[#UC-002]] voor eerste registratie en [[#UC-003]] voor printfeedback.
+- **Afbakening:** ontwerpwijzigingen gebeuren in SolidWorks, printinstellingen worden in Bambu Studio gewijzigd.
+- **Ontwerpbesluiten:** revisiebeleid en detectie uitwerken in [[DJF]], save-detectie onderzocht in [[3MF_METADATA_RESEARCH]].
+- **Planning:** nog te bepalen in [[ROADMAP]], Reload from disk opvolgen via [[ISSUES#ISS-001]].
+
+#### Open vragen en aannames
+
+| ID | Vraag of aanname | Eigenaar | Status en besluit |
+| --- | --- | --- | --- |
+| UC-005-Q-01 | Wat zijn de naam en incrementregels van version identifier variable en het SolidWorks-attribuut? | Nog te bepalen | Open |
+| UC-005-Q-02 | Betekent PRC part version ID bij een 3MF-save een partrevisie, projectrevisie of overkoepelende registratie? | Nog te bepalen | Open, afstemmen op onafhankelijke CAD-, STL- en 3MF-revisies |
+| UC-005-Q-03 | Welke map wordt gevolgd en hoe worden saves met identieke inhoud en herhaalde events behandeld? | Nog te bepalen | Open |
+| UC-005-Q-04 | Hoe blijft de vorige 3MF-revisie beschikbaar bij Save naar hetzelfde pad? | Nog te bepalen | Open |
+| UC-005-Q-05 | Werkt Reload from disk bij een nieuw geëxporteerde STL met andere naam en hoe blijven slicerinstellingen behouden? | Nog te bepalen | Open, [[ISSUES#ISS-001]] |
+
+#### Verificatieresultaat
+
+| Datum | Acceptatiecriteria | Controle en resultaat | Bewijs of beperking |
+| --- | --- | --- | --- |
+| 2026-11-12 | Alle criteria van UC-005 | Niet uitgevoerd | Gebruikersworkflow uitgewerkt, runtimeverificatie staat open |
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-12 | Gebruikersbeschrijving uitgewerkt volgens het template | Gebruiker, redactie Codex |
 
 [Back to top](#inhoudsopgave)
 
