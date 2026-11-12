@@ -1,0 +1,36 @@
+﻿{
+    "tested_at_utc":  "2026-11-12T18:48:03.0179360Z",
+    "process_bits":  64,
+    "license_key_supplied":  false,
+    "status":  "failed",
+    "stage":  "get_application_empty_key",
+    "error":  "Method invocation failed because [System.__ComObject] does not contain a method named \u0027GetApplication\u0027.",
+    "files":  [
+                  {
+                      "name":  "7382-4916 - makita blower wall mount.SLDPRT",
+                      "path":  "C:\\Users\\Gebruiker\\Documents\\software projects\\print_chill\\printchill\\Printchill\\POC material\\7382-4916 - makita blower wall mount.SLDPRT",
+                      "sha256_before":  "5AA0BB6AA72E20B1CEF33FC3E1D9ECFEB41471B30402E27AF78C523FF452FAF9",
+                      "sha256_after":  "5AA0BB6AA72E20B1CEF33FC3E1D9ECFEB41471B30402E27AF78C523FF452FAF9",
+                      "unchanged":  true,
+                      "baseline_schema":  "0.1",
+                      "baseline_properties":  {
+                                                  "name":  "hashkey",
+                                                  "type_code":  30,
+                                                  "type_label":  "text",
+                                                  "raw_value":  "test123-printchill_id",
+                                                  "resolved_value":  "test123-printchill_id",
+                                                  "read_status_code":  2,
+                                                  "read_status":  "resolved",
+                                                  "was_resolved":  true,
+                                                  "linked_to_property":  false,
+                                                  "error":  null
+                                              },
+                      "baseline_error":  null,
+                      "open_status":  "not_attempted",
+                      "open_error_code":  null,
+                      "error":  null
+                  }
+              ],
+    "solidworks_running_before":  false,
+    "solidworks_running_after":  false
+}

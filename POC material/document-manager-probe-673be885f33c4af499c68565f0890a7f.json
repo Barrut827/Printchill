@@ -1,0 +1,36 @@
+﻿{
+    "tested_at_utc":  "2026-11-12T18:50:23.8699569Z",
+    "process_bits":  64,
+    "license_key_supplied":  false,
+    "status":  "document_open_failed",
+    "stage":  "open_documents_read_only",
+    "error":  null,
+    "files":  [
+                  {
+                      "name":  "7382-4916 - makita blower wall mount.SLDPRT",
+                      "path":  "C:\\Users\\Gebruiker\\Documents\\software projects\\print_chill\\printchill\\Printchill\\POC material\\7382-4916 - makita blower wall mount.SLDPRT",
+                      "sha256_before":  "5AA0BB6AA72E20B1CEF33FC3E1D9ECFEB41471B30402E27AF78C523FF452FAF9",
+                      "sha256_after":  "5AA0BB6AA72E20B1CEF33FC3E1D9ECFEB41471B30402E27AF78C523FF452FAF9",
+                      "unchanged":  true,
+                      "baseline_schema":  "0.1",
+                      "baseline_properties":  {
+                                                  "name":  "hashkey",
+                                                  "type_code":  30,
+                                                  "type_label":  "text",
+                                                  "raw_value":  "test123-printchill_id",
+                                                  "resolved_value":  "test123-printchill_id",
+                                                  "read_status_code":  2,
+                                                  "read_status":  "resolved",
+                                                  "was_resolved":  true,
+                                                  "linked_to_property":  false,
+                                                  "error":  null
+                                              },
+                      "baseline_error":  null,
+                      "open_status":  "failed",
+                      "open_error_code":  null,
+                      "error":  "Exception calling \"Open\" with \"4\" argument(s): \"Klasse is niet gelicentieerd voor gebruik (Uitzondering van HRESULT: 0x80040112)\""
+                  }
+              ],
+    "solidworks_running_before":  false,
+    "solidworks_running_after":  false
+}

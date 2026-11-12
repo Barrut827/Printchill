@@ -1,5 +1,6 @@
 param(
-    [string]$InputFolder = (Join-Path $PSScriptRoot '..\POC material')
+    [string]$InputFolder = (Join-Path $PSScriptRoot '..\POC material'),
+    [string]$InteropPath = "$env:ProgramFiles\SOLIDWORKS Corp\SOLIDWORKS\SolidWorks.Interop.swdocumentmgr.dll"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -47,10 +48,38 @@ try {
             error = $null
         }
     }
+    $report.stage = 'load_interop'
+    if (-not (Test-Path -LiteralPath $InteropPath)) {
+        throw 'Document Manager interop ontbreekt. Geef de locatie van SolidWorks.Interop.swdocumentmgr.dll op via -InteropPath.'
+    }
+    # Call the COM interfaces through their type library instead of IDispatch.
+    Add-Type -Path $InteropPath
+    Add-Type -ReferencedAssemblies $InteropPath -TypeDefinition @'
+using SolidWorks.Interop.swdocumentmgr;
+public static class PrintChillDocumentManagerProbe
+{
+    public static object Connect(object factory)
+    {
+        return ((ISwDMClassFactory)factory).GetApplication("");
+    }
+    public static object Open(object application, string path, int kind, out int error)
+    {
+        SwDmDocumentOpenError result;
+        object document = ((ISwDMApplication)application).GetDocument(
+            path, (SwDmDocumentType)kind, true, out result);
+        error = (int)result;
+        return document;
+    }
+    public static void Close(object document)
+    {
+        ((ISwDMDocument)document).CloseDoc();
+    }
+}
+'@
     $report.stage = 'create_factory'
     $factory = New-Object -ComObject 'SwDocumentMgr.SwDMClassFactory'
     $report.stage = 'get_application_empty_key'
-    $application = $factory.GetApplication('')
+    $application = [PrintChillDocumentManagerProbe]::Connect($factory)
     if ($null -eq $application) {
         $report.status = 'empty_key_rejected'
     } else {
@@ -63,7 +92,7 @@ try {
                     '.sldprt' { 1 }; '.sldasm' { 2 }; '.slddrw' { 3 }
                 }
                 $openError = 0
-                $document = $application.GetDocument($item.path, $kind, $true, [ref]$openError)
+                $document = [PrintChillDocumentManagerProbe]::Open($application, $item.path, $kind, [ref]$openError)
                 $item.open_error_code = $openError
                 $item.open_status = if ($null -ne $document -and $openError -eq 0) { 'opened_read_only' } else { 'failed' }
             } catch {
@@ -71,7 +100,7 @@ try {
                 $item.error = $_.Exception.Message
             } finally {
                 if ($null -ne $document) {
-                    try { $document.CloseDoc() } finally { [void][Runtime.InteropServices.Marshal]::FinalReleaseComObject($document) }
+                    try { [PrintChillDocumentManagerProbe]::Close($document) } finally { [void][Runtime.InteropServices.Marshal]::FinalReleaseComObject($document) }
                 }
             }
         }

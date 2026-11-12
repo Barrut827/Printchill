@@ -175,7 +175,24 @@ Printchill → uitleesopdracht → Windows-worker met Document Manager
 
 Na de macroproef: controleer sleuteltoegang en SDK-voorwaarden, lees hetzelfde testpart via Document Manager en vergelijk namen, scopes, raw/resolved waarden en ontbrekende gegevens met de macro-uitvoer. Rapporteer verschillen expliciet voordat een backgroundprocessor wordt gekozen.
 
-**Status:** Document Manager-route nog niet geïmplementeerd, gelicentieerd of getest in dit project.
+**Status 2026-11-12:** sleutelvrije toegang getest en geblokkeerd door de licentiecontrole bij het openen van het part. De worker blijft afhankelijk van een geschikte Document Manager-sleutel.
+
+### Afgeronde proef — Document Manager zonder sleutel
+
+| Onderdeel | Vastgelegde uitkomst |
+| --- | --- |
+| Datum en omgeving | 2026-11-12, Windows, 64-bit PowerShell, lokaal geïnstalleerde Document Manager-interop |
+| Script | [Test-DocumentManager.ps1](../scripts/Test-DocumentManager.ps1), getypeerde COM-aanroepen via SolidWorks.Interop.swdocumentmgr.dll |
+| Testbestand | `POC material/7382-4916 - makita blower wall mount.SLDPRT` |
+| Verbinding | COM-factory en application-object met lege sleutel verkregen |
+| Read-only openen | Gefaald met HRESULT `0x80040112`, “Klasse is niet gelicentieerd voor gebruik” |
+| Broncontrole | SHA-256 vóór en na gelijk |
+| SolidWorks-proces | Gesloten vóór en na de proef |
+| Bewijs | [JSON-testrapport](../POC%20material/document-manager-probe-d813316915454ebb8cbaa8be22b4b4ac.json) |
+
+De eerdere fout “System.__ComObject does not contain a method named GetApplication” is opgelost met getypeerde COM-aanroepen. Daarna trad de bovenstaande licentiefout op bij `GetDocument`.
+
+**Vervolgafspraak:** de sleutelvrije route is hiermee voor de huidige installatie afgerond. Hervat Document Manager-onderzoek zodra een geschikte sleutel beschikbaar is of aantoonbaar gewijzigde leveranciersvoorwaarden of componenten aanleiding geven tot een nieuwe proef. Vergelijk dan de uitgelezen metadata met de VBA-export. Zie ook [proefinstructies en resultaat](../scripts/DocumentManager-POC.md).
 
 ## Bronnen
 

@@ -3,10 +3,16 @@
 Voer uit vanuit de repository, met SolidWorks gesloten:
 
 ```powershell
-powershell.exe -NoProfile -File .\scripts\Test-DocumentManager.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Test-DocumentManager.ps1
 ```
 
 Gebruik 64-bit Windows PowerShell bij een 64-bit Document Manager-installatie. Een andere testmap kan met `-InputFolder 'C:\Tests'`. Het script installeert of registreert niets en gebruikt uitsluitend `SwDocumentMgr.SwDMClassFactory`, met een lege sleutel. CAD-bestanden worden read-only geopend als de application beschikbaar komt. Er wordt geen SolidWorks-automatisering gestart.
+
+De getypeerde COM-aanroepen gebruiken de geïnstalleerde `SolidWorks.Interop.swdocumentmgr.dll`. Bij een afwijkende installatie geef je het volledige DLL-pad op met `-InteropPath`. De tijdelijke ExecutionPolicy-instelling geldt voor het gestarte proces.
+
+## Lokale proef 2026-11-12
+
+De generieke PowerShell-COM-aanroep gaf een ontbrekende methode bij `GetApplication`. Na aanpassing naar getypeerde interfaces wordt met de lege sleutel een application-object verkregen. Het openen van het testpart faalt vervolgens met `0x80040112`, klasse niet gelicentieerd voor gebruik. De bronhash bleef gelijk en SolidWorks draaide vóór en na de proef niet. De sleutelvrije route kon het part op deze installatie dus niet uitlezen.
 
 Een uniek JSON-rapport verschijnt in `POC material`. Het bevat bronhashes, document-openresultaten en de documentproperties uit de bestaande macro-export als referentie. Het script exporteert zelf nog geen Document Manager-properties: deze proef toetst eerst toegang zonder sleutel.
 

@@ -239,6 +239,8 @@ Een geslaagde CAD → STL-proef maakt de volledige CAD → STL → 3MF-keten nog
 
 ## Risico’s en open vragen
 
+- **Document Manager zonder sleutel, afgerond 2026-11-12:** de lokale 64-bit proef verkrijgt een application-object met lege sleutel, maar read-only openen van het testpart faalt met `0x80040112` (klasse niet gelicentieerd). SolidWorks bleef gesloten en de bronhash bleef gelijk. Verder onderzoek naar deze route wordt hervat bij een geschikte sleutel of aantoonbaar gewijzigde leveranciersvoorwaarden/componenten. Uitwerking en testbewijs staan in [[SOLIDWORKS_JSON_POC#Afgeronde proef — Document Manager zonder sleutel]].
+
 - **Behoud STL-header:** in POC-R01 is de header-ID niet teruggevonden in het teruggeleverde 3MF (Bambu Studio 02.08.02.61). Dit resultaat geldt voor deze testrun; behoud bij andere flows of versies is niet vastgesteld.
 - **ID versus inhoud:** een behouden ID kan bij gewijzigde geometrie horen. Gebruik de ID nooit als vervanging van inhoudscontrole.
 - **Eigen metadata in 3MF:** niet aannemen dat Bambu Studio onbekende velden bij opnieuw opslaan bewaart. In deze proef wijzigen we de 3MF niet.
