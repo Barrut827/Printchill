@@ -18,54 +18,7 @@
 
 Dit document bevat de use cases van PrintChill en vormt de basis voor scope, ontwerp, implementatie en verificatie.
 
-## Doel en scope
 
-PrintChill helpt CAD-hobbyisten, zzp’ers en kleine organisaties om CAD-bestanden, STL-bestanden en 3MF-printprojecten te beheren. Bestanden hebben onafhankelijke revisies. Relaties leggen vast welke specifieke bronrevisies bij een afgeleid bestand of printproject horen.
-
-De eerste productcontext is SolidWorks 2026 en Bambu Studio. Dit betekent nog niet dat automatische integraties met deze applicaties zijn besloten.
-
-## Werkwijze
-
-- Beschrijf een nieuwe feature eerst als use case, voordat implementatie begint.
-- Beschrijf het gebruikersdoel en waarneembaar systeemgedrag; leg technische ontwerpkeuzes vast in [[DJF]].
-- Gebruik één primaire gebruikersdoelstelling per use case.
-- Houd dit document, [[ROADMAP]] en de architectuurdocumentatie onderling consistent.
-- Voeg elke nieuwe use case toe aan de inhoudsopgave met een link naar de kop met het unieke ID, bijvoorbeeld `[UC-001 — Model importeren](#uc-001)`. Gebruik het ID als kop en plaats de titel op de regel eronder, zoals in het template. Behoud bovenaan en onderaan elke use case de link `[Back to top](#inhoudsopgave)`.
-- Onderstaande indeling is geïnspireerd op requirementsbeheer in IBM DOORS. Het is een projecttemplate, geen officieel IBM-template.
-- CRUD beschrijft het use-casetype. Gebruik CRUD-C voor aanmaken, CRUD-R voor lezen, CRUD-U voor bijwerken en CRUD-D voor verwijderen. Neem het type op in de metadata.
-
-## Identificatie en traceerbaarheid
-
-| Object | Notatie | Regel |
-| --- | --- | --- |
-| Use case | `UC-001` | Oplopend nummer; eenmaal toegewezen niet wijzigen of hergebruiken |
-| Acceptatiecriterium | `UC-001-AC-01` | Uniek binnen de use case |
-| Open vraag | `UC-001-Q-01` | Vraag met eigenaar en besluit indien bekend |
-| Verificatie | Testnaam of test-ID | Verwijs naar de controle die een acceptatiecriterium daadwerkelijk verifieert |
-
-Gebruik de use-case-ID in roadmapitems, ontwerpbesluiten en relevante tests. Verwijder vervallen use cases niet uit het register; markeer ze als vervallen en vermeld de reden of opvolger.
-
-## Status en prioriteit
-
-| Status | Betekenis |
-| --- | --- |
-| Concept | Eerste uitwerking; aannames en vragen kunnen nog openstaan |
-| Ter beoordeling | Voldoende uitgewerkt om scope en gedrag te beoordelen |
-| Goedgekeurd | Scope en acceptatiecriteria zijn afgestemd en de besluitnemer is vastgelegd |
-| In uitvoering | Implementatie is gestart |
-| Geïmplementeerd | Implementatie beschikbaar; verificatie nog niet volledig afgerond |
-| Geverifieerd | Alle acceptatiecriteria aantoonbaar gecontroleerd; bewijs vastgelegd |
-| Vervallen | Niet meer van toepassing; reden en eventuele opvolger vastgelegd |
-
-Een status verandert alleen op basis van het bijbehorende resultaat. Een geslaagde deeltest maakt een use case nog niet geverifieerd.
-
-| Prioriteit | Betekenis |
-| --- | --- |
-| Must | Nodig voor het afgesproken doel van de betreffende release |
-| Should | Belangrijk, maar de release kan zonder functioneren |
-| Could | Wenselijk als tijd en ruimte beschikbaar zijn |
-| Won’t deze release | Bewust buiten de betreffende release gehouden |
-| Nog te bepalen | Nog niet geprioriteerd |
 
 ## Use-caseregister
 
@@ -893,6 +846,63 @@ deze kolom in ongeveer 20% van UI breedte. de rest bestaat uit "cards" waarin ee
 
 
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+[Back to top](#inhoudsopgave)
+
+## Doel en scope
+
+PrintChill helpt CAD-hobbyisten, zzp’ers en kleine organisaties om CAD-bestanden, STL-bestanden en 3MF-printprojecten te beheren. Bestanden hebben onafhankelijke revisies. Relaties leggen vast welke specifieke bronrevisies bij een afgeleid bestand of printproject horen.
+
+De eerste productcontext is SolidWorks 2026 en Bambu Studio. Dit betekent nog niet dat automatische integraties met deze applicaties zijn besloten.
+
+## Werkwijze
+
+- Beschrijf een nieuwe feature eerst als use case, voordat implementatie begint.
+- Beschrijf het gebruikersdoel en waarneembaar systeemgedrag; leg technische ontwerpkeuzes vast in [[DJF]].
+- Gebruik één primaire gebruikersdoelstelling per use case.
+- Houd dit document, [[ROADMAP]] en de architectuurdocumentatie onderling consistent.
+- Voeg elke nieuwe use case toe aan de inhoudsopgave met een link naar de kop met het unieke ID, bijvoorbeeld `[UC-001 — Model importeren](#uc-001)`. Gebruik het ID als kop en plaats de titel op de regel eronder, zoals in het template. Behoud bovenaan en onderaan elke use case de link `[Back to top](#inhoudsopgave)`.
+- Onderstaande indeling is geïnspireerd op requirementsbeheer in IBM DOORS. Het is een projecttemplate, geen officieel IBM-template.
+- CRUD beschrijft het use-casetype. Gebruik CRUD-C voor aanmaken, CRUD-R voor lezen, CRUD-U voor bijwerken en CRUD-D voor verwijderen. Neem het type op in de metadata.
+
+## Identificatie en traceerbaarheid
+
+| Object | Notatie | Regel |
+| --- | --- | --- |
+| Use case | `UC-001` | Oplopend nummer; eenmaal toegewezen niet wijzigen of hergebruiken |
+| Acceptatiecriterium | `UC-001-AC-01` | Uniek binnen de use case |
+| Open vraag | `UC-001-Q-01` | Vraag met eigenaar en besluit indien bekend |
+| Verificatie | Testnaam of test-ID | Verwijs naar de controle die een acceptatiecriterium daadwerkelijk verifieert |
+
+Gebruik de use-case-ID in roadmapitems, ontwerpbesluiten en relevante tests. Verwijder vervallen use cases niet uit het register; markeer ze als vervallen en vermeld de reden of opvolger.
+
+## Status en prioriteit
+
+| Status | Betekenis |
+| --- | --- |
+| Concept | Eerste uitwerking; aannames en vragen kunnen nog openstaan |
+| Ter beoordeling | Voldoende uitgewerkt om scope en gedrag te beoordelen |
+| Goedgekeurd | Scope en acceptatiecriteria zijn afgestemd en de besluitnemer is vastgelegd |
+| In uitvoering | Implementatie is gestart |
+| Geïmplementeerd | Implementatie beschikbaar; verificatie nog niet volledig afgerond |
+| Geverifieerd | Alle acceptatiecriteria aantoonbaar gecontroleerd; bewijs vastgelegd |
+| Vervallen | Niet meer van toepassing; reden en eventuele opvolger vastgelegd |
+
+Een status verandert alleen op basis van het bijbehorende resultaat. Een geslaagde deeltest maakt een use case nog niet geverifieerd.
+
+[Back to top](#inhoudsopgave)
+
+| Prioriteit | Betekenis |
+| --- | --- |
+| Must | Nodig voor het afgesproken doel van de betreffende release |
+| Should | Belangrijk, maar de release kan zonder functioneren |
+| Could | Wenselijk als tijd en ruimte beschikbaar zijn |
+| Won’t deze release | Bewust buiten de betreffende release gehouden |
+| Nog te bepalen | Nog niet geprioriteerd |
+
+
 ## Controle vóór implementatie
 
 - Het doel, de actoren, trigger en voorwaarden zijn duidelijk.
@@ -902,3 +912,5 @@ deze kolom in ongeveer 20% van UI breedte. de rest bestaat uit "cards" waarin ee
 - Blokkerende vragen zijn opgelost; resterende aannames zijn zichtbaar.
 - Prioriteit, afhankelijkheden, status en planning zijn consistent met het register en de roadmap.
 - Er is een implementatieplan met een afweging van impact en ontwerpkeuzes, conform [[AGENT]].
+  
+[Back to top](#inhoudsopgave)
