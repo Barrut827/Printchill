@@ -871,6 +871,28 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 
 [Back to top](#inhoudsopgave)
 
+## UC#6 - Browsing for parts to print
+
+involved, engineer
+
+engineer zoekt een part voor nieuwe print.
+1: open PRC , UI laad.
+beschrijving UI: linkerkant scherm kolom met boven aan zoekbalk, filter knop.
+daaronder collecties en projecten. zie beschrijving in architecture .md
+deze kolom in ongeveer 20% van UI breedte. de rest bestaat uit "cards" waarin een thumbnail te zien is van het part met daaronder heel beknopt een samenvatting:
+- partnaam , number, versie , status, last modified, last printed , print materiaal, hoeveelheid materiaal , kleur , print tijd. tags.
+2: engineer scrold door de cards op zoek naar een part.
+3: typt in search bar een naam in.
+4: cards met matchende namen of daar op lijkend blijven over.
+5: engineer hovert met muis over een card, card wordt groter en laat meer detials zien aan attributes en ook geoppelde files.
+6: engineer klikt op thumbnail, een viewer opent om het STL file te bkijken in 3D.
+7: engineer wil weten hoe groot het part is. boven in de viewer zit ene knop met een kubus met maat lijntjes er bij, de viewer laat meteen een bounding box zien met lengte breedte hoogte van part.
+8: engineer draait part wat rond en sluit vervolgens de viewer weer door op het kruisje in de hoek te klikken, en weer terug te keren op de card.
+9: dit wordt hem, engineer klikt op het slicer symbool. bambustudio opent het part in bambustudio, part is de vorige keer al gesliced en al. engineer klikt op: print plaat
+10: bambu studio start print process.
+
+
+
 ## Controle vóór implementatie
 
 - Het doel, de actoren, trigger en voorwaarden zijn duidelijk.
