@@ -1,0 +1,20 @@
+{
+  "name": "printchill-ui-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "build:portable": "node build-portable.mjs",
+    "test": "node --test model.test.js"
+  },
+  "dependencies": {
+    "three": "0.180.0",
+    "@phosphor-icons/web": "2.1.2"
+  },
+  "devDependencies": {
+    "vite": "7.1.12"
+  }
+}

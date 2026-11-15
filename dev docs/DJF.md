@@ -30,3 +30,11 @@ De gebruiker vraagt om zoveel mogelijk uitleesbare gegevens. De macro voegt opsl
 - Bestaande cut-lists worden alleen gelezen; geen update. Actieve bodybounds zijn benaderingen in SI-eenheden, geen exact geometriebewijs.
 - Traversal heeft omvang-/dieptelimieten; brondata wordt nooit als opdrachten uitgevoerd.
 - Contractversie verhoogd naar 0.2 om de scopewijziging zichtbaar te maken. Validatie in SolidWorks 2026 SP0 staat nog open.
+
+## Eerste UI-prototype
+
+HTML met Vite, Three.js voor echte STL-previews en Phosphor-iconen. Zo zijn de flows uit UC-003 t/m UC-010 direct te bespreken en lokaal te testen. Geen backend of framework nodig voor deze proef. Snapshots blijven vaste combinaties; nieuwe 3MF-versies wijzigen bestaande combinaties niet. [Scope en grenzen](../prototype/README.md).
+
+## Prototype 2 — Part versions als dagelijkse context
+
+Gebruikersfeedback: snapshots voelden dubbel. Daarom legt een numerieke Part version (001…) de exacte bestandscombinatie vast; documentrevisies blijven letters. Eén bestandswijzigingsactie geeft één nieuwe Part version. Reports en attachments zijn aanvullende registraties zonder versietrigger. Snapshots blijven een latere baseliningfunctie. Logbook en Where used maken wijziging en herkomst zichtbaar; Engels is de basistaal. Prototype gebruikt alleen geheugenopslag en simuleert bestandsregistratie.

@@ -17,10 +17,15 @@
 - [UC-008 — Parts zoeken, filteren en zoekopdrachten opslaan](#uc-008)
 - [UC-009 — Waar-gebruikt-relaties bekijken en volgen](#uc-009)
 - [UC-010 — Snapshot van documentversies vastleggen en raadplegen](#uc-010)
+- [UC-011 — Part versions en logbook beheren](#uc-011)
+- [UC-012 — Attachments en softwareverwijzingen per Part version beheren](#uc-012)
 - [Architectuur en definities](Architecture.md)
 - [Volledig use-casetemplate](#volledig-use-casetemplate)
   - [UC-XXX — Template: werkwoord + gebruikersdoel](#uc-xxx)
 - [Controle vóór implementatie](#controle-vóór-implementatie)
+
+> [!important] Feedback verwerkt in prototype 2
+> Part versions tellen vanaf **001** op wanneer een beheerd bestand verandert; CAD/STL/3MF behouden onafhankelijke letterrevisies. Print Reports en attachments koppelen aan een exacte Part version zonder verhoging. Dit vervangt eerdere verplichte snapshotcontext. UC-010 is uitgesteld als latere baseliningfunctie. UI-taal: Engels.
 
 Dit document bevat de use cases van PrintChill en vormt de basis voor scope, ontwerp, implementatie en verificatie.
 
@@ -33,14 +38,16 @@ Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de det
 | --- | --- | --- | --- | --- | --- | --- |
 | UC-001 | SolidWorks-metadata read-only naar JSON exporteren | CAD-gebruiker | In uitvoering | Must | Metadata-POC | SolidWorks Design Premium 2026 SP0, Windows 64-bit |
 | UC-002 | Part aanmaken, reviseren en voorbereiden voor printen | CAD-engineer | Concept | Nog te bepalen | Nog te bepalen | SolidWorks 2026, Bambu Studio, beheerde opslag |
-| UC-003 | Print Report van een printpoging vastleggen | CAD-engineer / productiemedewerker | Concept | Nog te bepalen | Nog te bepalen | UC-002, UC-010, 3MF-parameters en bijlagen |
+| UC-003 | Print Report van een printpoging vastleggen | CAD-engineer / productiemedewerker | Concept | Nog te bepalen | Nog te bepalen | UC-002, UC-011, 3MF-parameters en bijlagen |
 | UC-004 | Een bestaand part openen in SolidWorks of Bambu Studio | CAD-engineer | Concept | Nog te bepalen | Nog te bepalen | UC-002, bestanden en applicaties |
 | UC-005 | Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren | CAD-engineer | Concept | Nog te bepalen | Nog te bepalen | UC-004, revisieregistratie en mapdetectie |
 | UC-006 | Parts visueel browsen en voorbereiden voor herhaalprint | Engineer / maker | Concept | Nog te bepalen | Nog te bepalen | Zie detailbeschrijving |
 | UC-007 | Tags aanmaken, toekennen en gebruiken | Engineer / maker | Concept | Nog te bepalen | Nog te bepalen | Zie detailbeschrijving |
 | UC-008 | Parts zoeken, filteren en zoekopdrachten opslaan | Engineer / maker | Concept | Nog te bepalen | Nog te bepalen | Zie detailbeschrijving |
 | UC-009 | Waar-gebruikt-relaties bekijken en volgen | Engineer / maker | Concept | Nog te bepalen | Nog te bepalen | Zie detailbeschrijving |
-| UC-010 | Snapshot van documentversies vastleggen en raadplegen | Engineer / maker | Concept | Nog te bepalen | Nog te bepalen | Zie detailbeschrijving |
+| UC-010 | Snapshot van documentversies vastleggen en raadplegen | Engineer / maker | Uitgesteld | Nog te bepalen | Nog te bepalen | Zie detailbeschrijving |
+| UC-011 | Part versions en logbook beheren | Engineer / maker | Concept | Must | UI-prototype 2 | UC-002, UC-005 |
+| UC-012 | Attachments en softwareverwijzingen per Part version beheren | Engineer / maker | Concept | Must | UI-prototype 2 | UC-011 |
 
 
 ### UC-001
@@ -191,6 +198,9 @@ Gebruiker start de macro in SolidWorks Design Premium 2026 SP0, 64-bit.
 [Back to top](#inhoudsopgave)
 
 **Titel:** Part aanmaken, reviseren en voorbereiden voor printen
+> [!info] Aanvulling prototype 2
+> Nieuwe registratie begint op Part version 001. CAD/STL/3MF hebben eigen letterrevisies. Eén bevestigde bestandswijzigingsactie verhoogt de Part version eenmaal (UC-011).
+
 #### Metadata
 
 | Veld | Waarde |
@@ -384,12 +394,12 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 
 #### Voorwaarden
 
-- De daadwerkelijk gebruikte snapshot en betrokken Parts zijn beschikbaar; zo nodig wordt de historische combinatie eerst expliciet vastgelegd via [[#UC-010]].
+- De daadwerkelijk gebruikte Part version en betrokken Parts zijn beschikbaar; de vaste bestandscombinatie is geregistreerd via [[#UC-011]].
 - De gebruiker heeft meetresultaten of observaties en mag een rapport opslaan.
 
 #### Resultaat bij succes
 
-- Een Print Report met procesparameters, metingen en bijlagen is opgeslagen bij de gebruikte snapshot en betrokken Parts.
+- Een Print Report met procesparameters, metingen en bijlagen is opgeslagen bij de gebruikte Part version en betrokken Parts.
 
 #### Garanties bij mislukking
 
@@ -401,15 +411,15 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 | Stap | Actoractie | Systeemgedrag |
 | --- | --- | --- |
 | 1 | Meet het geprinte onderdeel en constateert afwijkingen | Biedt zoeken naar het part aan |
-| 2 | Zoekt het part en selecteert de daadwerkelijk geprinte snapshot | Toont de vastgelegde documentversies; biedt UC-010 aan als de combinatie nog niet is vastgelegd |
-| 3 | Kiest Create print run bij de gebruikte snapshot | Opent een Print Report met notities en meetresultaten voor één printpoging |
+| 2 | Zoekt het part en selecteert de daadwerkelijk geprinte Part version | Toont de vastgelegde documentversies; verwijst naar UC-011 als de Part version nog niet is geregistreerd |
+| 3 | Kiest Create print run bij de gebruikte Part version | Opent een Print Report met notities en meetresultaten voor één printpoging |
 | 4 | Bekijkt de procesgegevens | Toont bovenaan laaghoogte, temperatuur, materiaal, walls, binnen- en buitenwandsnelheid, retractie-instellingen en first-layer speed uit het 3MF |
 | 5 | Vult gemeten maten en afwijkingen ten opzichte van het 3D-model in | Neemt waarden, eenheden en notities op in het rapport |
 | 6 | Kopieert screenshots uit SolidWorks en Bambu Studio en plakt met Ctrl+V | Voegt de afbeeldingen aan het rapport toe |
 | 7 | Uploadt een foto van het geprinte part | Toont de foto als bijlage |
 | 8 | Kiest + bij de parametertabel en zoekt een aanvullende parameter | Toont alle gevonden 3MF-parameters en filtert op de zoekopdracht |
 | 9 | Selecteert de gewenste parameter | Voegt de parameter met waarde en context aan de tabel toe |
-| 10 | Kiest Save print run en sluit het venster | Bewaart het Print Report bij de gebruikte snapshot, met Part-, 3MF- en eventuele plaatcontext |
+| 10 | Kiest Save print run en sluit het venster | Bewaart het Print Report bij de gebruikte Part version, met Part-, 3MF- en eventuele plaatcontext |
 
 #### Alternatieve scenario’s
 
@@ -430,9 +440,11 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 
 #### Businessregels
 
-- Ieder Print Report beschrijft één daadwerkelijke printpoging en verwijst naar de gebruikte snapshot; meerdere rapporten mogen dezelfde snapshot gebruiken.
-- De snapshot blijft onveranderd als later andere documentversies beschikbaar zijn.
-- Een printpoging mag succesvol, mislukt of afgebroken zijn; een snapshot alleen bewijst geen succes.
+- Toevoegen of wijzigen van een Print Report verhoogt de Part version niet.
+
+- Ieder Print Report beschrijft één daadwerkelijke printpoging en verwijst naar de gebruikte Part version; meerdere rapporten mogen dezelfde Part version gebruiken.
+- De Part version blijft onveranderd als later andere documentversies beschikbaar zijn.
+- Een printpoging mag succesvol, mislukt of afgebroken zijn; een Part version alleen bewijst geen succes.
 - De gebruiker bevestigt de revisie wanneer de laatste opgeslagen versie afwijkt van het geprinte onderdeel.
 - Parameterwaarden behouden hun naam, eenheid en beschikbare object-, materiaal- of plaatcontext.
 - Metingen worden met eenheden en de referentiemaat of beschreven afwijking vastgelegd.
@@ -441,7 +453,7 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 
 | Gegeven | Gebruik | Validatie of invariant |
 | --- | --- | --- |
-| Print Report | Notities, metingen en afbeeldingen van één poging | Gebonden aan concrete snapshot en betrokken Parts/3MF-plaat |
+| Print Report | Notities, metingen en afbeeldingen van één poging | Gebonden aan concrete Part version en betrokken Parts/3MF-plaat |
 | Procesparameters | Uitgelezen uit het gekozen 3MF | Herkomst en beschikbare context bewaard |
 | Meetwaarden | Vergelijking met het model | Eenheid en referentie herkenbaar |
 | Screenshots en foto's | Visueel bewijs | Bijlagen gekoppeld aan het rapport |
@@ -462,16 +474,16 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 | UC-003-AC-03 | Metingen en notities | Gebruiker vult het rapport in | Waarden, eenheden en afwijkingen zijn vastgelegd | Niet uitgevoerd |
 | UC-003-AC-04 | Screenshot op klembord en fotobestand | Gebruiker plakt en uploadt | Beide afbeeldingen verschijnen en blijven na opslaan beschikbaar | Niet uitgevoerd |
 | UC-003-AC-05 | Aanvullende parameter in 3MF | Gebruiker zoekt via + en selecteert | Parameter en waarde verschijnen in de tabel | Niet uitgevoerd |
-| UC-003-AC-06 | Volledig rapport | Gebruiker bewaart en heropent | Inhoud en bijlagen verwijzen naar de gebruikte snapshot en daarin vastgelegde 3MF-versie | Niet uitgevoerd |
+| UC-003-AC-06 | Volledig rapport | Gebruiker bewaart en heropent | Inhoud en bijlagen verwijzen naar de gebruikte Part version en daarin vastgelegde 3MF-versie | Niet uitgevoerd |
 | UC-003-AC-07 | Oudere geprinte revisie | Gebruiker selecteert deze voor registratie | Rapport wordt aan die revisie gekoppeld | Niet uitgevoerd |
 | UC-003-AC-08 | Opslagfout | Gebruiker kiest Save print run | Invoer blijft beschikbaar voor een nieuwe poging | Niet uitgevoerd |
-| UC-003-AC-09 | Twee printpogingen met dezelfde snapshot | Gebruiker maakt twee rapporten | Afzonderlijke rapport-ID’s verwijzen naar dezelfde vaste combinatie | Niet uitgevoerd |
-| UC-003-AC-10 | Mislukte of afgebroken print | Gebruiker registreert resultaat | Rapport bewaart de uitkomst zonder de snapshot te wijzigen of succes te suggereren | Niet uitgevoerd |
+| UC-003-AC-09 | Twee printpogingen met dezelfde Part version | Gebruiker maakt twee rapporten | Afzonderlijke rapport-ID’s verwijzen naar dezelfde vaste combinatie | Niet uitgevoerd |
+| UC-003-AC-10 | Mislukte of afgebroken print | Gebruiker registreert resultaat | Rapport bewaart de uitkomst zonder de Part version te wijzigen of succes te suggereren | Niet uitgevoerd |
 
 #### Afhankelijkheden en afbakening
 
 - **Afhankelijk van:** geregistreerde part- en 3MF-revisies, parameteruitlezing, klembord en bijlageopslag.
-- **Gerelateerde use cases:** [[#UC-002]] levert bestanden; [[#UC-010]] legt de gebruikte combinatie vast.
+- **Gerelateerde use cases:** [[#UC-002]] levert bestanden; [[#UC-011]] legt de gebruikte combinatie vast.
 - **Buiten scope:** automatische CAD-wijzigingen en automatische tolerantiebeoordeling.
 - **Ontwerpbesluiten:** verdere uitwerking in [[DJF]].
 - **Planning:** nog te bepalen in [[ROADMAP]].
@@ -497,7 +509,7 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-12 | Gebruikersworkflow uitgewerkt volgens het template | Gebruiker, redactie Codex |
 
-| 0.2 | 2026-11-15 | Terminologie afgestemd op documentversies, snapshots en Print Reports; bestaande scenario’s behouden | Codex |
+| 0.2 | 2026-11-15 | Terminologie afgestemd op documentversies, Part versions en Print Reports; bestaande scenario’s behouden | Codex |
 
 [Back to top](#inhoudsopgave)
 
@@ -560,7 +572,7 @@ De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part
 | Stap | Actoractie | Systeemgedrag |
 | --- | --- | --- |
 | 1 | Browset in PrintChill en klikt op de thumbnail | Opent de partdetails |
-| 2 | Bekijkt de partdetails | Toont een expliciete documentversie of snapshot; bij ontbreken van een voorkeur vraagt het systeem selectie |
+| 2 | Bekijkt de partdetails | Toont de gekozen Part version en exacte documentrevisies; bij ontbreken van een voorkeur vraagt het systeem selectie |
 | 3 | Klikt op het SolidWorks-partsymbool | Start SolidWorks of gebruikt de beschikbare sessie en opent het CAD-part van de geselecteerde revisie |
 | 4 | Bekijkt het part en meet kenmerken | SolidWorks biedt weergave en meetfuncties |
 | 5 | Sluit het part | SolidWorks sluit het document volgens de normale applicatieworkflow |
@@ -584,7 +596,7 @@ De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part
 
 #### Businessregels
 
-- De standaardselectie is nog te bepalen. Bij een gekozen snapshot blijven alle versies vast; nooit stilzwijgend vervangen door latest.
+- De standaardselectie is nog te bepalen. Bij een gekozen Part version blijven alle documentrevisies vast; nooit stilzwijgend vervangen door latest.
 - Het applicatiesymbool opent het bestand van de geselecteerde revisie.
 - Een herhaalprint gebruikt het geopende 3MF-project.
 - Bewaren van ontwerp- of slicerwijzigingen volgt [[#UC-005]].
@@ -593,7 +605,7 @@ De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part
 
 | Gegeven | Gebruik | Validatie of invariant |
 | --- | --- | --- |
-| Part en revisie | Selectie in het detailoverzicht | Concrete documentversie of snapshot zichtbaar; eerdere versies selecteerbaar |
+| Part en revisie | Selectie in het detailoverzicht | Concrete Part version en documentrevisies zichtbaar; eerdere versies selecteerbaar |
 | SLDPRT | Openen in SolidWorks | Bestand behoort bij de geselecteerde revisie |
 | 3MF | Openen in Bambu Studio | Project behoort bij de geselecteerde revisie en bijbehorende bronrelaties |
 | Thumbnail en applicatiesymbolen | Navigatie | Acties verwijzen naar het getoonde part en de geselecteerde revisie |
@@ -652,6 +664,9 @@ De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part
 [Back to top](#inhoudsopgave)
 
 **Titel:** Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren
+
+> [!info] Aanvulling prototype 2
+> Bestandswijzigingen leveren een nieuwe Part version op met alleen de gewijzigde documentrevisies verhoogd; per gewijzigd bestand zijn comments mogelijk. Ongewijzigde bestanden behouden hun revisie. Reports en attachments verhogen niets (UC-011/012).
 
 #### Metadata
 
@@ -731,7 +746,7 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 | B4 | Wacht op detectie | PrintChill signaleert een nieuw of gewijzigd 3MF via het bestandstijdstip in die map en controleert de opgeslagen inhoud |
 | B5 | Wacht op analyse | Bepaalt welke STL-partnummers en versies in het 3MF worden genoemd |
 | B6 | Wacht op registratie | Legt relaties vast tussen de nieuwe 3MF-revisie, de gebruikte STL-revisie en de bijbehorende CAD-revisie |
-| B7 | Bekijkt de nieuwe versie | Toont de nieuwe 3MF-versie; biedt vastleggen van een nieuwe snapshot aan zonder CAD/STL-versies te verhogen |
+| B7 | Bekijkt de nieuwe versie | Toont de volgende numerieke Part version met nieuwe 3MF-revisie, zonder CAD/STL-revisies te verhogen |
 
 #### Fouten en uitzonderingen
 
@@ -749,7 +764,7 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 - De CAD-route schrijft de nieuwe versie in het partattribuut en in de STL-header.
 - De slicerroute bewaart de specifieke bronrelaties tussen 3MF, STL en CAD.
 - Het bestandstijdstip geeft aanleiding tot inhoudscontrole. De revisieregels bepalen wanneer een save een nieuwe revisie oplevert.
-- Een slicerwijziging maakt alleen een nieuwe 3MF-versie; CAD- en STL-versies veranderen niet automatisch. Een nieuwe combinatie wordt apart als snapshot vastgelegd via UC-010.
+- Een slicerwijziging maakt alleen een nieuwe 3MF-versie; CAD- en STL-versies veranderen niet automatisch. De nieuwe bestandscombinatie wordt automatisch geregistreerd als volgende Part version via UC-011.
 
 #### Gegevens en relaties
 
@@ -795,7 +810,7 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 | ID | Vraag of aanname | Eigenaar | Status en besluit |
 | --- | --- | --- | --- |
 | UC-005-Q-01 | Wat zijn de naam en incrementregels van version identifier variable en het SolidWorks-attribuut? | Nog te bepalen | Open |
-| UC-005-Q-02 | Betekent PRC part version ID bij een 3MF-save een partrevisie, projectrevisie of overkoepelende registratie? | Nog te bepalen | Begripskeuze: onafhankelijke documentversies; snapshot is de overkoepelende baseline, zie Architecture en UC-010 |
+| UC-005-Q-02 | Betekent PRC part version ID bij een 3MF-save een partrevisie, projectrevisie of overkoepelende registratie? | Nog te bepalen | Besluit: PRC Part version is de numerieke overkoepelende registratie; documentrevisies blijven onafhankelijk, zie UC-011 |
 | UC-005-Q-03 | Welke map wordt gevolgd en hoe worden saves met identieke inhoud en herhaalde events behandeld? | Nog te bepalen | Open |
 | UC-005-Q-04 | Hoe blijft de vorige 3MF-revisie beschikbaar bij Save naar hetzelfde pad? | Nog te bepalen | Open |
 | UC-005-Q-05 | Werkt Reload from disk bij een nieuw geëxporteerde STL met andere naam en hoe blijven slicerinstellingen behouden? | Nog te bepalen | Open, [[ISSUES#ISS-001]] |
@@ -821,6 +836,9 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 [Back to top](#inhoudsopgave)
 
 **Titel:** Parts visueel browsen en voorbereiden voor herhaalprint
+
+> [!info] Aanvulling prototype 2
+> Part number staat prominent en expliciet gelabeld. Elke kaart toont uitsluitend gegevens van de geselecteerde numerieke Part version; geen mix met latest of andere versies. De UI is Engels.
 
 #### Metadata
 
@@ -855,7 +873,7 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 #### Voorwaarden
 
 - Geregistreerde Parts zijn beschikbaar; voor preview is een ondersteunde STL nodig.
-- Voor herhaalprint is een concrete 3MF-versie of snapshot beschikbaar.
+- Voor herhaalprint is een Part version met concrete 3MF-revisie beschikbaar.
 
 #### Resultaat bij succes
 
@@ -877,7 +895,7 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 | 5 | Klikt op thumbnail | Opent 3D-viewer van een expliciet benoemde STL-versie |
 | 6 | Kiest kubus-met-maatlijnen | Toont bounding box met lengte, breedte, hoogte en eenheden |
 | 7 | Draait het model en sluit de viewer met kruisje | Herstelt kaart, zoekopdracht en scrollpositie |
-| 8 | Kiest slicersymbool en bevestigt de 3MF-versie of snapshot | Opent de concrete 3MF in Bambu Studio via UC-004 |
+| 8 | Kiest slicersymbool en bevestigt de Part version en 3MF-revisie | Opent de concrete 3MF in Bambu Studio via UC-004 |
 | 9 | Controleert instellingen en kiest Print plate in Bambu Studio | Printen gebeurt in de slicer; PrintChill claimt geen automatisch bekend resultaat |
 
 #### Alternatieve scenario’s
@@ -885,7 +903,7 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 | ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
 | --- | --- | --- | --- | --- |
 | A1 | 4 | Aanraakscherm of geen hover | Gebruiker opent dezelfde details via klik of toetsenbord | Verder bij stap 5 |
-| A2 | 8 | Meerdere projecten of snapshots | Gebruiker kiest expliciet de gewenste combinatie | Verder bij stap 8 |
+| A2 | 8 | Meerdere projecten of Part versions | Gebruiker kiest expliciet de gewenste combinatie | Verder bij stap 8 |
 
 #### Fouten en uitzonderingen
 
@@ -897,7 +915,7 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 #### Businessregels
 
 - Kaartgegevens omvatten waar beschikbaar last modified, last printed, printmateriaal, hoeveelheid, kleur en printtijd.
-- Printgegevens zijn gekoppeld aan een benoemd 3MF/snapshot/Print Report, niet samengevoegd tot een fictieve Part-versie.
+- Printgegevens komen uitsluitend uit de documentrevisies of Print Reports van de geselecteerde Part version; geen mix met andere versies.
 - Ontbrekende gegevens worden niet als nul of succesvolle print getoond.
 - Een bounding box is een meshmeting; nauwkeurigheid/eenheid moet zichtbaar zijn.
 
@@ -907,7 +925,7 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 | --- | --- | --- |
 | Part-kaart | Selectie | Part-ID en versie-/printcontext herkenbaar |
 | STL-versie | 3D-preview | Geen impliciete wissel naar latest |
-| 3MF-versie / snapshot | Herhaalprint | Gebruiker ziet welke combinatie opent |
+| Part version / 3MF-revisie | Herhaalprint | Gebruiker ziet welke combinatie opent |
 
 #### Rechten en kwaliteitsvoorwaarden
 
@@ -924,12 +942,12 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 | UC-006-AC-02 | Naam in zoekbalk | Gebruiker zoekt | Matchende kaarten blijven over | Niet uitgevoerd |
 | UC-006-AC-03 | Kaart met STL | Viewer en maatknop gekozen | Benoemde versie en bounding box met eenheden zijn zichtbaar | Niet uitgevoerd |
 | UC-006-AC-04 | Actieve zoekopdracht | Viewer wordt gesloten | Zoekopdracht en scrollpositie blijven behouden | Niet uitgevoerd |
-| UC-006-AC-05 | Gekozen snapshot | Sliceractie wordt uitgevoerd | Exacte 3MF-versie opent; geen vervanging door latest | Niet uitgevoerd |
+| UC-006-AC-05 | Gekozen Part version | Sliceractie wordt uitgevoerd | Exacte 3MF-versie opent; geen vervanging door latest | Niet uitgevoerd |
 | UC-006-AC-06 | Geen hoverbediening | Gebruiker navigeert met toetsenbord | Details en viewer blijven bereikbaar | Niet uitgevoerd |
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** [[#UC-002]], [[#UC-004]], [[#UC-008]], [[#UC-010]], [[Architecture]].
+- **Afhankelijk van:** [[#UC-002]], [[#UC-004]], [[#UC-008]], [[#UC-011]], [[Architecture]].
 - **Buiten scope:** Printeraansturing, automatische printbevestiging en exacte CAD-maatvoering.
 - **Ontwerpbesluiten:** [[Architecture]], [[DJF]].
 - **Planning:** [[ROADMAP]], volgorde nog af te stemmen.
@@ -938,7 +956,7 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 
 | ID | Vraag of aanname | Eigenaar | Status en besluit |
 | --- | --- | --- | --- |
-| UC-006-Q-01 | Welke versie/snapshot wordt standaard aangeboden op een kaart? | Nog te bepalen | Open |
+| UC-006-Q-01 | Welke Part version wordt standaard aangeboden op een kaart? | Nog te bepalen | Prototype: latest tot expliciete selectie; productievoorkeur nog open |
 | UC-006-Q-02 | Welke printgegevens passen compact op de kaart en welke verschijnen pas in details? | Nog te bepalen | Open |
 | UC-006-Q-03 | Hoe worden collecties en projecten ingericht? | Nog te bepalen | Open |
 
@@ -1237,6 +1255,9 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 
 **Titel:** Waar-gebruikt-relaties bekijken en volgen
 
+> [!info] Aanvulling prototype 2
+> Toon een echt relatiediagram: gekozen STL-revisie centraal, concrete gebruikers erboven en CAD-bron eronder, verbonden met lijnen. Selectie is versiegebonden; ontbrekende relaties worden niet verzonnen.
+
 #### Metadata
 
 | Veld | Waarde |
@@ -1254,7 +1275,7 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 
 #### Doel en waarde
 
-Van een concrete documentversie naar bovenliggende gebruikende bestanden en betrokken snapshots navigeren.
+Van een concrete STL-revisie naar bovenliggende gebruikende bestanden en de onderliggende CAD-bron navigeren, met Part-versioncontext.
 
 #### Actoren
 
@@ -1273,7 +1294,7 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 
 #### Resultaat bij succes
 
-- Een eenvoudig diagram toont gebruikende versies en relevante snapshots; gebruiker kan een bovenliggend Part openen.
+- Een diagram toont gebruikende revisies boven de STL en de CAD-bron eronder, met lijnen; gebruiker kan een parent selecteren.
 
 #### Garanties bij mislukking
 
@@ -1286,7 +1307,7 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 | --- | --- | --- |
 | 1 | Kiest Where used | Toont beschikbare documenten en vraagt een concrete versie te selecteren |
 | 2 | Selecteert een STL-versie of CAD-partversie | Zoekt bekende 3MF-gebruikers of CAD-assemblygebruikers van die versie |
-| 3 | Bekijkt het diagram | Toont per parent document, versie en betrokken snapshots; CAD-herkomst en gebruikt-relaties blijven onderscheiden |
+| 3 | Bekijkt het diagram | Toont per parent document en revisie boven de geselecteerde STL; toont concrete CAD-herkomst eronder, verbonden met lijnen |
 | 4 | Klikt op een parent | Opent de bijbehorende Part-kaart met geselecteerde documentversie |
 | 5 | Navigeert terug | Herstelt de oorspronkelijke versie en diagramcontext |
 
@@ -1294,7 +1315,7 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 
 | ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
 | --- | --- | --- | --- | --- |
-| A1 | 1 | Vanuit een snapshot gestart | Gebruikt de daarin vastgelegde versie | Verder bij stap 2 |
+| A1 | 1 | Vanuit een historische Part version gestart | Gebruikt de daarin vastgelegde versie | Verder bij stap 2 |
 | A2 | 2 | Meerdere Parts delen een 3MF | Toont iedere geautoriseerde associatie | Verder bij stap 3 |
 | A3 | 2 | Geen bekende gebruiker | Toont expliciet geen bekende relaties | Einde |
 
@@ -1332,7 +1353,7 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 
 | ID | Gegeven | Wanneer | Dan | Verificatie |
 | --- | --- | --- | --- | --- |
-| UC-009-AC-01 | STL gebruikt in twee 3MF-versies | Where used geopend | Beide parentversies met relevante snapshots zichtbaar | Niet uitgevoerd |
+| UC-009-AC-01 | STL gebruikt in twee 3MF-versies | Where used geopend | Beide parentrevisies boven de STL zichtbaar en CAD-bron eronder, verbonden met lijnen | Niet uitgevoerd |
 | UC-009-AC-02 | CAD-part met bekende assemblyrelatie | Where used uitgevoerd | Bovenliggende assemblyversie verschijnt | Niet uitgevoerd |
 | UC-009-AC-03 | Oudere bronversie | Nieuwere versie bestaat | Query blijft op de gekozen oudere versie | Niet uitgevoerd |
 | UC-009-AC-04 | Zelfde naam zonder bewezen relatie | Index doorzocht | Geen onterechte gebruiksrelatie | Niet uitgevoerd |
@@ -1341,7 +1362,7 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** [[#UC-002]], [[#UC-005]], [[#UC-010]], CAD-/3MF-indexering.
+- **Afhankelijk van:** [[#UC-002]], [[#UC-005]], [[#UC-011]], CAD-/3MF-indexering.
 - **Buiten scope:** Automatische erkenning van onbekende geometrie en het wijzigen van bronrelaties vanuit het diagram.
 - **Ontwerpbesluiten:** [[Architecture]], [[DJF]].
 - **Planning:** [[ROADMAP]], volgorde nog af te stemmen.
@@ -1374,6 +1395,9 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 
 **Titel:** Snapshot van documentversies vastleggen en raadplegen
 
+> [!info] Aanvulling prototype 2
+> Uitgesteld: snapshot wordt een latere baseliningfunctie. Geen verplichte dagelijkse stap, geen voorwaarde voor Print Reports. Eerst Part versions uit UC-011 implementeren; baseline-scope later herzien.
+
 #### Metadata
 
 | Veld | Waarde |
@@ -1381,7 +1405,7 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 | ID | UC-010 |
 | Titel | Snapshot van documentversies vastleggen en raadplegen |
 | Type | CRUD-C / CRUD-R |
-| Status | Concept |
+| Status | Uitgesteld |
 | Prioriteit | Nog te bepalen |
 | Beoogde release | Nog te bepalen |
 | Eigenaar | Nog te bepalen |
@@ -1402,7 +1426,7 @@ Een combinatie van specifieke CAD-, STL- en 3MF-versies als onveranderlijke base
 
 #### Trigger
 
-Gebruiker kiest Snapshot vastleggen bij een Part of printproject.
+Latere baseline-actie; bediening en scope worden opnieuw uitgewerkt. Het hoofdscenario hieronder is het eerdere voorstel, niet de huidige UI-workflow.
 
 #### Voorwaarden
 
@@ -1462,7 +1486,7 @@ Gebruiker kiest Snapshot vastleggen bij een Part of printproject.
 | Snapshot | Unieke ID, naam, tijdstip en leden | Onveranderlijke concrete combinatie |
 | Versieleden | Document-ID en versie-ID | Geen latest-verwijzingen |
 | Bronrelaties | Herkomst per onderdeel | Onbekend/bevestigd expliciet |
-| Print Report | Printpoging met snapshot | Meerdere rapporten per snapshot toegestaan |
+| Print Report | Hoort direct bij een Part version (UC-003) | Geen snapshot nodig |
 
 #### Rechten en kwaliteitsvoorwaarden
 
@@ -1512,6 +1536,247 @@ Gebruiker kiest Snapshot vastleggen bij een Part of printproject.
 
 [Back to top](#inhoudsopgave)
 
+
+### UC-011
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Part versions en logbook beheren
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-011 |
+| Titel | Part versions en logbook beheren |
+| Type | CRUD-C / CRUD-R |
+| Status | Concept |
+| Prioriteit | Must |
+| Beoogde release | UI-prototype 2; productie nog te plannen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-15 |
+| Goedkeuring | Feedback gebruiker; implementatieacceptatie open |
+
+#### Doel en waarde
+
+Een Part number houdt een chronologische historie van vaste bestandscombinaties bij, zonder snapshot als dagelijkse extra laag.
+
+#### Actoren
+
+Engineer / maker (primair); Printchill (systeem).
+
+#### Trigger
+
+Gebruiker opent het Part en kiest de betreffende tab of wijzigingsactie.
+
+#### Voorwaarden
+
+Een Part number en geregistreerde documentrevisies zijn beschikbaar; gebruiker heeft passende rechten.
+
+#### Resultaat bij succes
+
+Historie en exacte versiecontext zijn raadpleegbaar zonder oudere gegevens te overschrijven.
+
+#### Garanties bij mislukking
+
+Bestaande versies blijven intact; geen gedeeltelijke registratie of onterechte nummerverhoging.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Opent Part | Toont Part number en version 001 of gekozen historische versie |
+| 2 | Kiest bestandswijzigingen registreren | Toont huidige revisies en commentvelden per bestand |
+| 3 | Wijzigt één of meer bestanden en bevestigt | Verhoogt gewijzigde letterrevisies; maakt atomair de volgende numerieke Part version |
+| 4 | Opent Logbook | Toont een git-achtige lijn met bolletjes, versienummers en eerste commentzin |
+| 5 | Klikt versiebolletje | Vouwt een ballon met exacte bestanden, revisies en comments uit |
+| 6 | Selecteert historische versie | Kaart, viewer, reports en attachments tonen die versiecontext |
+
+#### Alternatieve scenario’s
+
+| ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
+| --- | --- | --- | --- | --- |
+| A1 | Opslaan | Gebruiker annuleert | Geen mutatie | Oorspronkelijke context blijft |
+| A2 | Selectie | Historische Part version gekozen | Toont exact die context | Geen vervanging door latest |
+
+#### Fouten en uitzonderingen
+
+| ID | Vanaf stap | Foutconditie | Systeemreactie en herstel | Gevolg voor gegevens |
+| --- | --- | --- | --- | --- |
+| E1 | Opslaan | Ongeldige invoer of opslagfout | Toon reden en behoud invoer | Geen gedeeltelijke versie |
+| E2 | Openen | Bestand ontbreekt / geen rechten | Toon onbeschikbaarheid | Geen stille vervanging |
+
+#### Businessregels
+
+- Nummer begint bij 001; één bevestigde wijzigingsactie verhoogt eenmaal, ook bij meerdere bestanden.
+- CAD, STL en 3MF hebben onafhankelijke letterrevisies; revisieletters bewijzen geen bronrelatie.
+- Bestandsinhoud ongewijzigd: geen nieuwe Part version. Toevoegen/vervangen/verwijderen van beheerde ontwerpbestanden geldt als wijziging.
+- Report, attachment of Git-verwijzing toevoegen/wijzigen verhoogt de Part version niet.
+- Geen history rewrite of vertakking in deze eerste proef; nieuwe wijzigingen baseren op de actuele versie.
+- Comments zijn per gewijzigd bestand mogelijk. Zonder comment verschijnt een feitelijke wijzigingssamenvatting.
+- UI is Engels; Part number krijgt een prominent label.
+
+#### Gegevens en relaties
+
+Part number → Part version → exacte documentrevisies. Reports en attachments refereren de onveranderlijke Part version-ID. Logbook bewaart auteur, tijdstip en comments per gewijzigd bestand.
+
+#### Rechten en kwaliteitsvoorwaarden
+
+- **Toegang:** productiecontrole ook server-side; UI-demo heeft geen accounts.
+- **Dataconsistentie:** versie-ID’s gebruiken; historische context blijft vast.
+- **Gebruiksgemak en toegankelijkheid:** toetsenbord en klik; geen hover-afhankelijkheid.
+- **Prestaties en grenzen:** prototypegrenzen expliciet, productiegrenzen nog te bepalen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-011-AC-01 | Nieuw Part | Registratie voltooid | Version 001 zichtbaar | Prototypecontrole |
+| UC-011-AC-02 | Version 003 | Alleen 3MF G verandert | Version 004 bevat 3MF H en ongewijzigde CAD/STL | Prototypecontrole |
+| UC-011-AC-03 | Actuele versie | CAD en STL samen wijzigen | Eén nieuwe Part version bij hetzelfde Part number, beide file-comments zichtbaar | Prototypecontrole |
+| UC-011-AC-04 | Oude versie | Nieuwere versie bestaat | Oude bestanden en kaartgegevens blijven exact gelijk | Prototypecontrole |
+| UC-011-AC-05 | Geen bestandswijziging | Bevestigen | Geen versieverhoging | Prototypecontrole |
+| UC-011-AC-06 | Logbook | Bolletje via klik/toetsenbord geopend | Ballon toont exacte revisies en comments | Prototypecontrole |
+
+#### Afhankelijkheden en afbakening
+
+Afhankelijk van UC-002/005 en [[Architecture]]. UI-demo gebruikt geheugenopslag; productieopslag, connectors en automatische detectie vallen buiten deze proef.
+
+#### Open vragen en aannames
+
+- Gedrag na 999 en letterrevisie Z nog uit te werken; prototype blokkeert ongedefinieerde overloop.
+- Werkelijke inhoudsdetectie/hashbeleid en gelijktijdige wijzigingen: productieontwerp open.
+
+#### Verificatieresultaat
+
+Prototypecontroles worden vastgelegd in [design-qa](../prototype/design-qa.md); volledige productieacceptatie is niet uitgevoerd.
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-15 | Gebruikersfeedback verwerkt | Codex |
+
+[Back to top](#inhoudsopgave)
+
+### UC-012
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Attachments en softwareverwijzingen per Part version beheren
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-012 |
+| Titel | Attachments en softwareverwijzingen per Part version beheren |
+| Type | CRUD-C / CRUD-R |
+| Status | Concept |
+| Prioriteit | Must |
+| Beoogde release | UI-prototype 2; productie nog te plannen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-15 |
+| Goedkeuring | Feedback gebruiker; implementatieacceptatie open |
+
+#### Doel en waarde
+
+Instructies, schema’s en een vastgelegde softwareversie direct bij de juiste ontwerpversie terugvinden.
+
+#### Actoren
+
+Engineer / maker (primair); Printchill (systeem).
+
+#### Trigger
+
+Gebruiker opent het Part en kiest de betreffende tab of wijzigingsactie.
+
+#### Voorwaarden
+
+Een Part number en geregistreerde documentrevisies zijn beschikbaar; gebruiker heeft passende rechten.
+
+#### Resultaat bij succes
+
+Historie en exacte versiecontext zijn raadpleegbaar zonder oudere gegevens te overschrijven.
+
+#### Garanties bij mislukking
+
+Bestaande versies blijven intact; geen gedeeltelijke registratie of onterechte nummerverhoging.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Kiest Part version en Attachments | Toont alleen bijlagen van deze versie |
+| 2 | Uploadt instructie of schema | Valideert bestand en koppelt aan de gekozen versie |
+| 3 | Voegt Git-repository-URL en softwareversie toe | Valideert URL en bewaart repository plus commit/ref |
+| 4 | Bevestigt | Bijlage beschikbaar; Part version en Logbook veranderen niet |
+| 5 | Opent andere Part version | Toont alleen haar eigen attachments |
+
+#### Alternatieve scenario’s
+
+| ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
+| --- | --- | --- | --- | --- |
+| A1 | Opslaan | Gebruiker annuleert | Geen mutatie | Oorspronkelijke context blijft |
+| A2 | Selectie | Historische Part version gekozen | Toont exact die context | Geen vervanging door latest |
+
+#### Fouten en uitzonderingen
+
+| ID | Vanaf stap | Foutconditie | Systeemreactie en herstel | Gevolg voor gegevens |
+| --- | --- | --- | --- | --- |
+| E1 | Opslaan | Ongeldige invoer of opslagfout | Toon reden en behoud invoer | Geen gedeeltelijke versie |
+| E2 | Openen | Bestand ontbreekt / geen rechten | Toon onbeschikbaarheid | Geen stille vervanging |
+
+#### Businessregels
+
+- Bijlagen en Git-verwijzingen zijn ondersteunende data, geen beheerde ontwerpbestanden voor versietriggers.
+- Uploads en links worden aan de geselecteerde Part version gekoppeld, ook aan een historische versie.
+- Geen stilzwijgende overerving van bijlagen naar een nieuwe versie in de proef.
+- Git-URL alleen http(s). Commit-SHA legt een exacte softwareversie vast; branch/tag wordt als veranderlijk gemarkeerd.
+- Downloads behouden bestandsnaam; bestanden worden niet automatisch uitgevoerd.
+- Toevoegen of wijzigen veroorzaakt geen nieuwe Part version.
+
+#### Gegevens en relaties
+
+Part number → Part version → exacte documentrevisies. Reports en attachments refereren de onveranderlijke Part version-ID. Logbook bewaart auteur, tijdstip en comments per gewijzigd bestand.
+
+#### Rechten en kwaliteitsvoorwaarden
+
+- **Toegang:** productiecontrole ook server-side; UI-demo heeft geen accounts.
+- **Dataconsistentie:** versie-ID’s gebruiken; historische context blijft vast.
+- **Gebruiksgemak en toegankelijkheid:** toetsenbord en klik; geen hover-afhankelijkheid.
+- **Prestaties en grenzen:** prototypegrenzen expliciet, productiegrenzen nog te bepalen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-012-AC-01 | Version 003 | Bestand toegevoegd | Downloadbaar bij 003, geen nieuwe Part version | Prototypecontrole |
+| UC-012-AC-02 | Bijlage bij 003 | 002 geselecteerd | Bijlage niet zichtbaar | Prototypecontrole |
+| UC-012-AC-03 | Repo + commit-SHA | Link toegevoegd | Repo, commit en versiecontext terugleesbaar; nummer gelijk | Prototypecontrole |
+| UC-012-AC-04 | Ongeldige URL | Link toevoegen | Fout en geen registratie | Prototypecontrole |
+
+#### Afhankelijkheden en afbakening
+
+Afhankelijk van UC-002/005 en [[Architecture]]. UI-demo gebruikt geheugenopslag; productieopslag, connectors en automatische detectie vallen buiten deze proef.
+
+#### Open vragen en aannames
+
+- Overerving, verwijderen, bijlagewijzigingshistorie, productieviruscontrole en limieten later uitwerken.
+
+#### Verificatieresultaat
+
+Prototypecontroles worden vastgelegd in [design-qa](../prototype/design-qa.md); volledige productieacceptatie is niet uitgevoerd.
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-15 | Gebruikersfeedback verwerkt | Codex |
+
+[Back to top](#inhoudsopgave)
 
 ## Volledig use-casetemplate
 
@@ -1647,7 +1912,7 @@ Maak criteria afzonderlijk toetsbaar. Dek relevante alternatieven, fouten, recht
 
 ## Doel en scope
 
-Begrippen en datamodel: [[Architecture]]. **Versie** is een vaste documenttoestand; **snapshot** is een baseline van meerdere specifieke documentversies; **Print Report** beschrijft één printpoging. Het eerder gebruikte woord revisie betekent voorlopig versie; een extra formele revisielaag is niet besloten.
+Begrippen en datamodel: [[Architecture]]. **Part version** is de numerieke vaste bestandscombinatie (001…). **Documentrevisie** is een letter voor één bestand. **Snapshot** is uitgesteld als latere baseliningfunctie. **Print Report** beschrijft één printpoging bij een exacte Part version zonder versieverhoging.
 
 
 PrintChill helpt CAD-hobbyisten, zzp’ers en kleine organisaties om CAD-bestanden, STL-bestanden en 3MF-printprojecten te beheren. Bestanden hebben onafhankelijke revisies. Relaties leggen vast welke specifieke bronrevisies bij een afgeleid bestand of printproject horen.
