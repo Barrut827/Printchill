@@ -845,6 +845,51 @@ deze kolom in ongeveer 20% van UI breedte. de rest bestaat uit "cards" waarin ee
 10: bambu studio start print process.
 
 
+## UC#7 Creating en using tags
+
+bulk tagging:
+1. engineer browst door recente parts. sommige parts zijn onderdeel van sub assembly of fucntionaliteit of project. om zoeken makkelijker te maken kun je tags aanbrengen.
+2. enegineer selecteerd 5 parts door op de cards te klikken en ctrl vast te houden. in een van de menu balken (nadere te bepalen) klikt ie create tag.
+3. engineer typt: #[topic] en drukt op enter. nu zijn de tags toegekend aan de geselecteerde onderdelen.
+
+single tagging:
+1.engineer klikt op card van part, card openent.
+2. in de tag sectie klikt engineer, text balk komt te voorschijn.
+3. engineer bgint met # en begint te typen.
+4. PRC komt meteen met suggesties op basis van wat er getypt wordt. als je hier op klikt dan wordt die tag aan het part gehangen.
+je kunt onbeperkt tags toevoegen. echter elke tag maar 1x.
+
+using tags:
+1. engineer wil zoeken op tag "roboticarm"
+2. in de zoekbalk typt de engineer # dit is het teken dat engineer wil zoeken op tags.
+3: #roboticarm + PETG
+4: de plus kan worden gebruikt om zoektermen te combineren. de engineer wil zoeken op #roboticsarm en alle PETG parts.
+
+spelregels tags:
+- mogen geen spaties bevatten, wel koppel tekens (- of _)
+- wordt gechekct op dubbeling dmv hoofdletters, bijv #robotics en dan #Robotics aanmaken mag niet.
+- gebruik hoofdetters wel toegestaan.
+- speciale tekens # is niet toegestaan in een tag.
+
+
+## UC8 - searching for parts
+
+je wilt kunnen zoeken op alle toegekende attributes, ook wil je zoekopdrachten kunnen opslaan.
+bijvoorbeeld; geprinte parts, van PTEG , in de afgelopen 3 dagen.
+
+echter heet PRC 1 zoekbalk waarin je instant kunt zoeken. voor advanced searches kun je een menutje openvouwen om attributes aan te vinken. dit zijn alle part attributes die er zijn. ook op file type.
+
+als je niks doet is de input in de search bar toegepast op partname , partnumber en tags zodra je #toetst.
+
+## UC9 - where used
+
+PRC indexeert de alle content en houdt bij of bijvoorbeeld een STL file ook in andere 3MF files voorkomt.
+ook cad parts en stl files in assemblies.
+
+op de card van een part kun je op where used klikken, er wordt dan een query gedraaid of een van de files ook in een andere file gebruikt wordt:
+CAD part (prt's) in assemblies, en STL's in 3MF files.
+
+per file wordt een simpele diagram gerendered. vanuit de file gezien wordt parent files getoont met bijhorende versie en snapshot tov het file. ik kan dan in de diagram op een van de parents klikken en om vervolgens die part card te openen.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
