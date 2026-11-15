@@ -1,0 +1,20 @@
+digraph Snapshot {
+  graph [bgcolor="#F5F7FB", pad="0.45", nodesep="0.7", ranksep="0.65", fontname="DejaVu Sans", dpi=120, label="Printchill · Snapshot als baseline", labelloc=t, fontsize=25, fontcolor="#15243B"];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=15, margin="0.28,0.22", color="#D6DFEC", fillcolor="white", fontcolor="#15243B", penwidth=1.5];
+  edge [fontname="DejaVu Sans", fontsize=12, color="#697D96", fontcolor="#4F647E", penwidth=1.7, arrowsize=0.8];
+  subgraph cluster_baseline {
+    label="SNAPSHOT S-001\nVastgelegde baseline · werkende combinatie";
+    fontsize=19; fontcolor="#184C78"; color="#5C99C5"; fillcolor="#EAF3FA"; style="rounded,filled"; penwidth=2; margin=30;
+    cad [label="CAD\nRevisie C\n\nSolidWorks-part", color="#4B84B0", fillcolor="#FFFFFF"];
+    stl [label="STL\nRevisie C\n\nGeëxporteerd uit CAD C", color="#4B84B0", fillcolor="#FFFFFF"];
+    project [label="3MF\nRevisie G\n\nPrintoptimalisaties in Bambu Studio", color="#2C917E", fillcolor="#FFFFFF"];
+    cad -> stl [label="export"];
+    stl -> project [label="gebruikt als bron"];
+    fixed [label="Deze exacte revisies en hun relaties blijven vaststaan.", shape=plaintext, fontsize=12, fontcolor="#184C78"];
+    project -> fixed [style=invis];
+  }
+  future [label="Later: CAD revisie D of 3MF revisie H\nNieuwe combinatie → nieuwe snapshot\nS-001 blijft behouden", fillcolor="#FFFFFF", color="#CCD5E1", fontsize=13];
+  fixed -> future [style=dashed, arrowhead=none, label="latere wijzigingen\noverschrijven deze baseline niet"];
+  note [label="Bestanden hebben eigen revisiereeksen.\nSTL C is hier gekoppeld aan CAD C; gelijke revisielabels zijn geen vereiste.\nStatus is een apart onderwerp en staat buiten dit diagram.", shape=plaintext, fontsize=11, fontcolor="#5B6B80"];
+  future -> note [style=invis];
+}

@@ -14,6 +14,12 @@
 
 ## Doel en status
 
+### Snapshot als baseline
+
+Een **snapshot** legt een combinatie van specifieke bestandsrevisies en hun bronrelaties vast, bijvoorbeeld CAD C, STL C en getuned 3MF G. Het is geen afzonderlijke bestandsversie. Latere wijzigingen overschrijven deze baseline niet. Status is een apart onderwerp.
+
+![Snapshot als baseline: CAD C, STL C en 3MF G vormen samen een vastgelegde werkende combinatie](images/snapshot-baseline.png)
+
 Onderzoeken of een eenvoudige SolidWorks-macro de herkomst van een STL betrouwbaar kan vastleggen, en of die identificatie na handmatige import in Bambu Studio nog terug te vinden is in een opgeslagen 3MF-project.
 
 **Status:** gedeeltelijk uitgevoerd. Op 2026-11-08 is een bestaande STL van een header-ID voorzien en is het door de gebruiker teruggeleverde Bambu Studio-3MF onderzocht; zie POC-R01. De SolidWorks-macro en de volledige CAD → STL → 3MF-proef zijn nog niet gerealiseerd of geverifieerd. Architectuur wordt pas opgesteld nadat de POC is voltooid. Dit document beschrijft een technische proef, geen goedgekeurde productfeature. Voor productimplementatie wordt eerst een use case uitgewerkt volgens [[USECASES]].
@@ -207,7 +213,7 @@ Gebruik als resultaat: **Geslaagd**, **Gefaald**, **Geblokkeerd** of **Niet uitg
 
 ### Volledig parameteroverzicht
 
-De volledige extractie staat in het [doorzoekbare HTML-parameteroverzicht](NEO_key_chain_PRCL_3mf_parameters.html). Open dit bestand in een browser. Het overzicht heeft een zoekveld, vaste kolomkoppen en afzonderlijk scrollbare, inklapbare secties. De grote geometriesectie is standaard ingeklapt. Alle tabelwaarden van POC-R01 zijn behouden. De oorspronkelijke Markdown-extractie staat in [het losse parameterbestand](../NEO_key_chain_PRCL_3mf_parameters.md).
+De volledige extractie staat in het [doorzoekbare HTML-parameteroverzicht](NEO_key_chain_PRCL_3mf_parameters.html). Open dit bestand in een browser. Het overzicht heeft een zoekveld, vaste kolomkoppen en afzonderlijk scrollbare, inklapbare secties. De grote geometriesectie is standaard ingeklapt. Alle tabelwaarden van POC-R01 zijn behouden. De oorspronkelijke Markdown-extractie staat in [het losse parameterbestand](../POC%20material/NEO_key_chain_PRCL_3mf_parameters.md).
 
 [Back to top](#inhoudsopgave)
 

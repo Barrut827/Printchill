@@ -1,5 +1,11 @@
 # PrintChill — Design Justification File
 
+## DJF-003 — Begrippen en gebruikersdatamodel
+
+Part is de vaste onderdeelidentiteit; documenten hebben onafhankelijke versies. Snapshot betekent een baseline van een combinatie van specifieke versies en bronrelaties, geen iteratie of enkele bestandstoestand. Een Print Report beschrijft één printpoging met die snapshot. Hierdoor kunnen meerdere pogingen dezelfde combinatie gebruiken en blijft eerdere printcontext behouden bij nieuwe versies.
+
+De bestaande term revisie wordt voorlopig gelezen als versie, zonder extra formele revisielaag. Status (`draft`, `print-candidate`, `printed`, `scrap`) staat apart; niveau en overgangen zijn nog niet besloten. Zie [[Architecture]], [[USECASES#UC-003]] en [[USECASES#UC-010]]. De afbeelding illustreert één Part; de relaties ondersteunen ook meerdere Parts per 3MF/snapshot.
+
 ## DJF-001 — Metadata-POC via SolidWorks VBA
 
 **Scope:** [[USECASES#UC-001]], [[SOLIDWORKS_JSON_POC]]. Dit is een POC-keuze, geen definitieve productarchitectuur.
