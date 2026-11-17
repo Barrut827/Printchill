@@ -1778,6 +1778,43 @@ Prototypecontroles worden vastgelegd in [design-qa](../prototype/design-qa.md); 
 
 [Back to top](#inhoudsopgave)
 
+
+## UC#13 - Part Compare
+
+1;engineer heeft een part gevonden
+2; opent de card. en krijg standaard de latest version te zien.
+3; engineer gaat naar logbook om historie te bekijken.
+4; wil weten wat verschil is tussen de 2 laatste versies. (note; dit kan ook met meerdere versie bijvoorbeeld van de 12 versies, 1e de 3e en de 10e en laatste)
+5; klikt checkbox aan voor de versie en klikt op compare
+6; een nieuw scherm opent met;
+	a; links de oude , rechts de laatste versie
+	b; 2 3D modellen (STL's) over elkaar heen geprojecteerd, de oude versie is transparant gemaakt , de laatste niet. hierdoor zie je duidelijk de verschillen in design.
+	c; een overzicht met de related files (STL, 3MF, CAD) revisies deltas (als ze er zijn)
+	c; daaronder 1 tabel met 1st colom alle part attributes, kolom 2; attribute waarde oud part , kolom 3 attributes laatste versie. de cellen die anders zijn , zijn ge-high light.
+
+
+## UC#14 - omgang met samenstellingen (assy's)
+
+assy's bestaan in de CAD, en zijn erg dominant in klassieke PDM systemen.
+echter in PRC gaat hem op de parts, die print je immers en wil je daarom managen. de samenstelling zou hier als volgt in kunnen passen.
+je hebt een part die aan de CAD assy is gekoppeld. op dit nivea kan een overkoepelend 3MF file met alle plates die alle assy parts bevat gemaakt zijn en gekoppeld.
+dan krijg je:
+
+
+1234-5678 robotic upper arm assy
+	gekoppelde aan part version:
+	- 3MF met 6 platen en heel veel parts (alle child parts)
+	- 1234-5678 upper arm .asm file is wel op deze assy card gekoppeld
+	- een STL op assy niveau kan er ook zijn, maar dat is zelden nuttig.
+	
+	verdere info op dit assembly part te vinden:
+	- alle STL's die zijn weer aan de 3MF gekoppeld maar zie je niet op deze part card terug, wel op part card van de child components via de where used een link naar deze 3MF file.
+	- de (child) parts in die assembly zijn weer op de part structure tab terug te vinden
+	
+	
+
+
+
 ## Volledig use-casetemplate
 
 > [!info] Gebruik van het template

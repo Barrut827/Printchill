@@ -173,3 +173,13 @@ mapping design states op maturity states
 | Prototype        |   x   |     x     |          |          |
 | Mature           |       |           |    x     |    x     |
 | End of Life      |       |           |    x     |    x     |
+
+## Part Types
+
+PRC part kan een mono deel zijn maar ook een samenstelling.
+er zal een tab zijn binnen de part tab met "Part structure"
+hierin zullen alle child componentne zichtbaar zijn die in de solidworks file zitten.
+met part nummer en name, revision. vanuit deze child components kun je dan where met "where used" verticaal door de structuur navigeren.
+bij een mono part is er geen structure en deze tab dus leeg.
+
+side note: het is nu erg op solidworks ge-orienteerd, maar in de toekomst moeten ook om kunnen gaan met Fusion 360 en freeCad
