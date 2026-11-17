@@ -1,65 +1,55 @@
-# Printchill UI-prototype — v3
+# Printchill prototype v4
 
-Klikbare HTML-opzet voor ontwerpvalidatie. Engelstalige UI; documentatie in het Nederlands.
+Klikbare engineeringdemo met de actuele POC-samples. Engelse UI; geen productie-PDM.
 
-## Direct openen
+## Openen
 
-Download [Printchill-demo.html](Printchill-demo.html) en dubbelklik het bestand in Chrome of Edge. Geen installatie of webserver nodig. Dit bestand bevat de code, iconen en twee STL-modellen.
+Download [Printchill-demo.html](Printchill-demo.html), sla op en open in Chrome of Edge. Alle previews en samplemetadata zijn inbegrepen; geen webserver nodig. Voor ontwikkelen: Node 20.19+ / 22.12+, `npm ci` en `npm run dev` vanuit deze map.
 
-## Ontwikkelen
+## Wat is toegevoegd?
 
-Vereist Node.js 20.19+ of 22.12+.
+- **36 samplegroepen / 67 bestanden:** 23 STL, 21 SolidWorks-parts, twee assemblies, twaalf 3MF-projecten en FreeCAD/ondersteunende bestanden. Bronhashes en de zekerheid van relaties zijn zichtbaar.
+- **Echte revisies:** light panel en clips hebben aparte A/B-STL’s; geometrycache per bestand. Filenameletters bepalen importvolgorde, niet een herstelde CAD-savehistorie.
+- **Components:** object-/volumerecords, platen, filament en lokale bronkandidaten voor 3MF. Jeep-chassis heeft 99 records. Native assemblies blijven structure unavailable zolang geen echte child-extractie is geïmporteerd.
+- **Tabel:** raster/tabel, sorteerbare kolommen, kolomkeuze, zoeksyntax, filters, opgeslagen queries en batchtags.
+- **Compare:** vaste bestandsrevisies en 3MF-parameters naast elkaar, plus echte aangeleverde STL-previews. Geen berekende mesh-afwijkingen.
+- **Compacte inspectie:** Part Details links; geselecteerde bestanden en preview rechts. De eerste gegevens staan op een gewone laptop binnen het zichtbare scherm.
+- **Lokaal bewaren:** IndexedDB bewaart Part versions, reports, bijlagen, geïmporteerde STL’s en concepts. Sluiten/herladen wist een reportdraft niet. Opslagstatus en schrijffouten zijn zichtbaar; JSON-backup export/import is beschikbaar.
+- **Lifecycle:** bestaande design-/maturity-mapping. Released vraagt bevestiging; Obsolete/End of life is read-only en biedt kopiëren naar nieuw Part number. Geen versieverhoging door lifecycle, reports of attachments.
+- **Toegankelijkheid:** donkerdere tekst, grotere selectiedoelen, toetsenbordtabs, benoemde dialogs en tooltips bij hover/focus, Escape sluit tooltip zonder focusverlies. Mobiel heeft zichtbare viewerknoplabels.
+- **Snel werken:** `/` zoekt, `?` toont help; deelbare versiehash. Pijltjes draaien de modelpreview; +/− zoomen.
 
-```sh
-cd prototype
-npm ci
-npm run dev
-```
+## Assemblies
 
-Open de lokale URL uit de terminal. De bron-`index.html` heeft wel de Vite-webserver nodig.
+De huidige Linux-cloud kon de childstructuur van `buitenlamp.SLDASM` en `WCD_cover_zolder.SLDASM` niet betrouwbaar uitlezen. Een 3MF-componentlijst is geen vervanging daarvoor.
 
-## Proberen
+`../macros/ExportAssemblyStructure.bas` is de nieuwe read-only SolidWorks 2026-proef. Nog niet op Windows uitgevoerd/gecompileerd. Zie [macro-instructies](../macros/README.md). De JSON-import controleert schema en de bronbestandsnaam, behoudt configuratie/suppression/diepte en markeert het ontbreken van byte-level bronverificatie.
 
-- **Library:** prominente Part numbers, echte STL-previews, zoeken met `#workshop + PETG`, filters, tags en opgeslagen zoekopdrachten. Kies op elke kaart een Part version; alleen haar bestandsrevisies en printgegevens verschijnen.
-- **Part Details:** materiaal, totaalgewicht, printtijd, layer height, infillpercentage/-type, geselecteerde filamentkleuren/-types en plaatcount voor de gekozen 3MF-revisie. De mount in 003 toont vooraf uitgelezen metadata uit het aangeleverde 3MF; ontbrekend gewicht blijft Unknown; zonder volledige tijdgegevens verschijnt Slice required.
-- **Part version:** numeriek vanaf 001. De voorbeeld-mount heeft 001 t/m 003, met CAD C / STL C / 3MF G in 003.
-- **Register file changes:** selecteer gewijzigde bestanden en geef per bestand commentaar. Eén bevestiging maakt één volgende Part version; alleen gekozen bestandsrevisies worden verhoogd. Dit simuleert wijzigingen, zonder echte bronbestanden te bewerken.
-- **Where used:** klik een STL in het Part-versionvenster. Gebruikers staan erboven, de CAD-bron eronder, met lijnen. Relaties verwijzen naar exacte documentrevisies.
-- **Logbook:** git-achtige historie per Part number. Klik een bolletje om alle bestanden/revisies, wijzigingen en file-comments uit te klappen. De titel gebruikt de eerste commentzin.
-- **Print Reports:** verslag met foto’s/plakken, gekoppeld aan de gekozen Part version; geen versieverhoging.
-- **Attachments:** upload een instructie/schema of koppel een Git-repository met commit-SHA of ref aan de gekozen versie; geen versieverhoging. Bestanden kunnen weer gedownload worden. Geen automatische overerving naar een volgende versie.
-- **Import:** voeg een eigen STL toe als Part version 001 of bekijk custom properties uit de POC-JSON.
+## Gegevensgrenzen
 
-## Grenzen
+- Een nummer/revisie uit een bestandsnaam is niet automatisch een CAD-property. SMP-ID’s zijn lokaal toegekend.
+- Filename-relaties en de expliciete WTW-/armatuur-naamgroeperingen blijven kandidaten. Geen native assembly of CAD-exportrelatie verzonnen.
+- Het gelijknamige wall_mount-3MF verwijst naar lampcomponenten maar niet naar de wall_mount-STL; dit wordt in de UI gemeld. `velg_band_fusee.3mf` bevat alleen de verklaarde Band-bron.
+- Alle twaalf 3MF’s missen complete timingdata. Geen fictieve indicatie uit lengte/snelheid of eerste-laagtijd. Projectdefaults zijn geen volledig opgeloste objectinstellingen.
+- Een gesimuleerde wijziging maakt een nieuw Part-versionnummer en verhoogt gekozen fileletters; bron-CAD wordt niet bewerkt en er is geen echt nieuwe STL. De preview vermeldt dat.
+- Lokale browseropslag kan door quota, privémodus of wissen van browserdata verdwijnen. Exporteer backups. Geen accounts, cloudsync, ACL’s, CAD-/slicerconnector of daadwerkelijke slicing.
+- 3MF-plaatbeelden zijn opgeslagen projectpreviews; native CAD-assemblygeometrie is niet ontsloten. Snapshots blijven latere baseliningfunctionaliteit.
 
-Alle wijzigingen verdwijnen bij vernieuwen. Bestanden blijven in browsergeheugen. Historische revisies, relaties, datums en printgegevens zijn voorbeelden; elke Part gebruikt één echte aangeleverde STL voor alle historische previews. Oudere kaartprofielen zijn demo’s. In Part Details zijn alleen geregistreerde 3MF-waarden zichtbaar. De aangeleverde 3MF is expliciet aan demo G (Part version 003) gekoppeld; revisieherkenning is niet automatisch. Bij een gesimuleerde nieuwe 3MF-revisie wordt de extractie niet gekopieerd.
-
-Geen file-watcher, inhoudsdetectie, echte revisie-import, serveropslag, accounts, CAD/slicerconnector of printerverbinding. Bestandswijzigingen worden expliciet gesimuleerd; alleen opmerkingen of attachments vormen geen nieuwe Part version. Een registratie wordt altijd op de actuele versie gebaseerd, ook wanneer je een historische versie bekijkt. Dit is een lineaire historie, geen branching.
-
-Nummering na 999 of bestandsrevisie Z is nog onbeslist; de proef blokkeert deze overloop. Wijzigingen van dependent files zijn expliciet: CAD aanpassen verhoogt niet automatisch STL/3MF. Git-links worden niet online gecontroleerd; een branch/tag is als veranderlijk gemarkeerd.
-
-Snapshots zijn gereserveerd voor latere baselining en maken geen deel uit van deze dagelijkse UI. Nog open: meerdere modellen/assemblies demonstreren, ontwerpbestand toevoegen/verwijderen/vervangen, volledige printparametertabel, precieze meettools en vertalingen. Geen use case is als volledig productie-gereed gemarkeerd.
-
-## Techniek en verificatie
-
-Vite voor server/build, Three.js voor STL, Phosphor voor iconen. Versieregels staan in `model.js`; overige UI is een kleine module zonder framework/backend.
+## Reproduceren en testen
 
 ```sh
+python scripts/extract_3mf_details.py
+python scripts/build_sample_catalog.py
 npm test
+python -m unittest discover -s scripts -p '*_test.py'
 npm run build
-python scripts/extract_3mf_details.py  # reproduceer metadata uit het voorbeeld
 npm run build:portable
-# Python Playwright, met Vite op poort 4173:
-python -m playwright install chromium
+# Met Vite op poort 4173 en Python Playwright:
 python smoke_test.py
+# Of hetzelfde tegen de downloadbare HTML:
+PROTOTYPE_URL=file:///absolute/path/Printchill-demo.html python smoke_test.py
 ```
 
-[Visuele controle en screenshots](design-qa.md). De twee voorbeeldmodellen komen uit `POC material` in deze repository.
+Three.js, Vite en Phosphor blijven de enige runtime/build-dependencies. Nieuwe modules scheiden catalogus, opslag, manifestvalidatie, tooltips en viewer van UI-weergave.
 
-## Geconsolideerde filamentselectie en tijdindicatie
-
-De sample toont alleen geselecteerd projectfilament 4: Generic PLA, #DCF478. Geen live AMS-inventaris. Waar beschikbaar gebruikt extractie opgeslagen slicinggebruik; anders modeltoewijzingen. Geverfde kleuren en andere complexe overrides zijn niet volledig opgelost.
-
-Print time · indication: complete plaatvoorspellingen uit slice_info, fallback op tijdcommentaar in ingesloten tekst-G-code. Grove weergave op vijf minuten, bron en ruwe seconden blijven bewaard. Geen complete data: Slice required; geen fictieve tijd uit eerste-laagtijd of filamentlengte × printsnelheid. De huidige sample heeft geen complete voorspellingen. Geen automatische slicing of nieuwe 3MF-browserimport.
-
-Extractietests: `python -m unittest discover -s scripts -p '*_test.py'`. Onderzoek en online bronnen: [3MF print details](../dev%20docs/3MF_PRINT_DETAILS_RESEARCH.md).
+[Sampleanalyse](../dev%20docs/SAMPLE_ANALYSIS.md) · [UI-review](../dev%20docs/UI_DESIGN_REVIEW.md) · [Verificatie](design-qa.md).

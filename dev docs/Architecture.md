@@ -181,3 +181,13 @@ Part Details vervangt de dubbele bestandentab. Het Part-versionpaneel blijft de 
 ## Consolidatie filament en tijdindicatie
 
 Part Details toont geselecteerde model-/slicingfilamenten; projectconfiguratie is geen live AMS-inventaris. Tijdindicatie gebruikt complete voorspellingen per plaat, of ingesloten G-code-tijdcommentaar, afgerond op vijf minuten. Zonder complete gegevens: Slice required. Geen schatting uit filamentlengte en nominale printsnelheid. Bronnen, scope en beperkingen: [[3MF_PRINT_DETAILS_RESEARCH]].
+
+## Prototype v4 — samples en UI-review
+
+- Read-only samplecatalogus: 67 bestanden, hashes en expliciete naam-/metadata-associaties. Zie [[SAMPLE_ANALYSIS]]. De 36 groepen zijn importgroepen, geen automatisch bewezen CAD-identiteiten.
+- Echte A/B-STL’s krijgen eigen geometry-assets; de previewcache is per bestand, niet per Part. Gesimuleerde revisies houden een zichtbaar samplelabel en geen fictieve nieuwe bronhash.
+- 3MF-object-/volumerecords, plaatbeelden en filamenttoewijzingen vormen projectcompositie. Native CAD-assemblykinderen zijn een andere relatie en worden uitsluitend via expliciete extractie/manifest getoond.
+- IndexedDB bewaart lokaal workspace, concepts, reports en attachments; export/import van JSON-backups maakt overdracht mogelijk. Geen serveropslag, accounts, rechtenmodel of cloudsync.
+- Tabel met sortering/kolommen, versievergelijking, compacte inspectie, deelbare versiehash, toetsenbordtabs, benoemde dialogs en hover-/focustooltips verwerken [[UI_DESIGN_REVIEW]].
+- Design state en maturity zijn Part-level metadata. Het bestaande mappingbeleid blijft leidend; statuswijzigingen verhogen geen Part version. Released-bestandswijzigingen vragen bevestiging; Obsolete/End of life blokkeren ze en bieden kopiëren.
+- Assemblymanifestimport verrijkt een bestaande Part version met uitleesbewijs, zonder wijziging van bronbestanden. Bestandsnaammatch zonder bronhash wordt zichtbaar onbevestigd gehouden.

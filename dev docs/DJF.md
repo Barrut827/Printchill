@@ -46,3 +46,9 @@ Bestanden staan al naast de viewer. De tab toont nu 3MF-instellingen en printgeg
 ## Filamentselectie en grove printtijd
 
 Geselecteerde filamenten uit modeltoewijzing, waar beschikbaar versterkt door slicinggebruik. Geen AMS-liveclaim. Hergebruik de slicerindicatie en rond die af; een eigen lengte/snelheidsformule verwart materiaaltoevoer met nozzlebeweging. Onvolledige plaatdata niet als totaal presenteren. Zie [[3MF_PRINT_DETAILS_RESEARCH]].
+
+## Prototype v4 — veilige bewijsvoering en engineeringwerk
+
+De samples bevatten bruikbare 3MF-compositie maar nog geen betrouwbaar uitgelezen native SLDASM-childboom. Daarom geen inferred assembly uit omliggende namen: aparte componenttypen, herkomst en manifest-import. Nieuwe read-only SolidWorks-macro als Windows-vervolgproef; geen sleutelvrije Document Manager-herkansing.
+
+STL-assets zijn lossless gzip om de zelfstandige HTML klein genoeg te houden; Three.js en bestaande browser-API’s blijven voldoende, zonder nieuwe runtime-dependency. IndexedDB biedt lokale Blob/binaire opslag en concepts; expliciete backup en opslagfouten voorkomen de indruk van gegarandeerde cloudopslag. Workflow en toegankelijkheid verbeteren binnen de bestaande lichte PRC-vormgeving; geen complete redesign.
