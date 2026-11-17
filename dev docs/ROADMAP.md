@@ -16,3 +16,7 @@ Definities: [[Architecture]]. Detail en acceptatiecriteria: [[USECASES]]. Status
 Eerste [HTML UI-prototype](../prototype/README.md) beschikbaar om bibliotheek, Part versions, documentrevisies en Print Reports te beoordelen. Dit is ontwerpvalidatie; de bovenstaande implementatiefasen en UC-acceptatie blijven open.
 
 Prototype 2 verwerkt feedback over Part versions, Engels, prominente Part numbers, Where used-diagram, versiegebonden kaarten, Logbook en Attachments. Volledige productieacceptatie blijft open.
+
+Part Details (UC-006): 3MF-projectmetadata in de UI-proef. Automatische import, effectieve object-/plaatinstellingen en volledige slicingtotalen blijven vervolgstappen.
+
+Geconsolideerd: geselecteerde filamenten en Print time · indication. Vervolg: echte geslicete 3MF-fixture vergelijken met Bambu Studio, veilige import van slicingresultaten en later een lokale/background slicerconnector.

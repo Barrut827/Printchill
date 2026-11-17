@@ -1,4 +1,4 @@
-# UI-controle — prototype 2
+# UI-controle — prototype 3
 
 **Resultaat: geslaagd voor de gecontroleerde prototypeflows.** Volledige productieacceptatie blijft open.
 
@@ -19,3 +19,11 @@ Gebruikersfeedback is de basis voor deze iteratie; de lichte PRC-vormgeving en d
 ## Grenzen
 
 Geen volledige schermlezer-/toegankelijkheidsaudit of cross-browsermatrix. Bestandsrevisionering en historische geometrie zijn gesimuleerd; data blijft in browsergeheugen. Git-doelen worden niet geverifieerd. Snapshots zijn bewust uitgesteld. Zie README voor de volledige prototypescope.
+
+## Part Details-iteratie
+
+Bestandentab vervangen door Part Details; bestandsselectie blijft in het Part-versionpaneel. [Opname](screenshots/part-details.png). De 3MF-extractie bewaart vier geconfigureerde slots, maar de UI toont uitsluitend geselecteerd slot 4: Generic PLA, #DCF478. Verder 0.2 mm, 15% grid en twee platen. Modeltoewijzing is geen gemeten verbruik of live AMS-inventaris. Gewicht: Unknown; Print time · indication: Slice required.
+
+Browsercontrole omvat versiecontext, ontbrekende historische metadata, meerdere kleuren/types, behoud van Where used en het wissen van extractiedata bij een nieuwe gesimuleerde 3MF-revisie. Modeltests testen ook behoud bij ongewijzigde 3MF en ontbrekende versus nulwaarden.
+
+Consolidatie geverifieerd: browser toont slechts geselecteerd filament en werkende uitleg bij ontbrekende tijd. Zeven JS-tests en vijf Python-extractietests dekken o.a. selectie, complete/partiële plaattijden, tekst-G-code-fallback, ontbrekende gegevens en grove tijdronding. De saved-slice-scenario’s zijn synthetische fixtures; geen echte geslicete sample geverifieerd.

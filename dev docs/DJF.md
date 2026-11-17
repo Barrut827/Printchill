@@ -38,3 +38,11 @@ HTML met Vite, Three.js voor echte STL-previews en Phosphor-iconen. Zo zijn de f
 ## Prototype 2 — Part versions als dagelijkse context
 
 Gebruikersfeedback: snapshots voelden dubbel. Daarom legt een numerieke Part version (001…) de exacte bestandscombinatie vast; documentrevisies blijven letters. Eén bestandswijzigingsactie geeft één nieuwe Part version. Reports en attachments zijn aanvullende registraties zonder versietrigger. Snapshots blijven een latere baseliningfunctie. Logbook en Where used maken wijziging en herkomst zichtbaar; Engels is de basistaal. Prototype gebruikt alleen geheugenopslag en simuleert bestandsregistratie.
+
+## Part Details in plaats van dubbele bestandslijst
+
+Bestanden staan al naast de viewer. De tab toont nu 3MF-instellingen en printgegevens. De aangeleverde 3MF wordt vooraf uitgelezen met Python-stdlib; geen extra browserafhankelijkheid. De proef koppelt de extractie expliciet aan demo G. Gewicht/tijd ontbreken en blijven Unknown. Geconfigureerde filamenten worden apart van toegewezen/verbruikte filamenten benoemd.
+
+## Filamentselectie en grove printtijd
+
+Geselecteerde filamenten uit modeltoewijzing, waar beschikbaar versterkt door slicinggebruik. Geen AMS-liveclaim. Hergebruik de slicerindicatie en rond die af; een eigen lengte/snelheidsformule verwart materiaaltoevoer met nozzlebeweging. Onvolledige plaatdata niet als totaal presenteren. Zie [[3MF_PRINT_DETAILS_RESEARCH]].
