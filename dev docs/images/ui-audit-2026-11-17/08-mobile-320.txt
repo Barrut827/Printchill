@@ -1,0 +1,93 @@
+- complementary:
+  - text: PRC Printchill
+  - navigation "Main navigation":
+    - button "Library 2"
+    - button "Print Reports 2"
+    - button "Import"
+  - text: Collections
+  - button "All parts"
+  - button "Workshop"
+  - button "Accessories"
+  - text: Saved searches Save a search to revisit your favourite parts. M My workshop Local demo · v3
+  - button "Settings"
+- main:
+  - button "Open navigation"
+  - button "My workshop"
+  - text: /
+  - strong: 7382-4916
+  - text: Part number
+  - strong: 7382-4916
+  - heading "Makita blower wall mount" [level=1]
+  - button "#workshop"
+  - button "#makita"
+  - button "+ Add tag"
+  - button "Open file"
+  - button "Register file changes"
+  - text: Part version
+  - combobox "Part version":
+    - option "004 · Latest"
+    - option "003" [selected]
+    - option "002"
+    - option "001"
+  - text: Historical version · fixed file revisions 14 Nov 2026 · Morgan
+  - strong: STL · Rev C · Part version 003
+  - text: 28 × 53.4 × 49.4 mm
+  - button "Reset view"
+  - button "Show dimensions"
+  - button "Zoom in"
+  - button "Zoom out"
+  - heading "Files in version 003" [level=2]
+  - paragraph: Exact revisions. One clear design context.
+  - button "View revision of blower_mount.SLDPRT":
+    - text: CAD
+    - strong: blower_mount.SLDPRT
+    - text: C
+  - button "Explore relationships for blower_mount.STL":
+    - text: STL
+    - strong: blower_mount.STL
+    - text: C
+  - button "View revision of blower_mount.3mf":
+    - text: 3MF
+    - strong: blower_mount.3mf
+    - text: G
+  - tablist:
+    - tab "Part Details" [selected]
+    - tab "Where used"
+    - tab "Logbook"
+    - tab "Print Reports"
+    - tab "Attachments 0"
+  - heading "Print setup" [level=2]
+  - paragraph: Part version 003 · 3MF revision G
+  - text: 3MF project settings
+  - term: Material
+  - definition: PLA
+  - text: Selected project filament materials
+  - term: Total weight
+  - definition: Unknown
+  - text: Saved slicing estimate · all plates
+  - term: Print time · indication
+  - definition: Slice required
+  - text: Slice all plates to obtain an indication
+  - term: Layer height
+  - definition: 0.2 mm
+  - text: Project setting
+  - term: Infill
+  - definition: 15%
+  - text: Project setting
+  - term: Infill type
+  - definition: grid
+  - text: Project setting
+  - term: Plates in 3MF
+  - definition: "2"
+  - text: Full project
+  - heading "Selected filament colours & types" [level=3]
+  - paragraph: Model assignments · 1 selected of 4 configured project filaments. Not a live AMS inventory.
+  - text: Filament 4
+  - strong: PLA
+  - text: "Generic PLA #DCF478"
+  - emphasis: Selected on model
+  - button "How to obtain a time indication"
+  - text: "Source:"
+  - strong: 7382-4916 - makita blower wall mount.3mf
+  - text: Project settings apply to the full 3MF, which can contain other parts. Object/plate overrides and variable layer heights are not resolved here. Complete saved slicing estimates are missing. Slice all plates and save/export with slicing data to obtain a time indication. Extracted from the supplied sample and assigned to demo revision G; automatic revision matching is not connected.
+- status: Git version linked. Part version unchanged.

@@ -1,0 +1,78 @@
+- complementary:
+  - text: PRC Printchill
+  - navigation "Main navigation":
+    - button "Library 2"
+    - button "Print Reports 1"
+    - button "Import"
+  - text: Collections
+  - button "All parts"
+  - button "Workshop"
+  - button "Accessories"
+  - text: Saved searches Save a search to revisit your favourite parts. M My workshop Local demo · v3
+  - button "Settings"
+- main:
+  - button "My workshop"
+  - text: /
+  - strong: 7382-4916
+  - text: Interactive prototype · v3 Part number
+  - strong: 7382-4916
+  - heading "Makita blower wall mount" [level=1]
+  - button "#workshop"
+  - button "#makita"
+  - button "+ Add tag"
+  - button "Open file"
+  - button "Register file changes"
+  - text: Part version
+  - combobox "Part version":
+    - option "003 · Latest" [selected]
+    - option "002"
+    - option "001"
+  - text: Latest registered version 14 Nov 2026 · Morgan
+  - strong: STL · Rev C · Part version 003
+  - text: 28 × 53.4 × 49.4 mm
+  - button "Reset view"
+  - button "Show dimensions"
+  - button "Zoom in"
+  - button "Zoom out"
+  - heading "Files in version 003" [level=2]
+  - paragraph: Exact revisions. One clear design context.
+  - button "View revision of blower_mount.SLDPRT":
+    - text: CAD
+    - strong: blower_mount.SLDPRT
+    - text: C
+  - button "Explore relationships for blower_mount.STL":
+    - text: STL
+    - strong: blower_mount.STL
+    - text: C
+  - button "View revision of blower_mount.3mf":
+    - text: 3MF
+    - strong: blower_mount.3mf
+    - text: G
+  - text: Register a file change to create the next Part version. Reports and attachments do not increase this number.
+  - tablist:
+    - tab "Part Details"
+    - tab "Where used" [selected]
+    - tab "Logbook"
+    - tab "Print Reports"
+    - tab "Attachments 0"
+  - heading "Where used" [level=2]
+  - paragraph: STL C from Part version 003 · All known exact-revision relationships
+  - 'group "Relationship diagram: 3MF users above the STL, CAD source below"':
+    - text: USED IN · 2 PROJECT REVISIONS
+    - button "3MF · Rev F blower_mount.3mf Uses selected STL":
+      - text: 3MF · Rev F
+      - strong: blower_mount.3mf
+      - text: Uses selected STL
+    - button "3MF · Rev G blower_mount.3mf Uses selected STL":
+      - text: 3MF · Rev G
+      - strong: blower_mount.3mf
+      - text: Uses selected STL
+    - button "STL · Rev C blower_mount.STL Selected STL":
+      - text: STL · Rev C
+      - strong: blower_mount.STL
+      - text: Selected STL
+    - button "CAD · Rev C blower_mount.SLDPRT CAD source":
+      - text: CAD · Rev C
+      - strong: blower_mount.SLDPRT
+      - text: CAD source
+  - paragraph: Relationships use document identity + exact revision, not matching revision letters. Demo relationships are explicit sample data; no file analysis is running.
