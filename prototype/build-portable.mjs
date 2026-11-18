@@ -23,5 +23,5 @@ try {
   html=html.replace(match[0],()=>'<style>'+css+'</style>');
  }
  await writeFile('Printchill-demo.html',html);
- console.log('Created Printchill-demo.html — standalone prototype v2');
+ console.log('Created Printchill-demo.html — standalone prototype v3');
 } finally {await rm(output,{recursive:true,force:true});}

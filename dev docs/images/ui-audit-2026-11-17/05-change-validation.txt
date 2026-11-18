@@ -1,0 +1,116 @@
+- complementary:
+  - text: PRC Printchill
+  - navigation "Main navigation":
+    - button "Library 2"
+    - button "Print Reports 1"
+    - button "Import"
+  - text: Collections
+  - button "All parts"
+  - button "Workshop"
+  - button "Accessories"
+  - text: Saved searches Save a search to revisit your favourite parts. M My workshop Local demo · v3
+  - button "Settings"
+- main:
+  - button "My workshop"
+  - text: /
+  - strong: 7382-4916
+  - text: Interactive prototype · v3 Part number
+  - strong: 7382-4916
+  - heading "Makita blower wall mount" [level=1]
+  - button "#workshop"
+  - button "#makita"
+  - button "+ Add tag"
+  - button "Open file"
+  - button "Register file changes"
+  - text: Part version
+  - combobox "Part version":
+    - option "003 · Latest"
+    - option "002" [selected]
+    - option "001"
+  - text: Historical version · fixed file revisions 12 Nov 2026 · Morgan
+  - strong: STL · Rev C · Part version 002
+  - text: 28 × 53.4 × 49.4 mm
+  - button "Reset view"
+  - button "Show dimensions"
+  - button "Zoom in"
+  - button "Zoom out"
+  - heading "Files in version 002" [level=2]
+  - paragraph: Exact revisions. One clear design context.
+  - button "View revision of blower_mount.SLDPRT":
+    - text: CAD
+    - strong: blower_mount.SLDPRT
+    - text: C
+  - button "Explore relationships for blower_mount.STL":
+    - text: STL
+    - strong: blower_mount.STL
+    - text: C
+  - button "View revision of blower_mount.3mf":
+    - text: 3MF
+    - strong: blower_mount.3mf
+    - text: F
+  - text: This version stays unchanged when newer files are registered. Reports and attachments do not increase this number.
+  - tablist:
+    - tab "Part Details"
+    - tab "Where used"
+    - tab "Logbook" [selected]
+    - tab "Print Reports"
+    - tab "Attachments 0"
+  - heading "Part history" [level=2]
+  - paragraph: Part number 7382-4916 · 3 registered versions · File changes only
+  - button "Register file changes"
+  - article:
+    - button "Expand Part version 003"
+    - button "003 Reduce supports for a cleaner fit.":
+      - text: "003"
+      - strong: Reduce supports for a cleaner fit.
+    - text: 14 Nov 2026 · Morgan · 1 file changed · Latest
+  - article:
+    - button "Collapse Part version 002" [expanded]
+    - button "002 Increase clearance around the mounting screws." [expanded]:
+      - text: "002"
+      - strong: Increase clearance around the mounting screws.
+    - text: 12 Nov 2026 · Morgan · 3 files changed
+    - heading "Files in Part version 002" [level=3]
+    - button "View this version"
+    - text: CAD
+    - strong: blower_mount.SLDPRT · Rev C
+    - paragraph: Increase clearance around the mounting screws.
+    - text: Changed STL
+    - strong: blower_mount.STL · Rev C
+    - paragraph: Export the updated mount from CAD revision C.
+    - text: Changed 3MF
+    - strong: blower_mount.3mf · Rev F
+    - paragraph: Reimport STL C and adjust supports.
+    - text: Changed
+  - article:
+    - button "Expand Part version 001"
+    - button "001 Initial design imported.":
+      - text: "001"
+      - strong: Initial design imported.
+    - text: 10 Nov 2026 · Morgan · 3 files registered
+- dialog:
+  - heading "Register file changes" [level=2]
+  - button "Close"
+  - paragraph: Part number 7382-4916 · Based on latest version 003. All selected changes create one new Part version 004.
+  - text: "Prototype: this simulates file revisions. It does not edit or detect changes in real CAD/STL/3MF files."
+  - checkbox "blower_mount.SLDPRT · C → D"
+  - text: blower_mount.SLDPRT · C → D
+  - textbox "Comment for blower_mount.SLDPRT":
+    - /placeholder: What changed in this file? (optional)
+  - checkbox "blower_mount.STL · C → D"
+  - text: blower_mount.STL · C → D
+  - textbox "Comment for blower_mount.STL":
+    - /placeholder: What changed in this file? (optional)
+  - checkbox "blower_mount.3mf · G → H"
+  - text: blower_mount.3mf · G → H
+  - textbox "Comment for blower_mount.3mf":
+    - /placeholder: What changed in this file? (optional)
+  - paragraph: Dependent files are not revised automatically. If the STL is re-exported or the 3MF reimported, include that file too.
+  - text: Material · updated 3MF demo profile
+  - combobox "Material · updated 3MF demo profile":
+    - option "PETG"
+    - option "PLA" [selected]
+  - paragraph: Material only changes when the 3MF is selected. Print Reports and attachments do not create versions.
+  - alert: Select at least one changed file.
+  - button "Cancel"
+  - button "Create Part version 004"

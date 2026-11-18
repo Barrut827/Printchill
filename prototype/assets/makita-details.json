@@ -1,0 +1,93 @@
+{
+  "sourceFile": "7382-4916 - makita blower wall mount.3mf",
+  "sourceSha256": "2e76747fb61a7f539b49b1aa575acad0071746fda813645f0ef83193b9bf58d0",
+  "scope": "Project settings and model assignments; all plates. Not a per-object effective settings calculation.",
+  "layerHeight": "0.2",
+  "infillDensity": "15%",
+  "infillPattern": "grid",
+  "plateCount": 2,
+  "filaments": [
+    {
+      "slot": 1,
+      "color": "#FFFFFF",
+      "type": "PLA",
+      "profile": "Bambu PLA Matte @BBL X1C",
+      "selected": false,
+      "assigned": false,
+      "usageConfirmed": false,
+      "usedGrams": null,
+      "usedMeters": null
+    },
+    {
+      "slot": 2,
+      "color": "#7D6556",
+      "type": "PLA",
+      "profile": "Bambu PLA Matte @BBL X1C",
+      "selected": false,
+      "assigned": false,
+      "usageConfirmed": false,
+      "usedGrams": null,
+      "usedMeters": null
+    },
+    {
+      "slot": 3,
+      "color": "#000000",
+      "type": "PLA",
+      "profile": "Bambu PLA Matte @BBL X1C",
+      "selected": false,
+      "assigned": false,
+      "usageConfirmed": false,
+      "usedGrams": null,
+      "usedMeters": null
+    },
+    {
+      "slot": 4,
+      "color": "#DCF478",
+      "type": "PLA",
+      "profile": "Generic PLA",
+      "selected": true,
+      "assigned": true,
+      "usageConfirmed": false,
+      "usedGrams": null,
+      "usedMeters": null
+    }
+  ],
+  "modelAssignments": [
+    {
+      "objectId": "2",
+      "name": "7382-4916 - makita blower wall mount.STL",
+      "slot": 4
+    },
+    {
+      "objectId": "4",
+      "name": "2957-8304-Makita-blower-mouthpiece-storage.STL",
+      "slot": 4
+    }
+  ],
+  "selectionBasis": "model_assignment",
+  "selectionComplete": true,
+  "paintedModels": false,
+  "totalWeight": null,
+  "printTimeSeconds": null,
+  "printTimeSource": null,
+  "timedPlateCount": 0,
+  "timeStatus": "needs_slicing",
+  "plateStatistics": [
+    {
+      "plate": "1",
+      "seconds": null,
+      "weight": null,
+      "timeSource": null,
+      "usageKnown": false
+    },
+    {
+      "plate": "2",
+      "seconds": null,
+      "weight": null,
+      "timeSource": null,
+      "usageKnown": false
+    }
+  ],
+  "statisticsNote": "Complete saved slicing estimates are missing. Slice all plates and save/export with slicing data to obtain a time indication.",
+  "overridesPresent": []
+}

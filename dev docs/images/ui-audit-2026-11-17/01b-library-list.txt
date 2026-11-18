@@ -1,0 +1,67 @@
+- complementary:
+  - text: PRC Printchill
+  - navigation "Main navigation":
+    - button "Library 2"
+    - button "Print Reports 1"
+    - button "Import"
+  - text: Collections
+  - button "All parts"
+  - button "Workshop"
+  - button "Accessories"
+  - text: Saved searches Save a search to revisit your favourite parts. M My workshop Local demo · v3
+  - button "Settings"
+- main:
+  - button "My workshop"
+  - text: /
+  - strong: Library
+  - text: Interactive prototype · v3 Your designs, connected
+  - heading "A home for every part." [level=1]
+  - paragraph: Find a design. Choose a version. See exactly what belongs together.
+  - button "Add part"
+  - textbox "Search parts":
+    - /placeholder: "Search name, part number or #tag…"
+  - button "Filters"
+  - button "Save search"
+  - button "Grid view"
+  - button "List view"
+  - text: 2 parts Part name · A–Z
+  - article:
+    - checkbox "Select Makita blower wall mount"
+    - button "View Makita blower wall mount in 3D":
+      - img "3D preview of Makita blower wall mount"
+    - text: Part number
+    - strong: 7382-4916
+    - button "Makita blower wall mount"
+    - text: Part version
+    - combobox "Part version for 7382-4916":
+      - option "003 · Latest" [selected]
+      - option "002"
+      - option "001"
+    - text: CAD C STL C 3MF G
+    - button "#workshop"
+    - button "#makita"
+    - text: PLA · Unknown Slice required
+    - paragraph: Sample 3MF metadata · 3MF G · Part version 003
+    - button "Where used"
+    - button "Open project"
+  - article:
+    - checkbox "Select NEO keychain"
+    - button "View NEO keychain in 3D":
+      - img "3D preview of NEO keychain"
+    - text: Part number
+    - strong: 1840-2301
+    - button "NEO keychain"
+    - text: Part version
+    - combobox "Part version for 1840-2301":
+      - option "002 · Latest" [selected]
+      - option "001"
+    - text: STL A 3MF B
+    - button "#accessories"
+    - button "#neo"
+    - text: PLA · 8 g 24 min
+    - paragraph: Demo profile · 3MF B · Part version 002
+    - button "Where used"
+    - button "Open project"
+  - button "Your next idea Add an STL to your workshop."
+  - strong: One part number. A clear version history.
+  - text: Each Part version keeps its exact file revisions. Reports and attachments add context without changing the version.

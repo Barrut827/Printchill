@@ -183,3 +183,11 @@ met part nummer en name, revision. vanuit deze child components kun je dan where
 bij een mono part is er geen structure en deze tab dus leeg.
 
 side note: het is nu erg op solidworks ge-orienteerd, maar in de toekomst moeten ook om kunnen gaan met Fusion 360 en freeCad
+
+## Part Details
+
+Part Details vervangt de dubbele bestandentab. Het Part-versionpaneel blijft de bestandsselectie tonen. Details refereren alleen de gekozen 3MF-revisie: materiaal, totaalgewicht, printtijd, laaghoogte, infillpercentage/-type, filamentkleuren/-types en plaatcount. Projectpresets, objectoverrides, configuratie en werkelijk filamentverbruik zijn verschillende scopes; onbekende waarden blijven Unknown. De proef gebruikt een reproduceerbare extractie uit het aangeleverde Bambu-3MF voor demo-revisie G, zonder automatische revisieherkenning.
+
+## Consolidatie filament en tijdindicatie
+
+Part Details toont geselecteerde model-/slicingfilamenten; projectconfiguratie is geen live AMS-inventaris. Tijdindicatie gebruikt complete voorspellingen per plaat, of ingesloten G-code-tijdcommentaar, afgerond op vijf minuten. Zonder complete gegevens: Slice required. Geen schatting uit filamentlengte en nominale printsnelheid. Bronnen, scope en beperkingen: [[3MF_PRINT_DETAILS_RESEARCH]].

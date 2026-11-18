@@ -1,0 +1,384 @@
+{
+  "commit": "f0f3f04",
+  "artifactSha256": "d59ea2ced4b71f801be60bd951036715b9b629985728290dfd0ececa727ee3f3",
+  "screens": [
+    "01-library",
+    "02-part-details",
+    "03-where-used",
+    "04-logbook",
+    "05-change-validation",
+    "06-print-report",
+    "07-attachments",
+    "08-mobile-320"
+  ],
+  "errors": [],
+  "library": {
+    "tags": [
+      {
+        "text": "#workshop",
+        "foreground": "rgb(86, 123, 115)",
+        "background": "rgb(238, 245, 242)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 60.359375,
+        "height": 19,
+        "contrastRatio": 4.24
+      },
+      {
+        "text": "#makita",
+        "foreground": "rgb(86, 123, 115)",
+        "background": "rgb(238, 245, 242)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 47.015625,
+        "height": 19,
+        "contrastRatio": 4.24
+      },
+      {
+        "text": "#accessories",
+        "foreground": "rgb(86, 123, 115)",
+        "background": "rgb(238, 245, 242)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 70.359375,
+        "height": 19,
+        "contrastRatio": 4.24
+      },
+      {
+        "text": "#neo",
+        "foreground": "rgb(86, 123, 115)",
+        "background": "rgb(238, 245, 242)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 34.25,
+        "height": 19,
+        "contrastRatio": 4.24
+      }
+    ],
+    "checkboxes": [
+      {
+        "text": "",
+        "foreground": "rgb(23, 43, 57)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "width": 17,
+        "height": 17
+      },
+      {
+        "text": "",
+        "foreground": "rgb(23, 43, 57)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "width": 17,
+        "height": 17
+      }
+    ],
+    "sortElement": {
+      "tag": "SPAN",
+      "role": null,
+      "tabIndex": -1
+    }
+  },
+  "searchMatches": 1,
+  "details": {
+    "helpers": [
+      {
+        "text": "Selected project filament materials",
+        "foreground": "rgb(138, 155, 159)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 152.859375,
+        "height": 11,
+        "contrastRatio": 2.89
+      },
+      {
+        "text": "Saved slicing estimate \u00b7 all plates",
+        "foreground": "rgb(138, 155, 159)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 147.859375,
+        "height": 11,
+        "contrastRatio": 2.89
+      },
+      {
+        "text": "Slice all plates to obtain an indication",
+        "foreground": "rgb(138, 155, 159)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 164,
+        "height": 11,
+        "contrastRatio": 2.89
+      },
+      {
+        "text": "Project setting",
+        "foreground": "rgb(138, 155, 159)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 63.375,
+        "height": 11,
+        "contrastRatio": 2.89
+      },
+      {
+        "text": "Project setting",
+        "foreground": "rgb(138, 155, 159)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 63.375,
+        "height": 11,
+        "contrastRatio": 2.89
+      },
+      {
+        "text": "Project setting",
+        "foreground": "rgb(138, 155, 159)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 63.375,
+        "height": 11,
+        "contrastRatio": 2.89
+      },
+      {
+        "text": "Full project",
+        "foreground": "rgb(138, 155, 159)",
+        "background": "rgb(239, 246, 243)",
+        "fontSize": "10px",
+        "fontWeight": "400",
+        "width": 48.90625,
+        "height": 11,
+        "contrastRatio": 2.63
+      }
+    ],
+    "tabs": [
+      {
+        "text": "Part Details",
+        "foreground": "rgb(8, 127, 120)",
+        "background": "rgb(248, 250, 251)",
+        "fontSize": "13px",
+        "fontWeight": "650",
+        "width": 71.546875,
+        "height": 43,
+        "contrastRatio": 4.65
+      },
+      {
+        "text": "Where used",
+        "foreground": "rgb(119, 136, 146)",
+        "background": "rgb(248, 250, 251)",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "width": 70.09375,
+        "height": 43,
+        "contrastRatio": 3.51
+      },
+      {
+        "text": "Logbook",
+        "foreground": "rgb(119, 136, 146)",
+        "background": "rgb(248, 250, 251)",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "width": 49.890625,
+        "height": 43,
+        "contrastRatio": 3.51
+      },
+      {
+        "text": "Print Reports",
+        "foreground": "rgb(119, 136, 146)",
+        "background": "rgb(248, 250, 251)",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "width": 75.875,
+        "height": 43,
+        "contrastRatio": 3.51
+      },
+      {
+        "text": "Attachments 0",
+        "foreground": "rgb(119, 136, 146)",
+        "background": "rgb(248, 250, 251)",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "width": 92.390625,
+        "height": 43,
+        "contrastRatio": 3.51
+      }
+    ],
+    "values": [
+      {
+        "text": "PLA",
+        "foreground": "rgb(35, 74, 80)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "23px",
+        "fontWeight": "600",
+        "width": 228.5,
+        "height": 27
+      },
+      {
+        "text": "Unknown",
+        "foreground": "rgb(35, 74, 80)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "23px",
+        "fontWeight": "600",
+        "width": 228.5,
+        "height": 27
+      },
+      {
+        "text": "Slice required",
+        "foreground": "rgb(35, 74, 80)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "23px",
+        "fontWeight": "600",
+        "width": 228.5,
+        "height": 27
+      },
+      {
+        "text": "0.2 mm",
+        "foreground": "rgb(35, 74, 80)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "23px",
+        "fontWeight": "600",
+        "width": 228.5,
+        "height": 27
+      },
+      {
+        "text": "15%",
+        "foreground": "rgb(35, 74, 80)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "23px",
+        "fontWeight": "600",
+        "width": 228.5,
+        "height": 27
+      },
+      {
+        "text": "grid",
+        "foreground": "rgb(35, 74, 80)",
+        "background": "rgb(255, 255, 255)",
+        "fontSize": "23px",
+        "fontWeight": "600",
+        "width": 228.5,
+        "height": 27
+      },
+      {
+        "text": "2",
+        "foreground": "rgb(35, 74, 80)",
+        "background": "rgb(239, 246, 243)",
+        "fontSize": "23px",
+        "fontWeight": "600",
+        "width": 228.5,
+        "height": 27
+      }
+    ],
+    "panelRole": null,
+    "canvasKeyboard": {
+      "tabIndex": -1,
+      "role": null,
+      "label": null
+    }
+  },
+  "tabKeyboard": {
+    "before": "Part Details",
+    "after": "Part Details",
+    "activeTab": "Part Details"
+  },
+  "graph": {
+    "nodes": 4,
+    "lines": 3,
+    "headings": [
+      "3MF \u00b7 REV F\nblower_mount.3mf\nUses selected STL",
+      "3MF \u00b7 REV G\nblower_mount.3mf\nUses selected STL",
+      "STL \u00b7 REV C\nblower_mount.STL\nSelected STL",
+      "CAD \u00b7 REV C\nblower_mount.SLDPRT\nCAD source"
+    ]
+  },
+  "history": {
+    "selected": "002",
+    "files": "Files in version 002\n\nExact revisions. One clear design context.\n\nCAD\nblower_mount.SLDPRT\nC\nSTL\nblower_mount.STL\nC\n3MF\nblower_mount.3mf\nF\nThis version stays unchanged when newer files are registered.\nReports and attachments do not increase this number.",
+    "log": "Files in Part version 002\nView this version\nCAD\nblower_mount.SLDPRT \u00b7 Rev C\n\nIncrease clearance around the mounting screws.\n\nChanged\nSTL\nblower_mount.STL \u00b7 Rev C\n\nExport the updated mount from CAD revision C.\n\nChanged\n3MF\nblower_mount.3mf \u00b7 Rev F\n\nReimport STL C and adjust supports.\n\nChanged",
+    "dots": [
+      {
+        "text": "",
+        "foreground": "rgb(23, 43, 57)",
+        "background": "rgb(248, 250, 251)",
+        "fontSize": "13px",
+        "fontWeight": "600",
+        "width": 22,
+        "height": 22
+      },
+      {
+        "text": "",
+        "foreground": "rgb(23, 43, 57)",
+        "background": "rgb(8, 127, 120)",
+        "fontSize": "13px",
+        "fontWeight": "600",
+        "width": 22,
+        "height": 22
+      },
+      {
+        "text": "",
+        "foreground": "rgb(23, 43, 57)",
+        "background": "rgb(248, 250, 251)",
+        "fontSize": "13px",
+        "fontWeight": "600",
+        "width": 22,
+        "height": 22
+      }
+    ]
+  },
+  "dialog": {
+    "ariaLabel": null,
+    "ariaLabelledby": null,
+    "snapshot": "- dialog:\n  - heading \"Register file changes\" [level=2]\n  - button \"Close\"\n  - paragraph: Part number 7382-4916 \u00b7 Based on latest version 003. All selected changes create one new Part version 004.\n  - text: \"Prototype: this simulates file revisions. It does not edit or detect changes in real CAD/STL/3MF files.\"\n  - checkbox \"blower_mount.SLDPRT \u00b7 C \u2192 D\"\n  - text: blower_mount.SLDPRT \u00b7 C \u2192 D\n  - textbox \"Comment for blower_mount.SLDPRT\":\n    - /placeholder: What changed in this file? (optional)\n  - checkbox \"blower_mount.STL \u00b7 C \u2192 D\"\n  - text: blower_mount.STL \u00b7 C \u2192 D\n  - textbox \"Comment for blower_mount.STL\":\n    - /placeholder: What changed in this file? (optional)\n  - checkbox \"blower_mount.3mf \u00b7 G \u2192 H\"\n  - text: blower_mount.3mf \u00b7 G \u2192 H\n  - textbox \"Comment for blower_mount.3mf\":\n    - /placeholder: What changed in this file? (optional)\n  - paragraph: Dependent files are not revised automatically. If the STL is re-exported or the 3MF reimported, include that file too.\n  - text: Material \u00b7 updated 3MF demo profile\n  - combobox \"Material \u00b7 updated 3MF demo profile\":\n    - option \"PETG\"\n    - option \"PLA\" [selected]\n  - paragraph: Material only changes when the 3MF is selected. Print Reports and attachments do not create versions.\n  - alert\n  - button \"Cancel\"\n  - button \"Create Part version 004\"",
+    "activeBeforeEscape": "<button class=\"icon ghost\" id=\"close-modal\" aria-label=\"Close\"><i class=\"ph ph-x\" aria-hidden=\"true\"></i></button>",
+    "tabStayedInside": true,
+    "escapeCloses": true
+  },
+  "change": {
+    "selectedPartVersion": "002",
+    "baseMessage": "Part number 7382-4916 \u00b7 Based on latest version 003. All selected changes create one new Part version 004.",
+    "error": "Select at least one changed file."
+  },
+  "createdVersion": "004",
+  "discardedReportDraft": "",
+  "reportDialog": {
+    "selected": "7382-4916:004",
+    "material": "PLA"
+  },
+  "versionAfterReport": "004",
+  "attachments": {
+    "version": "004",
+    "content": "Controller firmware\n\nhttps://github.com/example/firmware\n\nMutable ref: main\n\n004\nOpen repository"
+  },
+  "mobile": {
+    "innerWidth": 320,
+    "scrollWidth": 320,
+    "tabsClientWidth": 288,
+    "tabsScrollWidth": 460
+  },
+  "afterReload": {
+    "versionOptions": [
+      "003 \u00b7 Latest",
+      "002",
+      "001"
+    ]
+  },
+  "listView": {
+    "tableCount": 0,
+    "gridRoleCount": 0,
+    "sortButtons": 0,
+    "viewClass": "list-mode"
+  },
+  "laptop": {
+    "viewportHeight": 768,
+    "tabsTop": 722,
+    "firstMetricTop": 851.09375
+  },
+  "historicalGeometry": {
+    "visibleVersion": "001",
+    "label": "STL \u00b7 Rev B \u00b7 Part version 001",
+    "sourceNote": "No 3MF metadata has been registered for this revision. Missing values remain Unknown; data from another version is never substituted."
+  }
+}

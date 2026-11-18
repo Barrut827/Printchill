@@ -1,0 +1,86 @@
+- complementary:
+  - text: PRC Printchill
+  - navigation "Main navigation":
+    - button "Library 2"
+    - button "Print Reports 1"
+    - button "Import"
+  - text: Collections
+  - button "All parts"
+  - button "Workshop"
+  - button "Accessories"
+  - text: Saved searches Save a search to revisit your favourite parts. M My workshop Local demo · v3
+  - button "Settings"
+- main:
+  - button "My workshop"
+  - text: /
+  - strong: 7382-4916
+  - text: Interactive prototype · v3 Part number
+  - strong: 7382-4916
+  - heading "Makita blower wall mount" [level=1]
+  - button "#workshop"
+  - button "#makita"
+  - button "+ Add tag"
+  - button "Open file"
+  - button "Register file changes"
+  - text: Part version
+  - combobox "Part version":
+    - option "004 · Latest" [selected]
+    - option "003"
+    - option "002"
+    - option "001"
+  - text: Latest registered version 17 Nov 2026 · Morgan
+  - strong: STL · Rev C · Part version 004
+  - text: 28 × 53.4 × 49.4 mm
+  - button "Reset view"
+  - button "Show dimensions"
+  - button "Zoom in"
+  - button "Zoom out"
+  - heading "Files in version 004" [level=2]
+  - paragraph: Exact revisions. One clear design context.
+  - button "View revision of blower_mount.SLDPRT":
+    - text: CAD
+    - strong: blower_mount.SLDPRT
+    - text: C
+  - button "Explore relationships for blower_mount.STL":
+    - text: STL
+    - strong: blower_mount.STL
+    - text: C
+  - button "View revision of blower_mount.3mf":
+    - text: 3MF
+    - strong: blower_mount.3mf
+    - text: H
+  - text: Register a file change to create the next Part version. Reports and attachments do not increase this number.
+  - tablist:
+    - tab "Part Details"
+    - tab "Where used"
+    - tab "Logbook"
+    - tab "Print Reports" [selected]
+    - tab "Attachments 0"
+  - heading "Print attempts" [level=2]
+  - paragraph: Part version 004 · Adding a report does not create a new version.
+  - button "Add Print Report"
+  - text: No print attempts recorded for this Part version.
+- dialog:
+  - heading "Record a print attempt" [level=2]
+  - button "Close"
+  - paragraph: This adds a report without changing the Part version.
+  - text: Printed Part version
+  - combobox "Printed Part version":
+    - option "7382-4916 · Makita blower wall mount · Version 004" [selected]
+  - text: Printer
+  - textbox "Printer": Bambu Lab X1 Carbon
+  - text: Material
+  - textbox "Material": PLA
+  - text: Result
+  - combobox "Result":
+    - option "Successful"
+    - option "Failed" [selected]
+    - option "Aborted"
+  - text: Observations & measurements
+  - textbox "Observations & measurements": "Audit print attempt: 0.3 mm gap; reduce supports next time."
+  - text: Photos / screenshots
+  - button "Photos / screenshots"
+  - paragraph: Paste screenshots with Ctrl+V. Up to 5 images, 5 MB each.
+  - alert
+  - button "Save Print Report"
+- status: Part version 004 created. Earlier versions are unchanged.

@@ -22,6 +22,7 @@ export function registerChange(part,changes,{date,author='Morgan',profile}={}) {
   if(file.sources)for(const source of file.sources)if(ids.has(source.id))source.rev=files.find(f=>f.id===source.id).rev;
  }
  const version={number:pad(number),date:date||new Date().toISOString().slice(0,10),author,files,profile:structuredClone(profile||base.profile),changes:changes.map(c=>({id:c.id,comment:c.comment.trim()}))};
+ if(base.details&&!changes.some(c=>base.files.find(f=>f.id===c.id)?.kind==='3MF'))version.details=structuredClone(base.details);
  part.versions.push(version);return version;
 }
 export function firstSentence(version){const text=version.changes.map(c=>c.comment).find(Boolean);return text?(text.match(/^[^.!?\n]+[.!?]?/)?.[0]||text):'File revisions updated.';}

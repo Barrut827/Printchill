@@ -914,6 +914,11 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 
 #### Businessregels
 
+- De tab **Part Details** vervangt de dubbele bestanden-/revisietab. Bestanden blijven in het Part-versionpaneel; STL blijft aanklikbaar voor Where used.
+- Details van uitsluitend de geselecteerde Part version: materiaal, totaalgewicht (g), printtijd, layer height (mm), infill (% en type), geselecteerde filamentkleuren/-types en plaatcount.
+- 3MF-bron en scope zijn zichtbaar: projectinstellingen zijn geen bewijs van effectieve object-/plaatinstellingen; geconfigureerde filamenten zijn geen AMS-inventaris en niet automatisch gebruikt. Toon modeltoewijzingen of slicinggebruik; ongebruikte geconfigureerde slots niet als geselecteerd tonen.
+- Geen opgeslagen gewicht: Unknown. Printtijd heet Print time · indication; lees alle plaatvoorspellingen of ingesloten G-code-tijdcommentaar en rond af op vijf minuten. Zonder volledige tijdgegevens: Slice required; geen lengte/snelheid-heuristiek. Bij meerdere platen gelden totalen voor het volledige project, niet alleen dit Part.
+
 - Kaartgegevens omvatten waar beschikbaar last modified, last printed, printmateriaal, hoeveelheid, kleur en printtijd.
 - Printgegevens komen uitsluitend uit de documentrevisies of Print Reports van de geselecteerde Part version; geen mix met andere versies.
 - Ontbrekende gegevens worden niet als nul of succesvolle print getoond.
@@ -944,6 +949,14 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 | UC-006-AC-04 | Actieve zoekopdracht | Viewer wordt gesloten | Zoekopdracht en scrollpositie blijven behouden | Niet uitgevoerd |
 | UC-006-AC-05 | Gekozen Part version | Sliceractie wordt uitgevoerd | Exacte 3MF-versie opent; geen vervanging door latest | Niet uitgevoerd |
 | UC-006-AC-06 | Geen hoverbediening | Gebruiker navigeert met toetsenbord | Details en viewer blijven bereikbaar | Niet uitgevoerd |
+
+| UC-006-AC-06 | Part met geregistreerde 3MF-metadata | Part Details geopend | Alle gevraagde velden met eenheden, bron en versiecontext zichtbaar | Prototypecontrole |
+| UC-006-AC-07 | Meerdere filamenten en platen | Details geopend | Kleuren/types afzonderlijk zichtbaar; plaatcount en projectscope expliciet | Prototypecontrole |
+| UC-006-AC-08 | Geen slicingstatistieken of historische 3MF | Details geopend | Ontbrekende gegevens Unknown; geen data van een andere revisie | Prototypecontrole |
+
+| UC-006-AC-09 | Vier slots, alleen extruder 4 op de modellen | Part Details geopend | Alleen geselecteerd Generic PLA #DCF478 zichtbaar; configuratie geen AMS-liveclaim | Prototypecontrole |
+| UC-006-AC-10 | Complete plaatvoorspellingen | Details geopend | Ruwe tijden bewaard en totaal als grove indicatie gepresenteerd | Synthetische extractie- en modeltests |
+| UC-006-AC-11 | Alleen gedeeltelijke of eerste-laagtijd | Details geopend | Geen fictieve totale tijd; Slice required met instructie | Prototypecontrole |
 
 #### Afhankelijkheden en afbakening
 
