@@ -105,3 +105,16 @@ Bij een runtimefout toont de macro de stap, foutcode en foutbron. Stuur die meld
 - Of een vooraf geopend ander document behouden bleef.
 
 Voer ook tests uit met een leeg propertyveld, dubbele namen op document-/configuratieniveau en tekst met quotes, backslashes, regeleinden en Unicode. Zie [het volledige POC-plan](../dev%20docs/SOLIDWORKS_JSON_POC.md).
+
+## Assemblycomponenten — nieuwe POC
+
+`ExportAssemblyStructure.bas` richt zich op SolidWorks Design Premium 2026 SP0 / VBA 64-bit. Importeren via VBA **File → Import File**; bij kopiëren/plakken de eerste `Attribute VB_Name`-regel weglaten.
+
+1. Sluit alle SolidWorks-documenten; de macro weigert een bestaande sessie.
+2. Start `main`, kies een gesloten `.SLDASM` en een nieuwe JSON-uitvoerlocatie.
+3. De macro opent read-only, leest de actieve configuratie via `GetRootComponent3(False)` / `GetChildren`, en sluit de eigen geladen documenten zonder save.
+4. Importeer de JSON in de demo bij **Import → SolidWorks assembly manifest**, met de juiste doelassembly.
+
+Componentnaam, pad, referentieconfiguratie, suppressioncode en diepte blijven per instantie bewaard. Geen rebuild, configuratiewissel, resolve of wijzigingen aan bronproperties. Lightweight/suppressed kinderen kunnen onvolledig zijn; de export vermeldt dit. Root-, mate-, BOM-quantity- en geometrievalidatie zijn geen onderdeel van deze proef.
+
+**Nog niet uitgevoerd op Windows/SolidWorks.** De Linux-cloud kan dit VBA-script niet compileren of de native assemblystructuur verifiëren. Controleer bronhashes vóór/na een praktijktest: grootte/timestampcontrole in de macro is geen hashbewijs. Het manifest wordt in de UI als door de gebruiker aangeleverde, nog niet byte-geverifieerde bron aangemerkt. De Document Manager-route blijft afhankelijk van een geschikte sleutel; de eerdere sleutelvrije proef is niet opnieuw geopend.

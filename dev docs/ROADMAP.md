@@ -20,3 +20,15 @@ Prototype 2 verwerkt feedback over Part versions, Engels, prominente Part number
 Part Details (UC-006): 3MF-projectmetadata in de UI-proef. Automatische import, effectieve object-/plaatinstellingen en volledige slicingtotalen blijven vervolgstappen.
 
 Geconsolideerd: geselecteerde filamenten en Print time · indication. Vervolg: echte geslicete 3MF-fixture vergelijken met Bambu Studio, veilige import van slicingresultaten en later een lokale/background slicerconnector.
+
+## Prototype v4
+
+UC-013 t/m UC-016: samplecatalogus/componenten, echte A/B-previews, engineeringtabel/vergelijking, lokale opslag/concepts en bestaand lifecyclebeleid. UI-reviewpunten worden expliciet nagelopen in prototype/design-qa.md.
+
+Nog open voor native CAD: assemblymacro op SolidWorks 2026 SP0 compileren en uitvoeren, tree/configuraties controleren, bronhashes vergelijken; daarna desgewenst gelicentieerde Document Manager-worker. Productieauth, gelijktijdig werken, echte CAD/slicerconnectors, slicing en geometrische afwijkingsanalyse blijven afzonderlijke stappen.
+
+## Toekomstige uitbreiding — FreeCAD
+
+- FreeCAD-integratie staat op de backlog, zonder geplande release of deadline; SolidWorks blijft de eerste CAD-integratie.
+- Onderzoek: metadata en custom properties uit `.FCStd`, assembly-childrelaties en het koppelen van CAD-revisies aan STL-exporten en Part versions.
+- Afhankelijkheden: stabiele CAD-import en relatieopslag; vóór implementatie een eigen use case en compatibiliteitsproef met FreeCAD-versies en assemblystructuren uitwerken. De huidige sample-inspectie is nog geen volledige integratie.

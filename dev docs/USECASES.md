@@ -19,6 +19,10 @@
 - [UC-010 — Snapshot van documentversies vastleggen en raadplegen](#uc-010)
 - [UC-011 — Part versions en logbook beheren](#uc-011)
 - [UC-012 — Attachments en softwareverwijzingen per Part version beheren](#uc-012)
+- [UC-013 — Samplebestanden en assemblycomponenten inspecteren](#uc-013)
+- [UC-014 — Part versions vergelijken en efficiënt doorzoeken](#uc-014)
+- [UC-015 — Werk en rapportconcepten lokaal bewaren en herstellen](#uc-015)
+- [UC-016 — Design state en maturity toepassen](#uc-016)
 - [Architectuur en definities](Architecture.md)
 - [Volledig use-casetemplate](#volledig-use-casetemplate)
   - [UC-XXX — Template: werkwoord + gebruikersdoel](#uc-xxx)
@@ -48,6 +52,10 @@ Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de det
 | UC-010 | Snapshot van documentversies vastleggen en raadplegen | Engineer / maker | Uitgesteld | Nog te bepalen | Nog te bepalen | Zie detailbeschrijving |
 | UC-011 | Part versions en logbook beheren | Engineer / maker | Concept | Must | UI-prototype 2 | UC-002, UC-005 |
 | UC-012 | Attachments en softwareverwijzingen per Part version beheren | Engineer / maker | Concept | Must | UI-prototype 2 | UC-011 |
+| UC-016 | Design state en maturity toepassen | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
+| UC-015 | Werk en rapportconcepten lokaal bewaren en herstellen | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
+| UC-014 | Part versions vergelijken en efficiënt doorzoeken | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
+| UC-013 | Samplebestanden en assemblycomponenten inspecteren | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
 
 
 ### UC-001
@@ -1827,6 +1835,425 @@ dan krijg je:
 	
 
 
+### UC-013
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Samplebestanden en assemblycomponenten inspecteren
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-013 |
+| Titel | Samplebestanden en assemblycomponenten inspecteren |
+| Type | CRUD-C / CRUD-R |
+| Status | In uitvoering — UI-prototype |
+| Prioriteit | Must |
+| Beoogde release | Prototype v4; productie nog te plannen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-17 |
+| Goedkeuring | Gebruikersopdracht; productieacceptatie open |
+
+#### Doel en waarde
+
+Bestanden, revisies en verklaarde bronrelaties uit samples raadplegen; onbewezen CAD-relaties blijven onzeker.
+
+#### Actoren
+
+Engineer / maker (primair); Printchill; voor native assembly-extractie SolidWorks 2026 op Windows.
+
+#### Trigger
+
+Gebruiker selecteert een part/project/assembly.
+
+#### Voorwaarden
+
+Samples of geregistreerde Parts zijn beschikbaar; gebruiker heeft toegang tot de lokale bestanden.
+
+#### Resultaat bij succes
+
+Toont de opgegeven hiërarchie, configuraties en suppressed/unresolved-componenten; meldt de extractiescope en bronverificatie.
+
+#### Garanties bij mislukking
+
+Geen overschrijven van bronbestanden of bestaande historische versies; fout en onvolledigheid expliciet.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Selecteert een Part/project/assembly | Toont bronbestanden, hashes, 3MF-objecten met platen en filamenten; koppelt aanwezige lokale bestanden op expliciete naam met onzekerheidslabel. |
+| 2 | Importeert een SolidWorks-assemblymanifest | Toont de opgegeven hiërarchie, configuraties en suppressed/unresolved-componenten; meldt de extractiescope en bronverificatie. |
+| 3 | Raadpleegt historische context | Behoudt concrete bronbestanden en revisies |
+
+#### Alternatieve scenario’s
+
+- A1: annuleert; geen ongewenste mutatie, bestaande conceptinvoer blijft beschikbaar.
+- A2: bron ontbreekt of relatie onzeker; toont beperking en beschikbare gedeeltelijke informatie.
+
+#### Fouten en uitzonderingen
+
+- E1: ongeldige invoer of manifest; geen gedeeltelijke publicatie, fout met herstelactie.
+- E2: lokale opslag niet beschikbaar; meldt dat gegevens nog niet veilig bewaard zijn en biedt export/herhalen.
+
+#### Businessregels
+
+- SLDASM zonder ondersteunde extractor blijft structure unavailable; geen kindcomponenten verzinnen. FreeCAD Group/Link is geen SolidWorks-bewijs.
+- A/B-bestanden houden hun eigen geometrie; CAD/STL-naamovereenkomst is geen bewezen exportrelatie.
+- Engels als UI-basistaal. Toetsenbordbediening, zichtbare labels, voldoende contrast en aanvullende hover-/focustooltips.
+
+#### Gegevens en relaties
+
+Part number → Part version → exacte documentrevisies; bronnen en zekerheid bij relaties blijven afzonderlijk vastgelegd.
+
+#### Rechten en kwaliteitsvoorwaarden
+
+Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volledige CAD-engine of rechtenmodel claimen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-013-AC-01 | Geldige broncontext | Hoofdscenario doorlopen | Verwacht resultaat met juiste versiecontext | Prototype-/browsertests |
+| UC-013-AC-02 | Onbekende bron of fout | Actie uitgevoerd | Geen verzonnen of gedeeltelijk als volledig gepresenteerde data | Prototype-/browsertests |
+| UC-013-AC-03 | Bestaande historie | Nieuwe aanvullende actie | Historische bestanden blijven onveranderd | Prototype-/browsertests |
+
+#### Afhankelijkheden en afbakening
+
+[[Architecture]], [[UI_DESIGN_REVIEW]], UC-006/009/011/012. Geen automatische CAD-rebuild, slicing, geometrische tolerantieberekening of cloudsync in deze proef.
+
+#### Open vragen en aannames
+
+Productieopslag, multi-userconflicten, licentie-/extractorcapabilities en volledige toegankelijke CAD-interactie blijven vervolgwerk.
+
+#### Verificatieresultaat
+
+Zie prototype/design-qa.md; native SolidWorks-macro kan alleen op Windows/SolidWorks worden geverifieerd.
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-17 | Sampleanalyse en UI-reviewverwerking beschreven | Codex |
+
+[Back to top](#inhoudsopgave)
+
+### UC-014
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Part versions vergelijken en efficiënt doorzoeken
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-014 |
+| Titel | Part versions vergelijken en efficiënt doorzoeken |
+| Type | CRUD-C / CRUD-R |
+| Status | In uitvoering — UI-prototype |
+| Prioriteit | Must |
+| Beoogde release | Prototype v4; productie nog te plannen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-17 |
+| Goedkeuring | Gebruikersopdracht; productieacceptatie open |
+
+#### Doel en waarde
+
+Veel Parts in een sorteerbare tabel bekijken en twee vaste versies naast elkaar beoordelen.
+
+#### Actoren
+
+Engineer / maker (primair); Printchill; voor native assembly-extractie SolidWorks 2026 op Windows.
+
+#### Trigger
+
+Gebruiker kiest raster of tabel, sortering en filters.
+
+#### Voorwaarden
+
+Samples of geregistreerde Parts zijn beschikbaar; gebruiker heeft toegang tot de lokale bestanden.
+
+#### Resultaat bij succes
+
+Toont toegevoegde/gewijzigde bestanden en 3MF-parameters, plus beschikbare echte STL-previews.
+
+#### Garanties bij mislukking
+
+Geen overschrijven van bronbestanden of bestaande historische versies; fout en onvolledigheid expliciet.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Kiest raster of tabel, sortering en filters | Behoudt geselecteerde versiecontext en toont kolommen/zoekcriteria. |
+| 2 | Kiest Compare en twee versies | Toont toegevoegde/gewijzigde bestanden en 3MF-parameters, plus beschikbare echte STL-previews. |
+| 3 | Raadpleegt historische context | Behoudt concrete bronbestanden en revisies |
+
+#### Alternatieve scenario’s
+
+- A1: annuleert; geen ongewenste mutatie, bestaande conceptinvoer blijft beschikbaar.
+- A2: bron ontbreekt of relatie onzeker; toont beperking en beschikbare gedeeltelijke informatie.
+
+#### Fouten en uitzonderingen
+
+- E1: ongeldige invoer of manifest; geen gedeeltelijke publicatie, fout met herstelactie.
+- E2: lokale opslag niet beschikbaar; meldt dat gegevens nog niet veilig bewaard zijn en biedt export/herhalen.
+
+#### Businessregels
+
+- Ontbrekende historische geometrie blijft expliciet onbekend; geen mesh-afwijkingsanalyse claimen.
+- Een vergelijking verandert geen document of Part version.
+- Engels als UI-basistaal. Toetsenbordbediening, zichtbare labels, voldoende contrast en aanvullende hover-/focustooltips.
+
+#### Gegevens en relaties
+
+Part number → Part version → exacte documentrevisies; bronnen en zekerheid bij relaties blijven afzonderlijk vastgelegd.
+
+#### Rechten en kwaliteitsvoorwaarden
+
+Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volledige CAD-engine of rechtenmodel claimen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-014-AC-01 | Geldige broncontext | Hoofdscenario doorlopen | Verwacht resultaat met juiste versiecontext | Prototype-/browsertests |
+| UC-014-AC-02 | Onbekende bron of fout | Actie uitgevoerd | Geen verzonnen of gedeeltelijk als volledig gepresenteerde data | Prototype-/browsertests |
+| UC-014-AC-03 | Bestaande historie | Nieuwe aanvullende actie | Historische bestanden blijven onveranderd | Prototype-/browsertests |
+
+#### Afhankelijkheden en afbakening
+
+[[Architecture]], [[UI_DESIGN_REVIEW]], UC-006/009/011/012. Geen automatische CAD-rebuild, slicing, geometrische tolerantieberekening of cloudsync in deze proef.
+
+#### Open vragen en aannames
+
+Productieopslag, multi-userconflicten, licentie-/extractorcapabilities en volledige toegankelijke CAD-interactie blijven vervolgwerk.
+
+#### Verificatieresultaat
+
+Zie prototype/design-qa.md; native SolidWorks-macro kan alleen op Windows/SolidWorks worden geverifieerd.
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-17 | Sampleanalyse en UI-reviewverwerking beschreven | Codex |
+
+[Back to top](#inhoudsopgave)
+
+### UC-015
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Werk en rapportconcepten lokaal bewaren en herstellen
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-015 |
+| Titel | Werk en rapportconcepten lokaal bewaren en herstellen |
+| Type | CRUD-C / CRUD-R |
+| Status | In uitvoering — UI-prototype |
+| Prioriteit | Must |
+| Beoogde release | Prototype v4; productie nog te plannen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-17 |
+| Goedkeuring | Gebruikersopdracht; productieacceptatie open |
+
+#### Doel en waarde
+
+Browserherladen en sluiten van een dialoog veroorzaken geen stil verlies van geregistreerde data of concepts.
+
+#### Actoren
+
+Engineer / maker (primair); Printchill; voor native assembly-extractie SolidWorks 2026 op Windows.
+
+#### Trigger
+
+Gebruiker wijzigt workspace of vult rapportconcept in.
+
+#### Voorwaarden
+
+Samples of geregistreerde Parts zijn beschikbaar; gebruiker heeft toegang tot de lokale bestanden.
+
+#### Resultaat bij succes
+
+Herstelt Part versions, rapporten, attachments, zoekopdrachten en concepts; biedt export als reservekopie.
+
+#### Garanties bij mislukking
+
+Geen overschrijven van bronbestanden of bestaande historische versies; fout en onvolledigheid expliciet.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Wijzigt workspace of vult rapportconcept in | Bewaart lokaal met expliciete opslagstatus en behandelt schrijffouten. |
+| 2 | Herlaadt of opent de dialoog opnieuw | Herstelt Part versions, rapporten, attachments, zoekopdrachten en concepts; biedt export als reservekopie. |
+| 3 | Raadpleegt historische context | Behoudt concrete bronbestanden en revisies |
+
+#### Alternatieve scenario’s
+
+- A1: annuleert; geen ongewenste mutatie, bestaande conceptinvoer blijft beschikbaar.
+- A2: bron ontbreekt of relatie onzeker; toont beperking en beschikbare gedeeltelijke informatie.
+
+#### Fouten en uitzonderingen
+
+- E1: ongeldige invoer of manifest; geen gedeeltelijke publicatie, fout met herstelactie.
+- E2: lokale opslag niet beschikbaar; meldt dat gegevens nog niet veilig bewaard zijn en biedt export/herhalen.
+
+#### Businessregels
+
+- Lokaal is niet serveropslag; opslagquota en privébrowser kunnen behoud beperken. Geen succesmelding na mislukte opslag.
+- Concepten en attachments wijzigen geen Part version. Reset vereist bevestiging.
+- Engels als UI-basistaal. Toetsenbordbediening, zichtbare labels, voldoende contrast en aanvullende hover-/focustooltips.
+
+#### Gegevens en relaties
+
+Part number → Part version → exacte documentrevisies; bronnen en zekerheid bij relaties blijven afzonderlijk vastgelegd.
+
+#### Rechten en kwaliteitsvoorwaarden
+
+Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volledige CAD-engine of rechtenmodel claimen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-015-AC-01 | Geldige broncontext | Hoofdscenario doorlopen | Verwacht resultaat met juiste versiecontext | Prototype-/browsertests |
+| UC-015-AC-02 | Onbekende bron of fout | Actie uitgevoerd | Geen verzonnen of gedeeltelijk als volledig gepresenteerde data | Prototype-/browsertests |
+| UC-015-AC-03 | Bestaande historie | Nieuwe aanvullende actie | Historische bestanden blijven onveranderd | Prototype-/browsertests |
+
+#### Afhankelijkheden en afbakening
+
+[[Architecture]], [[UI_DESIGN_REVIEW]], UC-006/009/011/012. Geen automatische CAD-rebuild, slicing, geometrische tolerantieberekening of cloudsync in deze proef.
+
+#### Open vragen en aannames
+
+Productieopslag, multi-userconflicten, licentie-/extractorcapabilities en volledige toegankelijke CAD-interactie blijven vervolgwerk.
+
+#### Verificatieresultaat
+
+Zie prototype/design-qa.md; native SolidWorks-macro kan alleen op Windows/SolidWorks worden geverifieerd.
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-17 | Sampleanalyse en UI-reviewverwerking beschreven | Codex |
+
+[Back to top](#inhoudsopgave)
+
+### UC-016
+
+[Back to top](#inhoudsopgave)
+
+**Titel:** Design state en maturity toepassen
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-016 |
+| Titel | Design state en maturity toepassen |
+| Type | CRUD-C / CRUD-R |
+| Status | In uitvoering — UI-prototype |
+| Prioriteit | Must |
+| Beoogde release | Prototype v4; productie nog te plannen |
+| Eigenaar | Nog te bepalen |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-17 |
+| Goedkeuring | Gebruikersopdracht; productieacceptatie open |
+
+#### Doel en waarde
+
+Het bestaande statusbeleid herkenbaar maken zonder het versiebeleid te veranderen.
+
+#### Actoren
+
+Engineer / maker (primair); Printchill; voor native assembly-extractie SolidWorks 2026 op Windows.
+
+#### Trigger
+
+Gebruiker opent lifecycle bij een part.
+
+#### Voorwaarden
+
+Samples of geregistreerde Parts zijn beschikbaar; gebruiker heeft toegang tot de lokale bestanden.
+
+#### Resultaat bij succes
+
+Valideert de architectuurmapping; Released vraagt bevestiging; Obsolete/End of life blokkeert wijzigen en biedt kopiëren naar nieuw Part number.
+
+#### Garanties bij mislukking
+
+Geen overschrijven van bronbestanden of bestaande historische versies; fout en onvolledigheid expliciet.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Opent Lifecycle bij een Part | Toont aparte design state en maturity met herkomst: lokaal toegekend, geen CAD-extractie. |
+| 2 | Bevestigt een toegestane overgang of een bestandswijziging | Valideert de architectuurmapping; Released vraagt bevestiging; Obsolete/End of life blokkeert wijzigen en biedt kopiëren naar nieuw Part number. |
+| 3 | Raadpleegt historische context | Behoudt concrete bronbestanden en revisies |
+
+#### Alternatieve scenario’s
+
+- A1: annuleert; geen ongewenste mutatie, bestaande conceptinvoer blijft beschikbaar.
+- A2: bron ontbreekt of relatie onzeker; toont beperking en beschikbare gedeeltelijke informatie.
+
+#### Fouten en uitzonderingen
+
+- E1: ongeldige invoer of manifest; geen gedeeltelijke publicatie, fout met herstelactie.
+- E2: lokale opslag niet beschikbaar; meldt dat gegevens nog niet veilig bewaard zijn en biedt export/herhalen.
+
+#### Businessregels
+
+- Statusmetadata veroorzaakt geen bestandsversieverhoging; historische bestandsreferenties blijven vast.
+- Statusbeleid volgt Architecture. Ontbrekende leveranciersstatussen worden niet uit bestandsnamen verzonnen.
+- Engels als UI-basistaal. Toetsenbordbediening, zichtbare labels, voldoende contrast en aanvullende hover-/focustooltips.
+
+#### Gegevens en relaties
+
+Part number → Part version → exacte documentrevisies; bronnen en zekerheid bij relaties blijven afzonderlijk vastgelegd.
+
+#### Rechten en kwaliteitsvoorwaarden
+
+Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volledige CAD-engine of rechtenmodel claimen.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-016-AC-01 | Geldige broncontext | Hoofdscenario doorlopen | Verwacht resultaat met juiste versiecontext | Prototype-/browsertests |
+| UC-016-AC-02 | Onbekende bron of fout | Actie uitgevoerd | Geen verzonnen of gedeeltelijk als volledig gepresenteerde data | Prototype-/browsertests |
+| UC-016-AC-03 | Bestaande historie | Nieuwe aanvullende actie | Historische bestanden blijven onveranderd | Prototype-/browsertests |
+
+#### Afhankelijkheden en afbakening
+
+[[Architecture]], [[UI_DESIGN_REVIEW]], UC-006/009/011/012. Geen automatische CAD-rebuild, slicing, geometrische tolerantieberekening of cloudsync in deze proef.
+
+#### Open vragen en aannames
+
+Productieopslag, multi-userconflicten, licentie-/extractorcapabilities en volledige toegankelijke CAD-interactie blijven vervolgwerk.
+
+#### Verificatieresultaat
+
+Zie prototype/design-qa.md; native SolidWorks-macro kan alleen op Windows/SolidWorks worden geverifieerd.
+
+#### Wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging | Auteur |
+| --- | --- | --- | --- |
+| 0.1 | 2026-11-17 | Sampleanalyse en UI-reviewverwerking beschreven | Codex |
+
+[Back to top](#inhoudsopgave)
 
 ## Volledig use-casetemplate
 

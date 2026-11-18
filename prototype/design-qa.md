@@ -1,29 +1,32 @@
-# UI-controle — prototype 3
+# UI-controle — prototype 4
 
-**Resultaat: geslaagd voor de gecontroleerde prototypeflows.** Volledige productieacceptatie blijft open.
+De gecontroleerde prototypeflows slagen. Deze iteratie verwerkt de UI-review en het nieuwe POC-materiaal; productieacceptatie blijft open.
 
-Gebruikersfeedback is de basis voor deze iteratie; de lichte PRC-vormgeving en de echte modelviewer blijven behouden.
+## Materiaal en relaties
 
-## Gecontroleerd
+- 67 originele bestanden, 36 groepen, 23 echte STL-previews en 12 uitgelezen 3MF-projecten. Bronnen zijn ongewijzigd; hashes en verliesvrije previewkopieën worden gecontroleerd.
+- Beschikbare A/B-revisies gebruiken elk hun eigen geometrie. Simulaties zijn expliciet als simulatie gemarkeerd.
+- 3MF-componenten, platen, geselecteerde filamenten en bronbestandsnamen worden uitgelezen. Een naamovereenkomst bewijst geen CAD-exportrelatie.
+- Native SolidWorks-assemblychildren zijn niet betrouwbaar uitgelezen. De Windows-macro en manifestimport zijn voorbereid; de macro is nog niet in SolidWorks 2026 uitgevoerd of gecompileerd. De browsertest gebruikt een synthetisch manifest.
 
-- Desktop 1440 px: [Library](screenshots/library.png), [Part](screenshots/part.png), [Where used](screenshots/where-used.png), [Logbook](screenshots/logbook.png), [Attachments](screenshots/attachments.png).
-- Part number heeft een prominent label; Part version 001… staat los van letterrevisies.
-- Where used toont 3MF-gebruikers boven de STL en de CAD-bron eronder, verbonden door lijnen. Onbekende CAD-bron levert geen verzonnen node op.
-- Logbook heeft versiebolletjes met uitklapbare bestandscombinatie en comments per gewijzigd bestand.
-- Browserregressie: versiegebonden kaarten, registreren van wijzigingen, geen update zonder geselecteerde file, oude versiecontext, report/foto, HTML-escaping, attachments/download, ongeldige Git-URL en Git-SHA, STL-import en mobiele overflow.
-- Modeltests: één registratie met meerdere files verhoogt eenmaal; alleen expliciete wijzigingen/dependencies gaan mee; oude inhoud en profiel blijven vast; fouten/duplicaten/overloop leveren geen gedeeltelijke registratie.
-- [Mobiel 390 px](screenshots/mobile.png): responsieve kaartindeling en navigatie; diagram schuift binnen eigen paneel.
-- De browserregressie is ook tegen het zelfstandige `file://`-HTML-bestand uitgevoerd.
-- Geen JavaScript-fouten in de browsercontrole. Productiebuild slaagt. Vite meldt nog de omvang van de Three.js-bundel.
+## Verwerkt en gecontroleerd
+
+- Compacte Part Details met kerngegevens boven de vouw bij 1366×768; prominent Part number en expliciete historische versiecontext.
+- Sorteerbare engineeringtabel, kolomkeuze, filters, opgeslagen zoekopdrachten en versievergelijking met echte STL-previews. Geen geometrische afwijkingsberekening.
+- Leesbaarder contrast, grotere bediening, gekoppelde dialoogtitels, toetsenbordtabs en toegankelijke tooltips met focus, hover en Escape.
+- Lokale IndexedDB-opslag, reportdrafts, foto's, attachments, Git-links en backup/herstel. Dit is browseropslag, geen serverbackup.
+- Lifecyclebewaking en bevestiging bij wijziging van Released; reports en attachments verhogen de Part version niet.
+- Deep links, versiegebonden Where used en expliciete bronzekerheid.
+
+## Verificatie
+
+- 12 JavaScript-tests en 9 Python-tests geslaagd.
+- Productiebuild geslaagd; Vite meldt de bekende bundelgrootte.
+- Volledige browserflow geslaagd via Vite én zelfstandig `file://`-HTML: imports, historie, drafts na reload, reports/foto's, attachments, lifecycle, backup/herstel, foutieve backup, manifestimport en toetsenbordbediening; geen JavaScript-pageerrors.
+- Mobiel 320 px zonder horizontale paginaoverflow; gerichte contrastcontrole van hulptekst en tabs minimaal 4.5:1.
+- Visueel bekeken: [Part](screenshots/v4/part.png), [vergelijking](screenshots/v4/compare.png) en [3MF-details](screenshots/v4/print-details.png). De laatste opname bevat een verwachte fouttoast uit de negatieve backup-test.
+- Aanvullend bewijs: [tabel](screenshots/v4/table.png), [3MF-componenten](screenshots/v4/project-components.png) en [native assembly-beperking](screenshots/v4/native-assembly.png).
 
 ## Grenzen
 
-Geen volledige schermlezer-/toegankelijkheidsaudit of cross-browsermatrix. Bestandsrevisionering en historische geometrie zijn gesimuleerd; data blijft in browsergeheugen. Git-doelen worden niet geverifieerd. Snapshots zijn bewust uitgesteld. Zie README voor de volledige prototypescope.
-
-## Part Details-iteratie
-
-Bestandentab vervangen door Part Details; bestandsselectie blijft in het Part-versionpaneel. [Opname](screenshots/part-details.png). De 3MF-extractie bewaart vier geconfigureerde slots, maar de UI toont uitsluitend geselecteerd slot 4: Generic PLA, #DCF478. Verder 0.2 mm, 15% grid en twee platen. Modeltoewijzing is geen gemeten verbruik of live AMS-inventaris. Gewicht: Unknown; Print time · indication: Slice required.
-
-Browsercontrole omvat versiecontext, ontbrekende historische metadata, meerdere kleuren/types, behoud van Where used en het wissen van extractiedata bij een nieuwe gesimuleerde 3MF-revisie. Modeltests testen ook behoud bij ongewijzigde 3MF en ontbrekende versus nulwaarden.
-
-Consolidatie geverifieerd: browser toont slechts geselecteerd filament en werkende uitleg bij ontbrekende tijd. Zeven JS-tests en vijf Python-extractietests dekken o.a. selectie, complete/partiële plaattijden, tekst-G-code-fallback, ontbrekende gegevens en grove tijdronding. De saved-slice-scenario’s zijn synthetische fixtures; geen echte geslicete sample geverifieerd.
+Geen volledige WCAG-/screenreaderaudit, cross-browsermatrix, server, rechtenbeheer, slicerberekening of native CAD-reader. Geen complete native BOM bewezen. Ontbrekende printtijd blijft Slice required; filamentslots zijn geen live AMS-inventaris. Een lokale opslagfout is niet met fault injection getest. Zie README en de materiaalanalyse voor de volledige scope.

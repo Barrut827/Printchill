@@ -161,3 +161,25 @@ Paginabreedte is 320 px zonder horizontale paginascroll. Tabstrook heeft 460 px 
 - Herladen is getest: aangemaakte 004 verdwijnt, alleen 003/002/001 blijven over. De demo meldt geheugenopslag, maar dat maakt Save nog niet duurzaam of herstelveilig.
 - Geen volledige WCAG-audit, screenreadertest, cross-browsermatrix, CAD-/slicerhandoff, backend, rechtencontrole, prestatietest of gebruikersstudie. Een geslaagde kleine flow bewijst geen productiegeschiktheid.
 - Review met makers/kleine bedrijven blijft nodig: laat deelnemers een Part vinden, twee versies vergelijken, een wijziging registreren en een printpoging terugvinden. Meet taaksucces, verkeerde versiekeuzes, herstelfouten en benodigde tijd.
+
+## Verwerking in prototype 4
+
+Deze aanvulling beschrijft de nieuwe implementatie. De bovenstaande metingen, screenshots en beperkingen blijven het historische verslag van prototype 3.
+
+| Reviewpunt | Verwerking en resterende grens |
+|---|---|
+| Informatiedichtheid en engineeringtabel | Compacte inspectiepagina, kerngegevens boven de vouw op laptop, sorteerbare tabel met kolomkeuze. |
+| Historische versiecontext | Afzonderlijke echte A/B-STL-previews waar aangeleverd; Viewing versus Editing latest expliciet. Gesimuleerde veranderingen blijven herkenbaar. |
+| Vergelijken | Bestandsrevisies, hashes en 3MF-instellingen naast elkaar; echte STL-previews. Geen berekening van geometrische afwijkingen. |
+| Contrast en bediening | Donkerdere hulptekst/tabs, grotere doelen, focusranden; gerichte contrastmeting minimaal 4.5:1. Geen volledige WCAG-claim. |
+| Tabs en dialogen | Pijltjestoetsen/Home/End, gekoppelde tabpanelen en dialoogtitels; gecontroleerd in Chromium. |
+| Tooltips | Hover en toetsenbordfocus, gekoppelde beschrijving, persistent bij hover, Escape sluit zonder focusverlies; belangrijke informatie blijft zichtbaar in de pagina. |
+| Drafts en opslag | Reportdrafts, foto's en bijlagen in IndexedDB; backup-export en bevestigd herstel. Geen cloudopslag of serverbackup. |
+| Veilige wijziging | File-comments pas na selectie; Released-bevestiging; lifecyclegrenzen; reports/bijlagen zonder Part-versionverhoging. |
+| Navigatie | Deep links naar Part/version/tab, zoekshortcut en lokale opgeslagen zoekopdrachten. |
+| Mobiel en feedback | 320 px zonder paginabrede overflow; toast bovenaan; diagrammen en brede tabellen schuiven lokaal. |
+| Bronnen en assemblies | Expliciete bronzekerheid, echte 3MF-componenten en platen. Native SLDASM-childstructuur vereist nog een Windows/SolidWorks-export. |
+
+Verificatie: 12 JavaScript- en 9 Python-tests, productiebuild en volledige browserflows via ontwikkelserver en zelfstandig HTML slagen. Backup/herstel met geïmporteerde STL is meegenomen. De assembly-manifesttest is synthetisch; de nieuwe VBA-macro is nog niet op Windows gecompileerd of uitgevoerd. Geen volledige screenreader-, cross-browser- of gebruikersstudie uitgevoerd.
+
+Zie [UI-controle prototype 4](../prototype/design-qa.md) voor bewijs en [materiaalanalyse](SAMPLE_ANALYSIS.md) voor de onderbouwing van relaties en ontbrekende gegevens.

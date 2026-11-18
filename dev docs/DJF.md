@@ -2,9 +2,25 @@
 
 ## DJF-003 — Begrippen en gebruikersdatamodel
 
-Part is de vaste onderdeelidentiteit; documenten hebben onafhankelijke versies. Snapshot betekent een baseline van een combinatie van specifieke versies en bronrelaties, geen iteratie of enkele bestandstoestand. Een Print Report beschrijft één printpoging met die snapshot. Hierdoor kunnen meerdere pogingen dezelfde combinatie gebruiken en blijft eerdere printcontext behouden bij nieuwe versies.
+een part is de major carrier van informatie. een part heeft een uniek part number zie DJF-04. een part heeft related objects.
+een part heeft z'n eigen version. uitgedrukt in een nummer 000 beginnend altijd bij 001.bij 999 is het op en moet een nieuw part gemaakt worden.
+de versie van het part staat los van de revisies van de related objects.
+Er zijn 2 typen: 
+- Describing Objects
+- Reference objects.
+Describing object zijn objecten die een beschrijvende relatie hebben tot het part. deze relatie bepaald hoe het part er fysiek uit ziet en hoe het gemaakt wordt. Dit is een "dwingende relatie"
 
-De bestaande term revisie wordt voorlopig gelezen als versie, zonder extra formele revisielaag. Status (`draft`, `print-candidate`, `printed`, `scrap`) staat apart; niveau en overgangen zijn nog niet besloten. Zie [[Architecture]], [[USECASES#UC-003]] en [[USECASES#UC-010]]. De afbeelding illustreert één Part; de relaties ondersteunen ook meerdere Parts per 3MF/snapshot.
+### Desribing Objects
+dit zijn de volgende objecten:
+- CAD file - heeft zelfde partnummer als part, revisie CAD = Revisie STL
+- STL file - heeft zelfde partnummer als part , revisie STL = Revisie CAD
+- 3MF file - heeft zelfde partnummer als part, eigen revisies
+
+### Reference Objects
+dit zijn;
+- print reports (hebben geen revisie alleen een created date en last modified date)
+- document als attachment zoals een bouw handleiding of electrisch schema etc.
+- linkje naar een git repo (geen versie beheer)
 
 ## DJF-001 — Metadata-POC via SolidWorks VBA
 
@@ -31,6 +47,16 @@ De gebruiker vraagt om zoveel mogelijk uitleesbare gegevens. De macro voegt opsl
 - Traversal heeft omvang-/dieptelimieten; brondata wordt nooit als opdrachten uitgevoerd.
 - Contractversie verhoogd naar 0.2 om de scopewijziging zichtbaar te maken. Validatie in SolidWorks 2026 SP0 staat nog open.
 
+## DJF - 003
+baselining fuctionaliteit noemen we snapshots. een snapshot bevat part versions inclusief de daarbij hordende related object; STL, CAD, 3MF maar ook print reports en andere attachments. een snapshot kan een verzameling zijn van meerdere parts. Dit om de status van je ontwerp en print in de tijd vast te leggen. een snapshot heeft een uniek ID, Sxxxx , xxxx zijn random generated nummers, moeten uniek zijn en mogen nooit dubbel zijn. 
+
+## DJF - 004
+een part number bestaat default uit 8 cijfers met een - als separotor voor de leesbaarheid.
+de 8 cijfers zijn random generated. beginnen niet met een 0 en eindigen ook nooit op een 0.
+roadmap topic: custom partnumbering via settings. niet nu.
+
+
+
 ## Eerste UI-prototype
 
 HTML met Vite, Three.js voor echte STL-previews en Phosphor-iconen. Zo zijn de flows uit UC-003 t/m UC-010 direct te bespreken en lokaal te testen. Geen backend of framework nodig voor deze proef. Snapshots blijven vaste combinaties; nieuwe 3MF-versies wijzigen bestaande combinaties niet. [Scope en grenzen](../prototype/README.md).
@@ -46,3 +72,9 @@ Bestanden staan al naast de viewer. De tab toont nu 3MF-instellingen en printgeg
 ## Filamentselectie en grove printtijd
 
 Geselecteerde filamenten uit modeltoewijzing, waar beschikbaar versterkt door slicinggebruik. Geen AMS-liveclaim. Hergebruik de slicerindicatie en rond die af; een eigen lengte/snelheidsformule verwart materiaaltoevoer met nozzlebeweging. Onvolledige plaatdata niet als totaal presenteren. Zie [[3MF_PRINT_DETAILS_RESEARCH]].
+
+## Prototype v4 — veilige bewijsvoering en engineeringwerk
+
+De samples bevatten bruikbare 3MF-compositie maar nog geen betrouwbaar uitgelezen native SLDASM-childboom. Daarom geen inferred assembly uit omliggende namen: aparte componenttypen, herkomst en manifest-import. Nieuwe read-only SolidWorks-macro als Windows-vervolgproef; geen sleutelvrije Document Manager-herkansing.
+
+STL-assets zijn lossless gzip om de zelfstandige HTML klein genoeg te houden; Three.js en bestaande browser-API’s blijven voldoende, zonder nieuwe runtime-dependency. IndexedDB biedt lokale Blob/binaire opslag en concepts; expliciete backup en opslagfouten voorkomen de indruk van gegarandeerde cloudopslag. Workflow en toegankelijkheid verbeteren binnen de bestaande lichte PRC-vormgeving; geen complete redesign.
