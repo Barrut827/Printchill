@@ -1,4 +1,4 @@
-# PrintChill voor Windows · MVP 0.2.5
+# PrintChill voor Windows · MVP 0.2.6
 
 Met deze handleiding installeer je de pilot en beheer je de lokale werkmap (workspace). De knopnamen hieronder komen overeen met de Engelstalige interface.
 
@@ -20,6 +20,10 @@ De volledige ontwerpworkflow en de acceptatiecriteria staan in de projectdocumen
 
 ## Bibliotheek en zoeken
 
+De Part-kaart toont opgeslagen plaatpreviews uit de gekozen 3MF. Filters doorzoeken ook beschikbare projectparameters. Een profielarray behoudt zijn waarden; dit is geen berekening van de effectieve instelling per object.
+
+**Print Reports:** kies de geprinte Part version en **Add print report**. Vul resultaat, materiaal, notities en een meetverslag met verwachte/gemeten maten en eenheden in. Zoek extra procesparameters en kies **+ Add parameter**. Upload foto’s of plak een screenshot met Ctrl+V. Het concept bewaart ook meetverslag, afbeeldingen en parameterselectie na sluiten. Bewaar het report voor opname in de workspace en back-up. Limieten zijn acht afbeeldingen, 2 MB per afbeelding en 5 MB per report.
+
 Wissel tussen kaarten met STL-thumbnail en de tabel. Kies een Part en Part version voor de bijbehorende geometrie, afmetingen, projectinstellingen en 3MF. **Library** brengt je terug naar je zoekresultaten. Via **Edit tags** geef je Parts labels. Combineer termen met **+**, bijvoorbeeld `#roboticarm + PETG`. Het materiaalfilter onder **Filters & saved searches** gebruikt het werkelijk opgegeven materiaal in een Print Report. In combinatie met een periode moeten beide bij dezelfde printpoging horen. **Save search** bewaart de criteria in de workspace.
 
 De workspace gebruikt SQLite voor de registraties en bewaart de bijbehorende bestanden lokaal. Bepaal met de Windows-maprechten wie toegang heeft tot de workspace en de back-ups.
@@ -31,6 +35,8 @@ De workspace gebruikt SQLite voor de registraties en bewaart de bijbehorende bes
 Maak eerst een back-up. Stop de oude backend met Ctrl+C als je hem vanuit een terminal hebt gestart. Draait hij op de achtergrond, meld je dan af en weer aan bij Windows. Pak het nieuwe pakket uit, start het met `start.cmd` en selecteer zo nodig je bestaande workspace.
 
 ## Voor ontwikkelaars
+
+De reportuitbreiding gebruikt schema 3. Vóór migratie van een bestaande workspace maakt PRC een back-up. Test met een aparte workspace via F5. Onder Run Task staan **PRC: Test functionaliteit** en **PRC: Test browserflow**. Deze laatste gebruikt een tijdelijke workspace en lokale Chrome.
 
 Open de repositorymap **Printchill** in VS Code. Kies bij **Run and Debug** de configuratie **PRC: Start met browser**. Met **F5** start de bronversie en opent de browser. **Shift+F5** stopt deze debugsessie.
 
@@ -45,4 +51,4 @@ Voer de volgende opdrachten uit vanuit de map `MVP` op Windows x64 met Node 24. 
 | UI met een tijdelijke workspace en lokale Chrome testen | `npm ci` en daarna `node --test ui.test.mjs` |
 | Pilot-ZIP bouwen | `.\build.ps1` |
 
-Bij het openen van een workspace met schema 1 maakt PRC naast de workspace eerst een back-up van de geregistreerde bestanden en migreert daarna naar schema 2. Voor het vernieuwen van de offline viewer- en metadatabundels gebruik je in deze bronmap `npm ci` en `node bundle.mjs`.
+Bij het openen van een workspace met schema 1 of 2 maakt PRC naast de workspace eerst een back-up en migreert naar schema 3. Voor het vernieuwen van de offline viewer- en metadatabundels gebruik je in deze bronmap `npm ci` en `node bundle.mjs`.

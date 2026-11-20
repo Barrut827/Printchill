@@ -4,6 +4,13 @@ import {estimate} from './estimate.mjs';
 const xml=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',processEntities:false});
 const list=x=>x==null?[]:Array.isArray(x)?x:[x];
 const attrs=x=>Object.fromEntries(list(x?.metadata).map(m=>[m.key,m.value]));
+export function plateImage(bytes,index){
+  if(!/^\d+$/.test(String(index)))throw Error('Invalid plate.');
+  const name='Metadata/plate_'+index+'.png';
+  const zip=unzipSync(bytes,{filter:e=>{if(e.name!==name)return false;if(e.originalSize>8000000)throw Error('Plate image too large.');return true;}});
+  if(!zip[name])throw Error('No saved plate preview.');
+  return zip[name];
+}
 function numeric(x){return x!=null&&x!==''&&Number.isFinite(+x)&&+x>=0?+x:null;}
 function duration(x){
   if(numeric(x)!==null)return +x;
@@ -58,6 +65,6 @@ export function metadata(bytes){
       estimated={seconds:plateEstimates.reduce((n,p)=>n+p.seconds,0),grams:plateEstimates.reduce((n,p)=>n+p.grams,0),plates:plateEstimates};
     }catch(e){estimateNote=e.message;}
   }
-  return {estimated,estimateNote,height:settings.layer_height,density:settings.sparse_infill_density,pattern:settings.sparse_infill_pattern,plates:plates.length||null,
+  return {parameters:settings,plateIds:plates,estimated,estimateNote,height:settings.layer_height,density:settings.sparse_infill_density,pattern:settings.sparse_infill_pattern,plates:plates.length||null,
     seconds:sum('time'),grams:sum('weight'),filaments:slots.map(slot=>({slot,type:used.get(slot)?.type||settings.filament_type?.[slot-1],color:used.get(slot)?.color||settings.filament_colour?.[slot-1]}))};
 }

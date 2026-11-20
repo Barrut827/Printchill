@@ -35,7 +35,7 @@ export class Workspace {
           CREATE TABLE reports(id INTEGER PRIMARY KEY,part TEXT,v INTEGER,outcome TEXT,note TEXT,created TEXT,FOREIGN KEY(part,v) REFERENCES versions(part,v));
           PRAGMA application_id=1347568433; PRAGMA user_version=1; COMMIT;`);
       }
-      check(this.one('PRAGMA application_id').application_id===1347568433 && [1,2].includes(this.one('PRAGMA user_version').user_version),'Unsupported workspace.');
+      check(this.one('PRAGMA application_id').application_id===1347568433 && [1,2,3].includes(this.one('PRAGMA user_version').user_version),'Unsupported workspace.');
       if(version<2){
         if(version===1)this.backup(this.root+'-pre-0.2-'+randomUUID());
         this.transaction(()=>{
@@ -44,6 +44,11 @@ export class Workspace {
           this.db.exec('PRAGMA user_version=2');
         });
       }
+      if(!this.all('PRAGMA table_info(reports)').some(c=>c.name==='details')){
+        if(version===2)this.backup(this.root+'-pre-reports-'+randomUUID());
+        this.db.exec("ALTER TABLE reports ADD COLUMN details TEXT DEFAULT '{}'; PRAGMA user_version=3");
+      }
+      this.db.exec('PRAGMA user_version=3');
       for (const dir of ['objects','work','staging']) fs.mkdirSync(path.join(this.root,dir),{recursive:true});
     } catch(e) {this.db.close();throw e;}
   }
@@ -106,7 +111,25 @@ export class Workspace {
       this.run('UPDATE jobs SET base=? WHERE id=?',v,id);return v;
     });
   }
-  report(part,v,outcome,note,material=''){this.files(part,v);check(['Success','Failed','Aborted'].includes(outcome),'Choose an outcome.');this.run('INSERT INTO reports(part,v,outcome,note,created,material) VALUES(?,?,?,?,?,?)',part,v,outcome,note,new Date().toISOString(),material);}
+  report(part,v,outcome,note,material='',details={}){
+    const files=this.files(part,v);
+    check(['Success','Failed','Aborted'].includes(outcome),'Choose an outcome.');
+    check(typeof note==='string'&&typeof material==='string','Invalid report.');
+    check(details&&typeof details==='object'&&!Array.isArray(details),'Invalid report details.');
+    const images=details.images||[];
+    check(Array.isArray(images)&&images.length<=8,'Maximum eight images.');
+    for(const img of images){
+      check(typeof img.name==='string'&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(img.data),'Use PNG, JPEG or WebP images.');
+      const bytes=Buffer.from(img.data.split(',')[1],'base64'),type=img.data.split(';')[0];
+      check(type.endsWith('png')&&bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))||
+        type.endsWith('jpeg')&&bytes[0]===255&&bytes[1]===216||
+        type.endsWith('webp')&&bytes.toString('ascii',0,4)==='RIFF'&&bytes.toString('ascii',8,12)==='WEBP','Invalid image content.');
+    }
+    const encoded=JSON.stringify({...details,sourceFiles:files});
+    check(Buffer.byteLength(encoded)<5000000,'Report exceeds 5 MB. Use smaller images.');
+    if(typeof details.id==='string'&&this.one("SELECT id FROM reports WHERE part=? AND v=? AND json_extract(details,'$.id')=?",part,v,details.id))return;
+    this.run('INSERT INTO reports(part,v,outcome,note,created,material,details) VALUES(?,?,?,?,?,?,?)',part,v,outcome,note,new Date().toISOString(),material,encoded);
+  }
   state(){
     return {root:this.root,parts:this.all('SELECT * FROM parts ORDER BY name'),versions:this.all('SELECT * FROM versions ORDER BY v DESC').map(r=>({...r,files:JSON.parse(r.files)})),reports:this.all('SELECT * FROM reports ORDER BY id DESC'),jobs:this.all('SELECT * FROM jobs').map(j=>{
       try{const p=this.workPath(j),stat=fs.statSync(p,{bigint:true}),sig=String(stat.ino)+'/'+stat.mtimeNs+'/'+stat.size;

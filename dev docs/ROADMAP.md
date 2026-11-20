@@ -2,6 +2,8 @@
 
 ## MVP 0.2.0 — bibliotheek, zoeken en herstel
 
+Vervolg 0.2.6: opgeslagen plaat-PNG’s, beschikbare 3MF-projectparameters als zoekfilter, versiegebonden Print Reports met meetverslag en afbeeldingen, UC-015-previewcriteria en VS Code-testtaken. Handmatige acceptatie van UC-008, reports en back-upmerge volgt via de lokale stack. UC-018 blijft geaccepteerd. SolidWorks blijft een afzonderlijke vervolgstap.
+
 - UC-006: kaarten en sorteerbare tabel op workspacegegevens, versiegebonden STL-inspectie met afmetingen en printdetails uit de geselecteerde 3MF.
 - UC-008: naam, nummer, tags en materiaal combineren, filters op bestandstype en printpoging, zoekcriteria lokaal bewaren en opnieuw uitvoeren.
 - UC-015: back-up beoordelen en Part-nummers na bevestiging samenvoegen; apart openen blijft beschikbaar. Een eerste opening van schema 1 maakt een migratieback-up.

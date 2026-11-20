@@ -370,6 +370,8 @@ De engineer kiest in de SolidWorks-ribbon **Save to Printchill** voor een nieuw 
 
 ### UC-003 Print Report van een printpoging vastleggen
 
+**MVP-vervolg 0.2.6.** Reportinvoer bevat meetverslag met eenheden, geselecteerde 3MF-projectparameters, afbeeldingen via upload/plakken en herstelbare concepten. Bewaren verandert de Part version niet. De oorspronkelijke parameterarrays blijven herkenbaar; effectieve objectoverrides worden niet berekend. Geautomatiseerde regressiecontrole is aanwezig; handmatige acceptatie van de volledige reportflow blijft open.
+
 [Back to top](#Inhoudsopgave)
 
 **Titel:** Print Report van een printpoging vastleggen
@@ -1243,7 +1245,7 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 | --- | --- | --- | --- | --- |
 | UC-008-AC-01 | Naam/nummer | Gebruiker typt | Resultaten actualiseren zonder aparte zoekpagina | Niet uitgevoerd |
 | UC-008-AC-02 | #roboticarm + PETG | Query uitgevoerd | Tag EN materiaal worden toegepast en zichtbaar gemaakt | Niet uitgevoerd |
-| UC-008-AC-03 | Zoekbare attributes en bestandstypen | Geavanceerd menu opent | Gebruiker kan deze als filters kiezen | Niet uitgevoerd |
+| UC-008-AC-03 | Geregistreerde 3MF-projectparameters en bestandstypen | Geavanceerd menu opent | Gebruiker filtert op bestandstype en aanwezige parameterwaarde; profielarrays behouden hun waarden | Implementatie aanwezig; praktijkacceptatie open |
 | UC-008-AC-04 | Part met verschillende printpogingen | Geprint in drie dagen EN PETG geselecteerd | Alleen een PETG-poging binnen de periode telt als match | Niet uitgevoerd |
 | UC-008-AC-05 | Opgeslagen relatieve query | Later opnieuw geopend | Periode schuift mee; actuele resultaten worden berekend | Niet uitgevoerd |
 | UC-008-AC-06 | Ongeldige syntax | Gebruiker zoekt | Duidelijke fout; geen ongemerkte wijziging van querybetekenis | Niet uitgevoerd |
@@ -2114,6 +2116,11 @@ Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volled
 | UC-015-AC-01 | Geldige broncontext | Heropen een lokaal opgeslagen rapportconcept | De ingevoerde notitie hoort nog bij dezelfde Part version | Prototype-/browsertests |
 | UC-015-AC-02 | Alternatief of fout | Herstel uit een beschadigde back-up | De onvolledige import wordt gemeld en de bestaande registraties blijven intact | Prototype-/browsertests |
 | UC-015-AC-03 | Bestaande historie | Open een historische versie na herstel | Het bestand is byte-identiek aan de geregistreerde revisie | Prototype-/browsertests |
+| UC-015-AC-04 | Geselecteerde back-upmap | Preview openen vóór bevestigen | Naam, aanmaakdatum indien bekend, aantal Parts en omvang in MB zijn zichtbaar | Automatisch getest; praktijkacceptatie open |
+| UC-015-AC-05 | Overlappende Part numbers | Herstel beoordelen | Toevoegingen, te vervangen nummers en aantallen lokale versies/rapporten staan vóór bevestiging in beeld | Automatisch getest; praktijkacceptatie open |
+| UC-015-AC-06 | Huidige Parts A/B en back-up B/C | Samenvoegen bevestigen | A blijft behouden, B wordt met versies en reports vervangen door de back-up, C wordt toegevoegd | Automatisch getest |
+| UC-015-AC-07 | Openstaande wijziging bij conflicterend Part | Samenvoegen proberen | De gebruiker handelt die werkkopie eerst af | Implementatie aanwezig; praktijkacceptatie open |
+| UC-015-AC-08 | Report met metingen en afbeeldingen | Back-up maken en terugzetten | Metingen, parameters, afbeeldingen en exacte Part-versionkoppeling zijn behouden | Automatische regressiecontrole |
 
 #### Afhankelijkheden en afbakening
 
@@ -2271,6 +2278,8 @@ Een engineer, designer of hobbyist weet dat drie verschillend genaamde legacybes
 
 --------
 ### UC-018 Een printontwerp aanpassen en de eerdere print reproduceren
+
+**Gebruikersacceptatie.** De Bambu-workflow is door de gebruiker geaccepteerd. Voor deze functionele uitbreiding is geen nieuwe handmatige UC-018-acceptatie vereist. SolidWorks valt onder de nog uit te werken CAD-integratie.
 
 [Back to top](#Inhoudsopgave)
 

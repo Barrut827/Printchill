@@ -10,6 +10,8 @@ export function results(w,c,now=Date.now()){
     const latest=w.versions.find(v=>v.part===p.id),tags=w.tags.filter(t=>t.part===p.id).map(t=>t.tag.toLowerCase());
     const details=w.details[latest.files['3MF']?.key]||{},materials=(details.filaments||[]).map(f=>f.type?.toLowerCase());
     const reports=w.reports.filter(r=>r.part===p.id),name=p.name.toLowerCase();
+    const raw=details.parameters?.[c.attribute],values=Array.isArray(raw)?raw:[raw];
+    if(c.attribute&&!values.some(x=>x!=null&&String(x).toLowerCase().includes((c.attributeValue||'').trim().toLowerCase())))return null;
     const exact=t=>t.startsWith('#')?tags.includes(t.slice(1)):name.includes(t)||p.id.includes(t)||materials.includes(t);
     const similar=terms.length===1&&!exact(terms[0])&&/^[\p{L}]{4,}$/u.test(terms[0])&&name.split(/\W+/).some(word=>oneEdit(word,terms[0]));
     const match=terms.every(exact)||similar;

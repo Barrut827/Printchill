@@ -2,6 +2,30 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "PRC: Installeer ontwikkelomgeving",
+      "type": "process",
+      "command": "npm.cmd",
+      "args": ["ci"],
+      "options": {"cwd": "${workspaceFolder}/MVP"},
+      "problemMatcher": []
+    },
+    {
+      "label": "PRC: Test functionaliteit",
+      "type": "process",
+      "command": "node.exe",
+      "args": ["--test", "store.test.mjs", "server.test.mjs", "release.test.mjs"],
+      "options": {"cwd": "${workspaceFolder}/MVP"},
+      "problemMatcher": []
+    },
+    {
+      "label": "PRC: Test browserflow",
+      "type": "process",
+      "command": "node.exe",
+      "args": ["--test", "ui.test.mjs"],
+      "options": {"cwd": "${workspaceFolder}/MVP"},
+      "problemMatcher": []
+    },
+    {
       "label": "PRC: Stop backend",
       "type": "process",
       "command": "powershell.exe",

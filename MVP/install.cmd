@@ -2,7 +2,7 @@
 setlocal
 set "target=%LOCALAPPDATA%\Programs\PrintChill"
 if not exist "%target%" mkdir "%target%"
-for %%F in (node.exe server.mjs store.mjs merge.mjs library.js viewer.bundle.js metadata.bundle.mjs THIRD-PARTY.txt launch.mjs start.cmd app.js style.css index.html README.md NODE-LICENSE.txt) do (
+for %%F in (node.exe server.mjs store.mjs merge.mjs library.js reports.js viewer.bundle.js metadata.bundle.mjs THIRD-PARTY.txt launch.mjs start.cmd app.js style.css index.html README.md NODE-LICENSE.txt) do (
   copy /Y "%~dp0%%F" "%target%\%%F" >nul || goto failed
 )
 set "entry=%APPDATA%\Microsoft\Windows\Start Menu\Programs\PrintChill.cmd"

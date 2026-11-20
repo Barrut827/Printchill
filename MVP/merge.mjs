@@ -12,7 +12,7 @@ function inspect(ws,source){
   const db=new DatabaseSync(file,{readOnly:true});
   try{
     if(db.prepare('PRAGMA application_id').get().application_id!==1347568433 ||
-       ![1,2].includes(db.prepare('PRAGMA user_version').get().user_version) ||
+       ![1,2,3].includes(db.prepare('PRAGMA user_version').get().user_version) ||
        db.prepare('PRAGMA integrity_check').get().integrity_check!=='ok')throw Error('Invalid backup database.');
     const read=table=>db.prepare('SELECT * FROM '+table).all();
     const parts=read('parts'),versions=read('versions'),reports=read('reports');
@@ -59,7 +59,7 @@ export function mergeBackup(ws,source,token){
     }
     for(const p of parts)ws.run('INSERT INTO parts(id,name) VALUES(?,?)',p.id,p.name);
     for(const r of versions)ws.run('INSERT INTO versions(part,v,files,created) VALUES(?,?,?,?)',r.part,r.v,r.files,r.created);
-    for(const r of reports)ws.run('INSERT INTO reports(part,v,outcome,note,created,material) VALUES(?,?,?,?,?,?)',r.part,r.v,r.outcome,r.note,r.created,r.material||'');
+    for(const r of reports)ws.run('INSERT INTO reports(part,v,outcome,note,created,material,details) VALUES(?,?,?,?,?,?,?)',r.part,r.v,r.outcome,r.note,r.created,r.material||'',r.details||'{}');
     for(const r of tags)ws.run('INSERT INTO part_tags VALUES(?,?)',r.part,r.tag);
   });
   return preview.parts;

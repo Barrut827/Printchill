@@ -42,7 +42,7 @@ test('0.1.1 workspace migrates once with recoverable legacy backup',t=>{
   try{
     const backup=fs.readdirSync(dir).find(s=>s.startsWith('vault-pre-0.2-'));
     assert.ok(backup);assert.deepEqual(backupPreview(w,path.join(dir,backup)).conflicts,[part]);
-    assert.equal(w.state().reports[0].note,'Before upgrade');assert.equal(w.one('PRAGMA user_version').user_version,2);
+    assert.equal(w.state().reports[0].note,'Before upgrade');assert.equal(w.one('PRAGMA user_version').user_version,3);
   }finally{w.db.close();}
 });
 test('preview and merge replace shared Part, preserve local Part, reject damaged bytes',t=>{
@@ -53,7 +53,10 @@ test('preview and merge replace shared Part, preserve local Part, reject damaged
     local.report(b,1,'Success','local');
     incoming.run('INSERT INTO parts VALUES(?,?)',b,'From backup');
     incoming.addVersion(b,1,{STL:incoming.capture(stl,'STL')});
-    incoming.report(b,1,'Failed','backup','PETG');
+    const details={id:'fixture-report',measurements:'20 mm expected; 19.8 mm measured',parameters:{layer_height:'0.2'},images:[{name:'photo.png',data:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a6LsAAAAASUVORK5CYII='}]};
+    incoming.report(b,1,'Failed','backup','PETG',details);
+    incoming.report(b,1,'Failed','backup','PETG',details);
+    assert.equal(incoming.state().reports.length,1);
     const c=incoming.importPart('New',[stl]),backup=path.join(tmp,'backup');
     incoming.backup(backup);
     const p=backupPreview(local,backup);
@@ -62,6 +65,9 @@ test('preview and merge replace shared Part, preserve local Part, reject damaged
     mergeBackup(local,backup,p.token);
     assert.equal(local.state().parts.length,3);assert.equal(local.files(a,1).STL.key,local.files(b,1).STL.key);
     assert.equal(local.state().reports[0].note,'backup');
+    const restored=JSON.parse(local.state().reports[0].details);
+    assert.deepEqual(restored.images,details.images);assert.deepEqual(restored.parameters,details.parameters);
+    assert.equal(restored.sourceFiles.STL.key,local.files(b,1).STL.key);
     fs.writeFileSync(path.join(backup,'objects',local.files(b,1).STL.key),'broken');
     assert.throws(()=>mergeBackup(local,backup,backupPreview(local,backup).token));
     assert.equal(local.state().parts.length,3);
@@ -76,4 +82,6 @@ test('selected project filament and same-attempt relative material query',()=>{
   const c={query:'#roboticarm + PLA',role:'3MF',days:'3',material:'PETG'};
   assert.equal(results(w,c,now).length,0);c.material='PLA';assert.equal(results(w,c,now).length,1);
   assert.equal(results(w,c,now+4*86400000).length,0);assert.throws(()=>results(w,{query:'test +'}));
+  assert.equal(results(w,{query:'',attribute:'layer_height',attributeValue:'0.2'},now).length,1);
+  assert.equal(results(w,{query:'',attribute:'layer_height',attributeValue:'0.4'},now).length,0);
 });

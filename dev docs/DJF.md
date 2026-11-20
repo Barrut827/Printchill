@@ -61,7 +61,12 @@ roadmap topic: custom partnumbering via settings. niet nu.
 
 UC-018 bepaalt de eerste oplevering: een engineer kan een geregistreerde 3MF vanuit PRC in Bambu Studio bewerken en de wijziging expliciet als volgende Part version bevestigen. De lokale Windows-backend kan zowel de werkkopie beheren als het geïnstalleerde programma starten. SolidWorks-integratie, macro’s en het reconstrueren van assemblywerkkopieën met hun interne verwijzingen volgen in een latere fase.
 
+## DJF-006 — Reports en zoekbare projectmetadata
+
+Functionele uitbouw gaat vooraf aan de volgende visuele herinrichting. Plaatbeelden komen uit de geregistreerde 3MF. Filters doorzoeken projectinstellingen; materiaal en datum van een printfilter horen bij dezelfde poging. Reports bewaren een snapshot van de geselecteerde parameters. Begrensde reportafbeeldingen staan voor deze lokale pilot in de database zodat back-up en merge dezelfde transacties gebruiken als de rapporttekst. Grote algemene attachments blijven een afzonderlijke vervolgstap.
+
 ## Eerste UI-prototype
+
 
 
 HTML met Vite, Three.js voor echte STL-previews en Phosphor-iconen. Zo zijn de flows uit UC-003 t/m UC-010 direct te bespreken en lokaal te testen. Geen backend of framework nodig voor deze proef. Snapshots blijven vaste combinaties; nieuwe 3MF-versies wijzigen bestaande combinaties niet. [Scope en grenzen](../prototype/README.md).

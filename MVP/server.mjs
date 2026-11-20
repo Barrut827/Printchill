@@ -7,7 +7,7 @@ import {spawn,execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {Workspace,restore} from './store.mjs';
 import {backupPreview,mergeBackup} from './merge.mjs';
-import {metadata} from './metadata.bundle.mjs';
+import {metadata,plateImage} from './metadata.bundle.mjs';
 const detailCache=new Map();
 const here=path.dirname(fileURLToPath(import.meta.url));
 const prefs=path.join(process.env.LOCALAPPDATA,'PrintChill','settings.json');
@@ -110,7 +110,7 @@ $owner=New-Object PickerOwner
     case 'tags':ws.transaction(()=>{ws.run('DELETE FROM part_tags WHERE part=?',b.part);for(const tag of b.tags.split(/[\s,]+/).map(s=>s.replace(/^#/,'').toLowerCase()).filter(Boolean))ws.run('INSERT OR IGNORE INTO part_tags VALUES(?,?)',b.part,tag);});return true;
     case 'saveSearch':if(!b.name.trim())throw Error('Name required');ws.run('INSERT OR REPLACE INTO searches VALUES(?,?)',b.name.trim(),JSON.stringify(b.criteria));return true;
     case 'import':return ws.importPart(b.name,b.paths);
-    case 'report':ws.report(b.part,b.v,b.outcome,b.note,b.material);return true;
+    case 'report':ws.report(b.part,b.v,b.outcome,b.note,b.material,b.details);return true;
     case 'backup':ws.backup(b.destination);return true;
     case 'confirm':return ws.confirm(b.id,b.latest,b.alternate);
     case 'open':{
@@ -126,10 +126,16 @@ const server=http.createServer(async(req,res)=>{
   try{
     if(req.headers.host!==host)throw Error('Invalid host.');
     res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');
-    res.setHeader('X-PrintChill-Build','0.2.5');
+    res.setHeader('X-PrintChill-Build','0.2.6');
     res.setHeader('Content-Security-Policy',"default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; frame-ancestors 'none'; base-uri 'none'");
     const url=new URL(req.url,origin);
-    if(req.method==='GET' && ['/','/app.js','/viewer.bundle.js','/library.js','/style.css'].includes(url.pathname)){
+    if(req.method==='GET'&&url.pathname==='/plate'){
+      const f=ws.files(url.searchParams.get('part'),Number(url.searchParams.get('v')))['3MF'];
+      if(!f)throw Error('No 3MF in this version.');
+      res.setHeader('Content-Type','image/png');
+      return res.end(plateImage(fs.readFileSync(ws.object(f.key)),url.searchParams.get('index')));
+    }
+    if(req.method==='GET' && ['/','/app.js','/reports.js','/viewer.bundle.js','/library.js','/style.css'].includes(url.pathname)){
       const file=url.pathname==='/'?'index.html':url.pathname.slice(1);
       res.setHeader('Content-Type',(file.endsWith('.js')?'text/javascript':file==='index.html'?'text/html':'text/css')+'; charset=utf-8');
       return res.end(fs.readFileSync(path.join(here,file),'utf8').replace('__TOKEN__',token));
@@ -140,7 +146,7 @@ const server=http.createServer(async(req,res)=>{
       return res.end(fs.readFileSync(ws.object(f.key)));
     }
     if(req.method!=='POST'||url.pathname!=='/api'||req.headers.origin!==origin||req.headers['x-prc-token']!==token)throw Error('Request denied.');
-    let chunks=[],size=0;for await(const chunk of req){if((size+=chunk.length)>65536)throw Error('Input too long.');chunks.push(chunk);}
+    let chunks=[],size=0;for await(const chunk of req){if((size+=chunk.length)>6000000)throw Error('Input too long (6 MB maximum).');chunks.push(chunk);}
     const {action,...body}=JSON.parse(Buffer.concat(chunks));const result=await api(action,body);
     res.setHeader('Content-Type','application/json');res.end(JSON.stringify(result));
   }catch(e){res.statusCode=400;res.end(JSON.stringify({error:e.message}));}

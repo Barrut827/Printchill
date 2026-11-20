@@ -1,9 +1,10 @@
 import {queryTerms,results} from './library.js';
+import {reportForm} from './reports.js';
 import {thumbnail,mountViewer,loadGeometry} from './viewer.bundle.js';
 const $=id=>document.getElementById(id);
 const thumbs=new Map();
 let table=false,disposeViewer,scrollBefore=0;
-function criteria(){return {query:$('search').value,role:$('role').value,material:$('material').value,days:$('days').value,printed:$('printed').checked,sort:$('sort').value};}
+function criteria(){return {query:$('search').value,role:$('role').value,material:$('material').value,days:$('days').value,printed:$('printed').checked,sort:$('sort').value,attribute:$('attribute').value,attributeValue:$('attribute-value').value};}
 function geometry(p,v){const f=v.files.STL;return {importId:f.key,geometryAsset:'/download?part='+encodeURIComponent(p)+'&v='+v.v+'&role=STL'};}
 const thumbnails=new IntersectionObserver(entries=>{for(const entry of entries){
   if(!entry.isIntersecting)continue;
@@ -29,6 +30,8 @@ function draw(){
   const w=state?.workspace;
   $('create').disabled=!w;
   const parts=w?.parts||[],c=criteria();let rows=[],message='';
+  const attrs=[...new Set(Object.values(w?.details||{}).flatMap(d=>Object.keys(d.parameters||{})))].sort();
+  $('attribute').innerHTML='<option value="">Any project parameter</option>'+attrs.map(k=>'<option '+(k===c.attribute?'selected':'')+'>'+esc(k)+'</option>').join('');
   try{rows=w?results(w,c):[];message=rows.length+' parts'+(c.query.trim()?' · '+queryTerms(c.query).join(' AND '):'');}catch(e){message=e.message;}
   $('count').textContent=message;$('saved').innerHTML='<option value="">Saved searches…</option>'+(w?.searches||[]).map(r=>'<option>'+esc(r.name)+'</option>').join('');
   if(rows.some(r=>r.similar))$('count').textContent+=' · includes similar names';
@@ -83,6 +86,15 @@ function viewerTools(){
 function enrich(){
   const w=state?.workspace,s=w?.versions.find(x=>x.part===part&&x.v===v);if(!s)return;
   const d=w.details[s.files['3MF']?.key]||{},tags=w.tags.filter(t=>t.part===part).map(t=>'#'+t.tag);
+  if(s.files['3MF']&&(d.plateIds||[]).length){
+    $('detail').insertAdjacentHTML('beforeend','<h3>Saved plate previews · 3MF '+letter(s.files['3MF'].revision)+'</h3><div class="plates">'+d.plateIds.map(id=>'<figure><img loading="lazy" alt="Plate '+esc(id)+' saved in this 3MF revision" src="/plate?part='+encodeURIComponent(part)+'&v='+v+'&index='+encodeURIComponent(id)+'"><figcaption>Plate '+esc(id)+'</figcaption></figure>').join('')+'</div>');
+  }
+  const reports=w.reports.filter(r=>r.part===part);
+  for(const r of reports){
+    const payload=JSON.parse(r.details||'{}');
+    if(!Object.keys(payload).length)continue;
+    $('detail').insertAdjacentHTML('beforeend','<details><summary>Print report #'+r.id+' · version '+version(r.v)+' · '+esc(r.outcome)+'</summary><p>'+esc([payload.printer,payload.plate,payload.sourceName].filter(Boolean).join(' · '))+'</p><p>'+esc(payload.measurements||'No measurements')+'</p><dl>'+Object.entries(payload.parameters||{}).map(([k,value])=>'<dt>'+esc(k)+'</dt><dd>'+esc(JSON.stringify(value))+'</dd>').join('')+'</dl><div class="plates">'+(payload.images||[]).map(img=>'<figure><img alt="'+esc(img.name)+'" src="'+esc(img.data)+'"><figcaption>'+esc(img.name)+'</figcaption></figure>').join('')+'</div></details>');
+  }
   if(s.files['3MF'])$('detail').querySelector('h2').insertAdjacentHTML('afterend','<p><strong>Print time</strong> '+printMetric(d,'seconds')+' &nbsp; <strong>Filament</strong> '+printMetric(d,'grams')+'</p>');
   const value=(x,unit='')=>x==null?'Unknown':esc(x)+unit;
   $('detail').insertAdjacentHTML('afterbegin','<button class="back" data-action="back">← Library</button>');
@@ -103,11 +115,11 @@ function settings(){
 }
 $('settings').onclick=settings;
 $('create').onclick=()=>dialog('Import Part',input('name','Part name')+'<label>CAD, STL or 3MF · one file per role<textarea id="paths" required readonly></textarea></label>'+picker('paths','files'),'Register version 001',async()=>{part=await api('import',{name:$('name').value,paths:$('paths').value.split('\n').filter(Boolean)});v=1;});
-for(const id of ['search','material','role','days','printed','sort'])$(id).oninput=draw;
+for(const id of ['search','material','role','days','printed','sort','attribute','attribute-value'])$(id).oninput=draw;
 $('side-tags').onclick=e=>{const b=e.target.closest('[data-tag]');if(!b)return;const token='#'+b.dataset.tag,terms=$('search').value.split('+').map(s=>s.trim()).filter(Boolean);$('search').value=(terms.includes(token)?terms.filter(s=>s!==token):[...terms,token]).join(' + ');draw();[...$('side-tags').children].find(x=>x.dataset.tag===b.dataset.tag)?.focus();};
 $('layout').onclick=()=>{table=!table;draw();};
 $('save-search').onclick=()=>{try{queryTerms(criteria().query);dialog('Save search',input('search-name','Search name'),'Save',()=>api('saveSearch',{name:$('search-name').value,criteria:criteria()}));}catch(e){note(e.message);}};
-$('saved').onchange=()=>{const row=state.workspace.searches.find(r=>r.name===$('saved').value);if(!row)return;const c=JSON.parse(row.criteria);$('search').value=c.query;for(const k of ['role','material','days','sort'])$(k).value=c[k];$('printed').checked=c.printed;draw();};
+$('saved').onchange=()=>{const row=state.workspace.searches.find(r=>r.name===$('saved').value);if(!row)return;const c=JSON.parse(row.criteria);$('search').value=c.query;for(const k of ['role','material','days','sort','attribute'])$(k).value=c[k]||'';$('attribute-value').value=c.attributeValue||'';$('printed').checked=c.printed;draw();};
 $('library').onclick=e=>{const btn=e.target.closest('[data-part]');if(btn){const inspectModel=!!e.target.closest('.visual');scrollBefore=window.scrollY;part=btn.dataset.part;v=null;draw();if(inspectModel&&$('inspect'))$('inspect').open=true;window.scrollTo(0,0);$('detail').querySelector('button')?.focus();}};
 $('detail').onchange=e=>{if(e.target.id==='version'){v=Number(e.target.value);draw();}};
 function review(job,alternate){
@@ -127,9 +139,8 @@ $('detail').onclick=async e=>{try{
     const [p]=await api('pick',{kind:'model'});if(p)review(job,p);
   }
   if(b.dataset.action==='report'){
-    const base=v,key='printchill:'+state.root+':'+part+':'+v;
-    dialog('Print report · '+part+' / '+version(base),'<label>Outcome<select id="outcome"><option>Success</option><option>Failed</option><option>Aborted</option></select></label><label>Printed material<input id="report-material" placeholder="e.g. PETG"></label><label>Notes<textarea id="notes">'+esc(localStorage.getItem(key)||'')+'</textarea></label>','Save report',async()=>{await api('report',{part,v:base,outcome:$('outcome').value,note:$('notes').value,material:$('report-material').value});localStorage.removeItem(key);});
-    $('notes').oninput=()=>localStorage.setItem(key,$('notes').value);
+    const f=state.workspace.versions.find(r=>r.part===part&&r.v===v).files['3MF'];
+    reportForm({part,version:v,parameters:state.workspace.details[f?.key]?.parameters||{},source:{root:state.root,name:f?.name},api,dialog,esc,refresh});
   }
 }catch(err){note(err.message);}};
 $('fields').onclick=async e=>{try{
