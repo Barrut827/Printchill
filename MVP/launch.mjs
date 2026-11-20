@@ -7,7 +7,7 @@ async function ready() {
   try {
     const response = await fetch('http://127.0.0.1:' + port, {signal: AbortSignal.timeout(800)});
     const prc=response.ok && (await response.text()).includes('name="prc-token"');
-    if(prc && response.headers.get('X-PrintChill-Build')!=='0.1.1')return 'outdated';
+    if(prc && response.headers.get('X-PrintChill-Build')!=='0.2.5')return 'outdated';
     return prc;
   } catch { return false; }
 }

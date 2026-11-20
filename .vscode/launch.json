@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "PRC: Start met browser",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/MVP/server.mjs",
+      "cwd": "${workspaceFolder}/MVP",
+      "env": { "PRC_PORT": "47831" },
+      "preLaunchTask": "PRC: Stop backend",
+      "console": "internalConsole",
+      "outputCapture": "std",
+      "serverReadyAction": {
+        "pattern": "PrintChill ready at (http://127\\.0\\.0\\.1:47831)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      },
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

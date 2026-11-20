@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "esbuild": "0.25.12",
+    "fast-xml-parser": "5.12.1",
+    "fflate": "0.8.3",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "playwright-core": "1.56.1"
+  }
+}

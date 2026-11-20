@@ -1,4 +1,4 @@
-# PrintChill voor Windows · MVP 0.1.1
+# PrintChill voor Windows · MVP 0.2.5
 
 Met deze handleiding installeer je de pilot en beheer je de lokale werkmap (workspace). De knopnamen hieronder komen overeen met de Engelstalige interface.
 
@@ -15,22 +15,34 @@ De volledige ontwerpworkflow en de acceptatiecriteria staan in de projectdocumen
 ## Back-up en herstel
 
 - **Back-up maken:** kies **Settings → Create backup** en selecteer een lege map buiten de workspace. De back-up bevat de geregistreerde versies, bestanden en printrapporten. Bevestig openstaande wijzigingen vooraf als je ze wilt meenemen.
-- **Herstellen:** kies **Settings → Restore backup**. Selecteer als bron de back-upmap met `backup.json`. Kies vervolgens de bestemming en klik op **Restore and open**. Bij een lege doelmap herstelt PRC rechtstreeks in die map. Bevat de doelmap al bestanden, dan maakt PRC daarin een submap `PRC-restored-…` en opent die als workspace.
+- **Samenvoegen:** kies **Settings → Restore backup → Merge into current workspace**. Selecteer de map met `backup.json` en bekijk naam, aanmaakdatum, grootte, Parts en conflicten. Bevestigen vervangt voor overlappende nummers de lokale versies, tags en rapporten door de back-upinhoud. Andere lokale Parts blijven beschikbaar. Bevestig eerst eventuele wijzigingen in werkkopieën voor de conflicterende Parts. Bij oudere back-ups kan de aanmaakdatum onbekend zijn.
+- **Apart openen:** kies **Open as separate workspace** voor een zelfstandige kopie van de volledige back-up, inclusief opgeslagen zoekopdrachten. Een gevulde doelmap krijgt hiervoor een nieuwe submap.
+
+## Bibliotheek en zoeken
+
+Wissel tussen kaarten met STL-thumbnail en de tabel. Kies een Part en Part version voor de bijbehorende geometrie, afmetingen, projectinstellingen en 3MF. **Library** brengt je terug naar je zoekresultaten. Via **Edit tags** geef je Parts labels. Combineer termen met **+**, bijvoorbeeld `#roboticarm + PETG`. Het materiaalfilter onder **Filters & saved searches** gebruikt het werkelijk opgegeven materiaal in een Print Report. In combinatie met een periode moeten beide bij dezelfde printpoging horen. **Save search** bewaart de criteria in de workspace.
 
 De workspace gebruikt SQLite voor de registraties en bewaart de bijbehorende bestanden lokaal. Bepaal met de Windows-maprechten wie toegang heeft tot de workspace en de back-ups.
 
 ## Bijwerken naar een nieuwe pilotversie
 
+**Printschatting.** Zonder volledige opgeslagen slicertotalen berekent PRC een indicatie uit horizontale doorsneden van de geplaatste 3MF-geometrie, wand- en laaginstellingen, infill, snelheden en filamentprofiel. Bij Print details toont **How PRC estimated this print** per plaat de gebruikte profielwaarden en beperkingen. Een opgeslagen Bambu-waarde krijgt per grootheid voorrang. Opwarmtijd, support, brim en materiaalwissels vallen buiten de benadering; de werkelijke print kan meer tijd en materiaal vragen.
+
 Maak eerst een back-up. Stop de oude backend met Ctrl+C als je hem vanuit een terminal hebt gestart. Draait hij op de achtergrond, meld je dan af en weer aan bij Windows. Pak het nieuwe pakket uit, start het met `start.cmd` en selecteer zo nodig je bestaande workspace.
 
 ## Voor ontwikkelaars
+
+Open de repositorymap **Printchill** in VS Code. Kies bij **Run and Debug** de configuratie **PRC: Start met browser**. Met **F5** start de bronversie en opent de browser. **Shift+F5** stopt deze debugsessie.
+
+Via **Terminal → Run Task…** kun je ook **PRC: Bouw en installeer Windows-pilot**, **PRC: Start vanuit broncode** of **PRC: Stop backend** kiezen. Starten en installeren stoppen eerst de herkende PRC-backend op poort 47831. Rond een lopende import of herstelactie vooraf af. De installatietaak bouwt de ZIP en zet de pilot met snelkoppeling in het Windows-startmenu. Voor bouwen is Node 24 x64 nodig en mogelijk internet voor de runtime-licentie.
 
 Voer de volgende opdrachten uit vanuit de map `MVP` op Windows x64 met Node 24. De tests gebruiken de voorbeeldbestanden uit de repository.
 
 | Doel | Opdracht |
 | --- | --- |
 | Starten vanuit de broncode | `.\start.cmd` |
-| Opslag en lokale API testen | `node --test store.test.mjs server.test.mjs` |
+| Opslag, lokale API, zoeken en back-upmerge testen | `node --test store.test.mjs server.test.mjs release.test.mjs` |
+| UI met een tijdelijke workspace en lokale Chrome testen | `npm ci` en daarna `node --test ui.test.mjs` |
 | Pilot-ZIP bouwen | `.\build.ps1` |
 
-Deze versie ondersteunt databaseschema 1. Controleer bij een nieuwe distributie ook de installatie op een schoon Windows-account en de upgrade met een bestaande workspace.
+Bij het openen van een workspace met schema 1 maakt PRC naast de workspace eerst een back-up van de geregistreerde bestanden en migreert daarna naar schema 2. Voor het vernieuwen van de offline viewer- en metadatabundels gebruik je in deze bronmap `npm ci` en `node bundle.mjs`.

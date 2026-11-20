@@ -16,22 +16,24 @@ Samana ontleent zijn betekenis aan de gereconstrueerde Germaanse vorm *samana*, 
 
 shortlist; nog nader te bepalen wat te doen. printchill bekt lekker maar ligt te dicht bij Windchill. gaat gedoe opleveren. nieuwe naam moet kort en krachtig zijn, 1 a max 2 lettergrepen.
 
-| Naam             | Gevonden bestaand gebruik                                      | Nabijheid tot jouw product               | Merkrechten Benelux/EU                                                          |
-| ---------------- | -------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------- |
-| **Staxo**        | Crypto-app en facturatiesoftware                               | Andere toepassingen, wel software        | EU-registratie gevonden voor metalen bouwconstructies; softwaredekking **open** |
-| **Staxly**       | Cloudbeveiliging en catalogus voor ontwikkelplatforms          | Andere toepassingen, wel IT-beheer       | **Open**                                                                        |
-| **Modex**        | Engineeringsoftware voor modelleren, simulatie en documentatie | **Sterke overlap**                       | **Open**                                                                        |
-| **Ordynate**     | Geen duidelijke exacte softwarematch gevonden                  | Nog onbekend; ook _Ordinate_ onderzoeken | **Open**                                                                        |
-| **Strivo**       | BIM-modelbeheer met versies, catalogi en traceerbaarheid       | **Sterke overlap**                       | **Open**                                                                        |
-| **Tylix**        | Programmeertools en ontwikkelomgeving                          | Andere toepassing, wel software          | **Open**                                                                        |
-| **Flurix**       | AI-platformen en bedrijfssoftware                              | Andere toepassingen, deels beheer        | **Open**                                                                        |
-| **Ankyr**        | Boekingsplatform voor muziekpodia                              | Andere toepassing, wel beheersoftware    | **Open**                                                                        |
-| **Pectra Print** | Geen exacte combinatie gevonden; **Pectra BPM** bestaat        | Verwant: processen en informatie beheren | Amerikaanse merkvermeldingen gevonden; EU/Benelux **open**                      |
-| **Queris**       | Industriële software én document- en gegevensbeheer            | **Sterke overlap**                       | Gebruik van ® gevonden; registratiebereik **open**                              |
-| **Querix**       | Softwareontwikkelplatform en applicatiemigratie                | Gevestigde naam binnen software          | **Open**                                                                        |
-| **Partofy**      | Geen duidelijke exacte softwarematch gevonden                  | Ook vergelijkbare namen onderzoeken      | **Open**                                                                        |
-| **Samana**       | IT-diensten en monitoringplatform SAMM                         | Andere toepassing, wel IT-beheer         | **Open**                                                                        |
-| Kipu Print       |                                                                |                                          |                                                                                 |
+| Naam             | Gevonden bestaand gebruik                                      | Nabijheid tot jouw product                                      | Merkrechten Benelux/EU                                                          |
+| ---------------- | -------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| **Staxo**        | Crypto-app en facturatiesoftware                               | Andere toepassingen, wel software                               | EU-registratie gevonden voor metalen bouwconstructies; softwaredekking **open** |
+| **Staxly**       | Cloudbeveiliging en catalogus voor ontwikkelplatforms          | Andere toepassingen, wel IT-beheer                              | **Open**                                                                        |
+| **Modex**        | Engineeringsoftware voor modelleren, simulatie en documentatie | **Sterke overlap**                                              | **Open**                                                                        |
+| **Ordynate**     | Geen duidelijke exacte softwarematch gevonden                  | Nog onbekend; ook _Ordinate_ onderzoeken                        | **Open**                                                                        |
+| **Strivo**       | BIM-modelbeheer met versies, catalogi en traceerbaarheid       | **Sterke overlap**                                              | **Open**                                                                        |
+| **Tylix**        | Programmeertools en ontwikkelomgeving                          | Andere toepassing, wel software                                 | **Open**                                                                        |
+| **Flurix**       | AI-platformen en bedrijfssoftware                              | Andere toepassingen, deels beheer                               | **Open**                                                                        |
+| **Ankyr**        | Boekingsplatform voor muziekpodia                              | Andere toepassing, wel beheersoftware                           | **Open**                                                                        |
+| **Pectra Print** | Geen exacte combinatie gevonden; **Pectra BPM** bestaat        | Verwant: processen en informatie beheren                        | Amerikaanse merkvermeldingen gevonden; EU/Benelux **open**                      |
+| **Queris**       | Industriële software én document- en gegevensbeheer            | **Sterke overlap**                                              | Gebruik van ® gevonden; registratiebereik **open**                              |
+| **Querix**       | Softwareontwikkelplatform en applicatiemigratie                | Gevestigde naam binnen software                                 | **Open**                                                                        |
+| **Partofy**      | Geen duidelijke exacte softwarematch gevonden                  | Ook vergelijkbare namen onderzoeken                             | **Open**                                                                        |
+| **Samana**       | IT-diensten en monitoringplatform SAMM                         | Andere toepassing, wel IT-beheer                                | **Open**                                                                        |
+| Kipu Print       |                                                                |                                                                 |                                                                                 |
+| Joynt            |                                                                | als in joint: verbind, verbinder                                | wordt al wel veel toegepast.                                                    |
+| Stapler          |                                                                | als in een nietje dat de verschillende versies bij elkaar houdt |                                                                                 |
 ## Datamodel voor gebruikers
 
 Conceptueel model; geen vastgesteld databaseschema of gerealiseerde applicatie. De afbeelding is de eerdere gebruikersrendering en is achterhaald voor Part versions en Print Reports; onderstaande definities zijn leidend.
@@ -224,6 +226,13 @@ side note: het is nu erg op solidworks ge-orienteerd, maar in de toekomst moeten
 
 Part Details vervangt de dubbele bestandentab. Het Part-versionpaneel blijft de bestandsselectie tonen. Details refereren alleen de gekozen 3MF-revisie: materiaal, totaalgewicht, printtijd, laaghoogte, infillpercentage/-type, filamentkleuren/-types en plaatcount. Projectpresets, objectoverrides, configuratie en werkelijk filamentverbruik zijn verschillende scopes; onbekende waarden blijven Unknown. De proef gebruikt een reproduceerbare extractie uit het aangeleverde Bambu-3MF voor demo-revisie G, zonder automatische revisieherkenning.
 
+## Back-up Mechanism
+printchill bevat een backup mechanisme. om een backup te make nvan de volledige database en de alle native files. deze moet kunnen worden geexporteerd naar een door de user aangegeven locatie. en ook weer ingelezen kunnen worden. bij het selecteren van de backup folder wordt de backup ingelezen en wordt in het backup/restore venster getoond: time date stamp gemaakt backup,naam backup , aantal parts deze bevat. grootte van backup in MB's.
+### Backup restore merge conflicts
+Bij het inlezen van een backup worden alle files die zowel in de huidige als in de backup staan overschreven door de backup. anders gebruik je de backup functionaliteit niet. voordat de backup restore wordt doorgezet wordt er gemeld aan de gebruiker: let op, deze part numbers bestaan in de huidige database én in de backup, door op restore te drukken worden bestaande parts in de huidige database overschreven met de content van de backup.
+
+## Tijdnotatie in applicatie
+PRC werkt met een DD/MM/YYY HH:MM (24hr clock) notatie.
 ## Consolidatie filament en tijdindicatie
 
 Part Details toont geselecteerde model-/slicingfilamenten; projectconfiguratie is geen live AMS-inventaris. Tijdindicatie gebruikt complete voorspellingen per plaat, of ingesloten G-code-tijdcommentaar, afgerond op vijf minuten. Zonder complete gegevens: Slice required. Geen schatting uit filamentlengte en nominale printsnelheid. Bronnen, scope en beperkingen: [[3MF_PRINT_DETAILS_RESEARCH]].

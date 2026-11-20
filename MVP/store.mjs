@@ -35,7 +35,15 @@ export class Workspace {
           CREATE TABLE reports(id INTEGER PRIMARY KEY,part TEXT,v INTEGER,outcome TEXT,note TEXT,created TEXT,FOREIGN KEY(part,v) REFERENCES versions(part,v));
           PRAGMA application_id=1347568433; PRAGMA user_version=1; COMMIT;`);
       }
-      check(this.one('PRAGMA application_id').application_id===1347568433 && this.one('PRAGMA user_version').user_version===1,'Unsupported workspace.');
+      check(this.one('PRAGMA application_id').application_id===1347568433 && [1,2].includes(this.one('PRAGMA user_version').user_version),'Unsupported workspace.');
+      if(version<2){
+        if(version===1)this.backup(this.root+'-pre-0.2-'+randomUUID());
+        this.transaction(()=>{
+          this.db.exec('CREATE TABLE IF NOT EXISTS part_tags(part TEXT REFERENCES parts(id),tag TEXT COLLATE NOCASE,PRIMARY KEY(part,tag)); CREATE TABLE IF NOT EXISTS searches(name TEXT PRIMARY KEY,criteria TEXT NOT NULL)');
+          if(!this.all('PRAGMA table_info(reports)').some(c=>c.name==='material'))this.db.exec("ALTER TABLE reports ADD COLUMN material TEXT DEFAULT ''");
+          this.db.exec('PRAGMA user_version=2');
+        });
+      }
       for (const dir of ['objects','work','staging']) fs.mkdirSync(path.join(this.root,dir),{recursive:true});
     } catch(e) {this.db.close();throw e;}
   }
@@ -98,7 +106,7 @@ export class Workspace {
       this.run('UPDATE jobs SET base=? WHERE id=?',v,id);return v;
     });
   }
-  report(part,v,outcome,note){this.files(part,v);check(['Success','Failed','Aborted'].includes(outcome),'Choose an outcome.');this.run('INSERT INTO reports(part,v,outcome,note,created) VALUES(?,?,?,?,?)',part,v,outcome,note,new Date().toISOString());}
+  report(part,v,outcome,note,material=''){this.files(part,v);check(['Success','Failed','Aborted'].includes(outcome),'Choose an outcome.');this.run('INSERT INTO reports(part,v,outcome,note,created,material) VALUES(?,?,?,?,?,?)',part,v,outcome,note,new Date().toISOString(),material);}
   state(){
     return {root:this.root,parts:this.all('SELECT * FROM parts ORDER BY name'),versions:this.all('SELECT * FROM versions ORDER BY v DESC').map(r=>({...r,files:JSON.parse(r.files)})),reports:this.all('SELECT * FROM reports ORDER BY id DESC'),jobs:this.all('SELECT * FROM jobs').map(j=>{
       try{const p=this.workPath(j),stat=fs.statSync(p,{bigint:true}),sig=String(stat.ino)+'/'+stat.mtimeNs+'/'+stat.size;
@@ -119,7 +127,7 @@ export class Workspace {
       const out=path.join(dest,'objects',f.key);if(!fs.existsSync(out))fs.copyFileSync(this.object(f.key),out);
       check(hash(fs.readFileSync(out))===f.key,'Backup integrity check failed.');
     }
-    fs.writeFileSync(path.join(dest,'backup.json'),JSON.stringify({format:1}));
+    fs.writeFileSync(path.join(dest,'backup.json'),JSON.stringify({format:1,name:path.basename(dest),created:new Date().toISOString()}));
   }
 }
 function inside(parent,child){const rel=path.relative(parent,child);return !rel || (!rel.startsWith('..'+path.sep)&&rel!=='..'&&!path.isAbsolute(rel));}

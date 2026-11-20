@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PRC: Stop backend",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile", "-ExecutionPolicy", "RemoteSigned", "-File", "${workspaceFolder}/scripts/stop-prc.ps1"],
+      "problemMatcher": []
+    },
+    {
+      "label": "PRC: Start vanuit broncode",
+      "dependsOn": "PRC: Stop backend",
+      "type": "process",
+      "command": "node.exe",
+      "args": ["server.mjs"],
+      "options": { "cwd": "${workspaceFolder}/MVP", "env": { "PRC_PORT": "47831" } },
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "PRC: Bouw en installeer Windows-pilot",
+      "dependsOn": "PRC: Stop backend",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile", "-ExecutionPolicy", "RemoteSigned", "-File", "${workspaceFolder}/MVP/build.ps1", "-Install"],
+      "problemMatcher": []
+    }
+  ]
+}

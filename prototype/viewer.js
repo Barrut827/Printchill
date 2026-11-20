@@ -113,6 +113,31 @@ export async function mountViewer(el, file) {
   const box = new THREE.BoxHelper(mesh, 0x087f78);
   box.visible = false;
   scene.add(box);
+  const dimensions = new THREE.Group();
+  const bounds = new THREE.Box3().setFromObject(mesh);
+  const {min, max} = bounds;
+  // STL Z-up is displayed Y-up. Original +Y points along world -Z.
+  const corner = new THREE.Vector3(min.x, min.y, max.z);
+  const axes = [
+    ['X', new THREE.Vector3(max.x,min.y,max.z), '#952e28'],
+    ['Y', new THREE.Vector3(min.x,min.y,min.z), '#166142'],
+    ['Z', new THREE.Vector3(min.x,max.y,max.z), '#224ba5'],
+  ];
+  for(const [axis,end,color] of axes){
+    const length=corner.distanceTo(end);
+    const geometry=new THREE.BufferGeometry().setFromPoints([corner,end]);
+    const line=new THREE.Line(geometry,new THREE.LineBasicMaterial({color,depthTest:false}));
+    line.renderOrder=2;dimensions.add(line);
+    const canvas=document.createElement('canvas');canvas.width=384;canvas.height=80;
+    const ctx=canvas.getContext('2d');ctx.fillStyle=color;ctx.fillRect(0,0,384,80);
+    ctx.fillStyle='white';ctx.font='bold 40px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(axis+'  '+length.toLocaleString('en-GB',{maximumFractionDigits:1})+' mm',192,40);
+    const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+    const tag=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,depthTest:false,depthWrite:false}));
+    tag.position.copy(corner).lerp(end,0.55);tag.scale.set(radius*.48,radius*.10,1);
+    tag.renderOrder=3;dimensions.add(tag);
+  }
+  dimensions.visible=false;scene.add(dimensions);
   const label =
     g.userData.dimensions
       .map((n) => n.toLocaleString("en-GB", { maximumFractionDigits: 1 }))
@@ -120,11 +145,16 @@ export async function mountViewer(el, file) {
   el.querySelector("[data-dimensions]").textContent =
     label + " · STL units assumed as mm";
   const action = (a) => {
-    if (a === "reset-view") {
+    if (['front','top','left','right'].includes(a)) {
+      controls.target.set(0,0,0);
+      camera.position.set(...({front:[0,0,1],top:[0,1,0.00001],left:[-1,0,0],right:[1,0,0]})[a]).multiplyScalar(initial.length());
+    } else if (a === "reset-view") {
       camera.position.copy(initial);
       controls.target.set(0, 0, 0);
     } else if (a === "bounds") {
       box.visible = !box.visible;
+      dimensions.visible=box.visible;
+      el.querySelector('[data-view-action="bounds"]')?.setAttribute('aria-pressed',String(box.visible));
       el.querySelector("[data-dimensions]").hidden = !box.visible;
     } else camera.position.multiplyScalar(a === "zoom-in" ? 0.82 : 1.22);
     controls.update();
@@ -182,5 +212,6 @@ export async function mountViewer(el, file) {
     v.grid.material.dispose();
     box.geometry.dispose();
     box.material.dispose();
+    for(const child of dimensions.children){child.geometry?.dispose();child.material.map?.dispose();child.material.dispose();}
   };
 }

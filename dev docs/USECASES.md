@@ -900,17 +900,17 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 
 #### Hoofdscenario
 
-| Stap | Actoractie | Systeemgedrag |
-| --- | --- | --- |
-| 1 | Opent PrintChill | Toont circa 20% zijbalk met zoekbalk, filters, collecties/projecten en daarnaast Part-kaarten |
-| 2 | Scrollt door kaarten | Toont thumbnail, naam, nummer, geselecteerde versiecontext, beschikbare status en tags; compacte printgegevens met broncontext |
-| 3 | Typt een naam | Filtert kaarten op exacte of gelijkende namen volgens UC-008 |
-| 4 | Hovert of focust een kaart; opent details | Vergroot/toont details, extra properties en gekoppelde documenten; ook klikbediening beschikbaar |
-| 5 | Klikt op thumbnail | Opent 3D-viewer van een expliciet benoemde STL-versie |
-| 6 | Kiest kubus-met-maatlijnen | Toont bounding box met lengte, breedte, hoogte en eenheden |
-| 7 | Draait het model en sluit de viewer met kruisje | Herstelt kaart, zoekopdracht en scrollpositie |
-| 8 | Kiest slicersymbool en bevestigt de Part version en 3MF-revisie | Opent de concrete 3MF in Bambu Studio via UC-004 |
-| 9 | Controleert instellingen en kiest Print plate in Bambu Studio | Printen gebeurt in de slicer; PrintChill claimt geen automatisch bekend resultaat |
+| Stap | Actoractie                                                      | Systeemgedrag                                                                                                                  |
+| ---- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 1    | Opent PrintChill                                                | Toont circa 20% zijbalk met zoekbalk, filters, collecties/projecten en daarnaast Part-kaarten                                  |
+| 2    | Scrollt door kaarten                                            | Toont thumbnail, naam, nummer, geselecteerde versiecontext, beschikbare status en tags; compacte printgegevens met broncontext |
+| 3    | Typt een naam                                                   | Filtert kaarten op exacte of gelijkende namen volgens UC-008                                                                   |
+| 4    | Hovert of focust een kaart; opent details                       | Vergroot/toont details, extra properties en gekoppelde documenten; ook klikbediening beschikbaar                               |
+| 5    | Klikt op thumbnail                                              | Opent 3D-viewer van een expliciet benoemde STL-versie                                                                          |
+| 6    | Kiest kubus-met-maatlijnen                                      | Toont bounding box met lengte, breedte, hoogte en eenheden                                                                     |
+| 7    | Draait het model en sluit de viewer met kruisje                 | Herstelt kaart, zoekopdracht en scrollpositie                                                                                  |
+| 8    | Kiest slicersymbool en bevestigt de Part version en 3MF-revisie | Opent de concrete 3MF in Bambu Studio via UC-004                                                                               |
+| 9    | Controleert instellingen en kiest Print plate in Bambu Studio   | Printen gebeurt in de slicer; PrintChill claimt geen automatisch bekend resultaat                                              |
 
 #### Alternatieve scenario’s
 
@@ -955,22 +955,21 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 
 #### Acceptatiecriteria
 
-| ID | Gegeven | Wanneer | Dan | Verificatie |
-| --- | --- | --- | --- | --- |
-| UC-006-AC-01 | Parts met thumbnails | Bibliotheek opent | Kaarten en zijbalk tonen beschikbare gegevens met context | Niet uitgevoerd |
-| UC-006-AC-02 | Naam in zoekbalk | Gebruiker zoekt | Matchende kaarten blijven over | Niet uitgevoerd |
-| UC-006-AC-03 | Kaart met STL | Viewer en maatknop gekozen | Benoemde versie en bounding box met eenheden zijn zichtbaar | Niet uitgevoerd |
-| UC-006-AC-04 | Actieve zoekopdracht | Viewer wordt gesloten | Zoekopdracht en scrollpositie blijven behouden | Niet uitgevoerd |
-| UC-006-AC-05 | Gekozen Part version | Sliceractie wordt uitgevoerd | Exacte 3MF-versie opent; geen vervanging door latest | Niet uitgevoerd |
-| UC-006-AC-06 | Geen hoverbediening | Gebruiker navigeert met toetsenbord | Details en viewer blijven bereikbaar | Niet uitgevoerd |
-
-| UC-006-AC-06 | Part met geregistreerde 3MF-metadata | Part Details geopend | Alle gevraagde velden met eenheden, bron en versiecontext zichtbaar | Prototypecontrole |
-| UC-006-AC-07 | Meerdere filamenten en platen | Details geopend | Kleuren/types afzonderlijk zichtbaar; plaatcount en projectscope expliciet | Prototypecontrole |
-| UC-006-AC-08 | Geen slicingstatistieken of historische 3MF | Details geopend | Ontbrekende gegevens Unknown; geen data van een andere revisie | Prototypecontrole |
-
-| UC-006-AC-09 | Vier slots, alleen extruder 4 op de modellen | Part Details geopend | Alleen geselecteerd Generic PLA #DCF478 zichtbaar; configuratie geen AMS-liveclaim | Prototypecontrole |
-| UC-006-AC-10 | Complete plaatvoorspellingen | Details geopend | Ruwe tijden bewaard en totaal als grove indicatie gepresenteerd | Synthetische extractie- en modeltests |
-| UC-006-AC-11 | Alleen gedeeltelijke of eerste-laagtijd | Details geopend | Geen fictieve totale tijd; Slice required met instructie | Prototypecontrole |
+| ID           | Gegeven                                              | Wanneer                                      | Dan                                                                                           | Verificatie               | Verificatieopmerkingen                                                                                                                                                                                                                                   |
+| ------------ | ---------------------------------------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UC-006-AC-01 | Parts met thumbnails                                 | Bibliotheek opent                            | Kaarten en zijbalk tonen beschikbare gegevens met context                                     | verified, ok with remarks | kaart schaalt niet mee met de gegevens. ook wordt overgeinformeerd. "bambu calcuation" etc. is niet relevant ik wil allen print tijd en gewicht zien                                                                                                     |
+| UC-006-AC-02 | Naam in zoekbalk                                     | Gebruiker zoekt                              | Matchende kaarten blijven over                                                                | verified, ok              | de tags zijn als zodanig in gericht. als ik een tag aan maak moet dit ook als tag terug komen in de UI en ook in de linker menu balk wil ik dan bestaand tags kunnen zien. met ene blokjes er om heen #tag. doe inspiratie op bij bootstrap UI elementen |
+| UC-006-AC-03 | Kaart met STL                                        | Viewer en maatknop gekozen                   | Benoemde versie en bounding box met eenheden zijn zichtbaar                                   | verified ok               | icoonjtes wel verwarrend. de boundingbox is goed zo. maak het icoontje als een linaal, een laat de aanzichten top , right left etc zien met een pijl icoon.                                                                                              |
+| UC-006-AC-04 | Gefilterde bibliotheek met meerdere schermen kaarten | Open een kaart na scrollen en kies ← Library | Dezelfde zoektekst, positie en kaartfocus zijn hersteld                                       | Browsertest               | Praktijkcontrole open                                                                                                                                                                                                                                    |
+| UC-006-AC-05 | Gekozen Part version                                 | Sliceractie wordt uitgevoerd                 | Exacte 3MF-versie opent; geen vervanging door latest                                          | verified, werkt           |                                                                                                                                                                                                                                                          |
+| UC-006-AC-06 | Geen hoverbediening                                  | Gebruiker navigeert met toetsenbord          | Details en viewer blijven bereikbaar                                                          | verified, OK              | werkt nu                                                                                                                                                                                                                                                 |
+| UC-006-AC-12 | Part met geregistreerde 3MF-metadata                 | Part Details geopend                         | Alle gevraagde velden met eenheden, bron en versiecontext zichtbaar                           | verified, OK              |                                                                                                                                                                                                                                                          |
+| UC-006-AC-07 | Meerdere filamenten en platen                        | Details geopend                              | Kleuren/types afzonderlijk zichtbaar; plaatcount en projectscope expliciet                    | verified, OK              | geen preview van de platen, volgens zitten er wel een preview per plaat in de 3MF verstopt kan dat kloppen?                                                                                                                                              |
+| UC-006-AC-08 | Geen slicingstatistieken of historische 3MF          | Details geopend                              | Ontbrekende gegevens Unknown; geen data van een andere revisie                                | verified, OK              |                                                                                                                                                                                                                                                          |
+| UC-006-AC-09 | Vier slots, alleen extruder 4 op de modellen         | Part Details geopend                         | Alleen geselecteerd Generic PLA #DCF478 zichtbaar; configuratie geen AMS-liveclaim            | verified, OK              |                                                                                                                                                                                                                                                          |
+| UC-006-AC-10 | Complete plaatvoorspellingen                         | Details geopend                              | Ruwe tijden bewaard en totaal als grove indicatie gepresenteerd                               | verified, OK              | goed genoeg voor nu                                                                                                                                                                                                                                      |
+| UC-006-AC-11 | Alleen gedeeltelijke of eerste-laagtijd              | Details geopend                              | Geen extrapolatie uit laag 1; automatische Bambu-berekening gebruikt de geselecteerde revisie | verified, OK              | goed genoeg voor nu                                                                                                                                                                                                                                      |
+| UC-006-AC-13 | Kaart met STL en printgegevens                       | Kaart krijgt hover of toetsenbordfocus       | Hoofdafmetingen, gewicht en printtijd verschijnen bij dezelfde kaart                          | Verified, OK              |                                                                                                                                                                                                                                                          |
 
 #### Afhankelijkheden en afbakening
 
@@ -1053,13 +1052,15 @@ Gebruiker kiest tagbewerking op een Part-kaart of meerdere geselecteerde Parts.
 
 #### Hoofdscenario
 
-| Stap | Actoractie | Systeemgedrag |
-| --- | --- | --- |
-| 1 | Selecteert vijf Parts met Ctrl+klik of selectievakjes | Houdt selectie zichtbaar en biedt tagactie aan |
-| 2 | Kiest Create tag en typt #roboticarm | Valideert naam en toont bestaande suggesties |
-| 3 | Bevestigt de nieuwe of bestaande tag | Koppelt de tag eenmaal aan ieder geselecteerd Part |
-| 4 | Opent één Part en typt in de tagsectie | Toont suggesties tijdens typen; aanvullende tags zijn toe te voegen |
-| 5 | Zoekt #roboticarm + PETG | Past gecombineerde zoekcriteria toe volgens UC-008 |
+| Stap | Actoractie                                            | Systeemgedrag                                                            |
+| ---- | ----------------------------------------------------- | ------------------------------------------------------------------------ |
+| 1    | Selecteert vijf Parts met Ctrl+klik of selectievakjes | Houdt selectie zichtbaar en biedt tagactie aan                           |
+| 2    | Kiest Create tag en typt #roboticarm                  | Valideert naam en toont bestaande suggesties                             |
+| 3    | Bevestigt de nieuwe of bestaande tag                  | Koppelt de tag eenmaal aan ieder geselecteerd Part                       |
+| 4    | Opent één Part en typt in de tagsectie                | Toont suggesties tijdens typen; aanvullende tags zijn toe te voegen      |
+| 5    | Zoekt #roboticarm + PETG                              | Past gecombineerde zoekcriteria toe volgens UC-008                       |
+| 6    | vind vervolgens alle parts die hier aan voldoen       | toont resultaten                                                         |
+| 7    | gebruiker klikt op tag                                | automatisch worden alle parts in library getoond die geklikte tag hebben |
 
 #### Alternatieve scenario’s
 
@@ -1078,10 +1079,11 @@ Gebruiker kiest tagbewerking op een Part-kaart of meerdere geselecteerde Parts.
 
 #### Businessregels
 
-- # is invoerprefix, geen onderdeel van de opgeslagen tagnaam.
+-  hashtag (#)is invoerprefix, geen onderdeel van de opgeslagen tagnaam.
 - Geen spaties of # in een tagnaam; - en _ zijn toegestaan.
 - Hoofdletters zijn toegestaan in weergave; naamuniciteit is hoofdletterongevoelig.
 - Een tag mag per Part maximaal eenmaal voorkomen. Geen willekeurige productlimiet op aantal tags; technische grenzen nog bepalen.
+- een tag krijgt een apart blokje zoals een button zodat ie er echt uit springt. zo wordt een tag ook overal getoond.
 
 #### Gegevens en relaties
 
@@ -1893,9 +1895,9 @@ Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volled
 
 | ID | Gegeven | Wanneer | Dan | Verificatie |
 | --- | --- | --- | --- | --- |
-| UC-013-AC-01 | Geldige broncontext | Hoofdscenario doorlopen | Verwacht resultaat met juiste versiecontext | Prototype-/browsertests |
-| UC-013-AC-02 | Onbekende bron of fout | Actie uitgevoerd | Geen verzonnen of gedeeltelijk als volledig gepresenteerde data | Prototype-/browsertests |
-| UC-013-AC-03 | Bestaande historie | Nieuwe aanvullende actie | Historische bestanden blijven onveranderd | Prototype-/browsertests |
+| UC-013-AC-01 | Geldige broncontext | Selecteer een projectversie | De componenten van die 3MF verschijnen met hun plaatcontext | Prototype-/browsertests |
+| UC-013-AC-02 | Alternatief of fout | Open een assembly zonder manifest | Native childrelaties blijven onbekend | Prototype-/browsertests |
+| UC-013-AC-03 | Bestaande historie | Selecteer een oudere assemblyversie | Inspectie gebruikt alleen de bronbestanden van die versie | Prototype-/browsertests |
 
 #### Afhankelijkheden en afbakening
 
@@ -2004,9 +2006,9 @@ Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volled
 
 | ID | Gegeven | Wanneer | Dan | Verificatie |
 | --- | --- | --- | --- | --- |
-| UC-014-AC-01 | Geldige broncontext | Hoofdscenario doorlopen | Verwacht resultaat met juiste versiecontext | Prototype-/browsertests |
-| UC-014-AC-02 | Onbekende bron of fout | Actie uitgevoerd | Geen verzonnen of gedeeltelijk als volledig gepresenteerde data | Prototype-/browsertests |
-| UC-014-AC-03 | Bestaande historie | Nieuwe aanvullende actie | Historische bestanden blijven onveranderd | Prototype-/browsertests |
+| UC-014-AC-01 | Geldige broncontext | Selecteer twee versies in Compare | De twee geselecteerde combinaties staan naast elkaar | Prototype-/browsertests |
+| UC-014-AC-02 | Alternatief of fout | Vergelijk een versie zonder STL | De ontbrekende preview is herkenbaar en de attribuutvergelijking blijft beschikbaar | Prototype-/browsertests |
+| UC-014-AC-03 | Bestaande historie | Wissel van raster naar gesorteerde tabel | De geselecteerde Part version blijft herkenbaar | Prototype-/browsertests |
 
 #### Afhankelijkheden en afbakening
 
@@ -2109,9 +2111,9 @@ Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volled
 
 | ID | Gegeven | Wanneer | Dan | Verificatie |
 | --- | --- | --- | --- | --- |
-| UC-015-AC-01 | Geldige broncontext | Hoofdscenario doorlopen | Verwacht resultaat met juiste versiecontext | Prototype-/browsertests |
-| UC-015-AC-02 | Onbekende bron of fout | Actie uitgevoerd | Geen verzonnen of gedeeltelijk als volledig gepresenteerde data | Prototype-/browsertests |
-| UC-015-AC-03 | Bestaande historie | Nieuwe aanvullende actie | Historische bestanden blijven onveranderd | Prototype-/browsertests |
+| UC-015-AC-01 | Geldige broncontext | Heropen een lokaal opgeslagen rapportconcept | De ingevoerde notitie hoort nog bij dezelfde Part version | Prototype-/browsertests |
+| UC-015-AC-02 | Alternatief of fout | Herstel uit een beschadigde back-up | De onvolledige import wordt gemeld en de bestaande registraties blijven intact | Prototype-/browsertests |
+| UC-015-AC-03 | Bestaande historie | Open een historische versie na herstel | Het bestand is byte-identiek aan de geregistreerde revisie | Prototype-/browsertests |
 
 #### Afhankelijkheden en afbakening
 
@@ -2214,9 +2216,9 @@ Read-only bronanalyse; lokale prototypeopslag zonder serveraccounts. Geen volled
 
 | ID | Gegeven | Wanneer | Dan | Verificatie |
 | --- | --- | --- | --- | --- |
-| UC-016-AC-01 | Geldige broncontext | Hoofdscenario doorlopen | Verwacht resultaat met juiste versiecontext | Prototype-/browsertests |
-| UC-016-AC-02 | Onbekende bron of fout | Actie uitgevoerd | Geen verzonnen of gedeeltelijk als volledig gepresenteerde data | Prototype-/browsertests |
-| UC-016-AC-03 | Bestaande historie | Nieuwe aanvullende actie | Historische bestanden blijven onveranderd | Prototype-/browsertests |
+| UC-016-AC-01 | Geldige broncontext | Bevestig een toegestane lifecycleovergang | Design state en maturity voldoen aan de afgesproken mapping | Prototype-/browsertests |
+| UC-016-AC-02 | Alternatief of fout | Probeer een Obsolete Part te reviseren | De registratie wordt geblokkeerd en kopiëren naar een nieuw nummer wordt aangeboden | Prototype-/browsertests |
+| UC-016-AC-03 | Bestaande historie | Wijzig alleen de maturity | De bestaande Part version en bestandsrevisies blijven behouden | Prototype-/browsertests |
 
 #### Afhankelijkheden en afbakening
 

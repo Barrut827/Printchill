@@ -39,6 +39,7 @@ In deze file plannen we de verschillende use cases weg in de tijd mbt volgorde e
 ## Overige
 - houdt voor de .md files de opmaak voor obsidian aan zodat de md files daarin goed leesbaar zijn.
 - ruim niet gebruikte bestanden meteen op.
+- je mag nooit en te nimmer de dev bestanden in de dev folder mee verpakken in een release tag of release build. zoals agent.md , architecture, DJF , UC
 
 # Quality control
 

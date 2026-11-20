@@ -1,5 +1,12 @@
 # PrintChill — Roadmap
 
+## MVP 0.2.0 — bibliotheek, zoeken en herstel
+
+- UC-006: kaarten en sorteerbare tabel op workspacegegevens, versiegebonden STL-inspectie met afmetingen en printdetails uit de geselecteerde 3MF.
+- UC-008: naam, nummer, tags en materiaal combineren, filters op bestandstype en printpoging, zoekcriteria lokaal bewaren en opnieuw uitvoeren.
+- UC-015: back-up beoordelen en Part-nummers na bevestiging samenvoegen; apart openen blijft beschikbaar. Een eerste opening van schema 1 maakt een migratieback-up.
+- Pilotcontrole: open een workspace uit 0.1.1, vind een Part via kaart én zoekopdracht, controleer een historische revisie in Bambu en herstel een back-up met overlappende nummers. Gebruik een testworkspace bij het beoordelen van vervanging.
+
 ## Windows-MVP — van eerste import tot reproduceerbare print
 
 Voorstel voor één gebruiker per lokale workspace. UC-018 is de acceptatieproef voor de release. Elke fase levert een testbaar onderdeel via de bestaande web-UI.
