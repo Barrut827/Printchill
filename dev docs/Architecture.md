@@ -10,10 +10,28 @@
 - [UI-uitgangspunten](#ui-uitgangspunten)
 - [Open ontwerpvragen](#open-ontwerpvragen)
 
-## Naamgeving
+## Naamgeving applicatie
 
 Samana ontleent zijn betekenis aan de gereconstrueerde Germaanse vorm *samana*, die ‘samen’ of ‘gezamenlijk’ betekent en verwant is aan het Oudnoordse *saman*. Als bedrijfsnaam staat het voor het samenbrengen van ideeën, mensen en techniek: van een eerste klantvraag naar een doordacht ontwerp en een tastbaar product. Daarmee past Samana bij 3D-printen, CAD-ontwerp en maatwerk, terwijl de naam ook ruimte biedt voor toekomstige engineeringactiviteiten. De vloeiende, internationaal klinkende naam heeft een rustigere en professionelere uitstraling dan Printchill en legt de nadruk op samenwerking en oplossingen. Samana wordt al door andere organisaties gebruikt; de geschiktheid als merknaam voor jouw activiteiten moet daarom nog worden vastgesteld.
 
+shortlist; nog nader te bepalen wat te doen. printchill bekt lekker maar ligt te dicht bij Windchill. gaat gedoe opleveren. nieuwe naam moet kort en krachtig zijn, 1 a max 2 lettergrepen.
+
+| Naam             | Gevonden bestaand gebruik                                      | Nabijheid tot jouw product               | Merkrechten Benelux/EU                                                          |
+| ---------------- | -------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------- |
+| **Staxo**        | Crypto-app en facturatiesoftware                               | Andere toepassingen, wel software        | EU-registratie gevonden voor metalen bouwconstructies; softwaredekking **open** |
+| **Staxly**       | Cloudbeveiliging en catalogus voor ontwikkelplatforms          | Andere toepassingen, wel IT-beheer       | **Open**                                                                        |
+| **Modex**        | Engineeringsoftware voor modelleren, simulatie en documentatie | **Sterke overlap**                       | **Open**                                                                        |
+| **Ordynate**     | Geen duidelijke exacte softwarematch gevonden                  | Nog onbekend; ook _Ordinate_ onderzoeken | **Open**                                                                        |
+| **Strivo**       | BIM-modelbeheer met versies, catalogi en traceerbaarheid       | **Sterke overlap**                       | **Open**                                                                        |
+| **Tylix**        | Programmeertools en ontwikkelomgeving                          | Andere toepassing, wel software          | **Open**                                                                        |
+| **Flurix**       | AI-platformen en bedrijfssoftware                              | Andere toepassingen, deels beheer        | **Open**                                                                        |
+| **Ankyr**        | Boekingsplatform voor muziekpodia                              | Andere toepassing, wel beheersoftware    | **Open**                                                                        |
+| **Pectra Print** | Geen exacte combinatie gevonden; **Pectra BPM** bestaat        | Verwant: processen en informatie beheren | Amerikaanse merkvermeldingen gevonden; EU/Benelux **open**                      |
+| **Queris**       | Industriële software én document- en gegevensbeheer            | **Sterke overlap**                       | Gebruik van ® gevonden; registratiebereik **open**                              |
+| **Querix**       | Softwareontwikkelplatform en applicatiemigratie                | Gevestigde naam binnen software          | **Open**                                                                        |
+| **Partofy**      | Geen duidelijke exacte softwarematch gevonden                  | Ook vergelijkbare namen onderzoeken      | **Open**                                                                        |
+| **Samana**       | IT-diensten en monitoringplatform SAMM                         | Andere toepassing, wel IT-beheer         | **Open**                                                                        |
+| Kipu Print       |                                                                |                                          |                                                                                 |
 ## Datamodel voor gebruikers
 
 Conceptueel model; geen vastgesteld databaseschema of gerealiseerde applicatie. De afbeelding is de eerdere gebruikersrendering en is achterhaald voor Part versions en Print Reports; onderstaande definities zijn leidend.
@@ -55,6 +73,24 @@ Documentrevisies gebruiken letters; Part versions gebruiken minimaal drie cijfer
 Een standaard CAD- of STL-document hoort bij het betreffende Part. Een 3MF-project en een snapshot kunnen meerdere Parts omvatten; de documentassociaties en bronrelaties mogen daarom niet tot één Part worden beperkt. Onderdeel-/plaatcontext blijft bewaard waar beschikbaar.
 
 ## Regels
+
+**Workspace (MVP-voorstel).** Bij eerste start biedt PRC een lokale map aan, bijvoorbeeld `Documenten\PRC` als Documenten lokaal staat. In Settings kiest de gebruiker **Nieuwe workspace** (lege map) of **Bestaande workspace openen** (herkenbare PRC-database). PRC controleert schrijfrechten en onthoudt het pad per Windows-gebruiker, buiten de workspace. Binnen de workspace zijn alle opslagpaden relatief. Ontbreekt de map na een verhuizing, dan vraagt PRC de bestaande workspace aan te wijzen. Voor de MVP gebruiken we een lokale schijf buiten synchronisatie- en netwerkmappen.
+
+| Onderdeel | Inhoud |
+| --- | --- |
+| `workspace.sqlite` | Workspace-ID, schemaversie, Parts, revisies, rapporten en werkkopies met hun basisversie |
+| `objects/` | Onveranderlijke bestandsinhoud onder een interne sleutel; oorspronkelijke naam en extensie staan in de database |
+| `work/<sessie-id>/` | Bewerkbare 3MF met herkenbare naam; PRC volgt het gekozen bestand en vangt vervangen van dat bestand op |
+| `staging/` | Tijdelijke invoer voor controle en publicatie; bij herstart controleert PRC achtergebleven bestanden |
+
+Een back-up gaat naar een apart gekozen bestemming buiten de workspace. De MVP-back-up omvat geregistreerde revisies en rapporten. De export meldt openstaande werkkopieën zodat de gebruiker gewenste wijzigingen eerst kan bevestigen. Herstel schrijft naar een lege workspace en controleert of alle geregistreerde bestanden aanwezig en intact zijn.
+
+**MVP op Windows.** Eén gebruiker werkt in één lokale workspace. De web-UI vraagt de lokale backend om acties uit te voeren. Alleen de backend schrijft naar SQLite en de beheerde bestandsopslag. SQLite bewaart de versierelaties; de bestandsopslag bewaart de geregistreerde bestanden en houdt werkkopieën apart. Voor **Open in Bambu Studio** maakt de backend een bewerkbare kopie van de 3MF-revisie uit de geselecteerde Part version en opent deze in de lokaal geïnstalleerde Bambu Studio.
+
+- Bij aanmaken krijgt een Part direct een Part number. De eerste bevestigde bestandscombinatie vormt Part version 001. Eén STL volstaat.
+- Handmatige registratie bevestigt welke documentrevisies bij de Part version horen. De herkomst van een STL uit een specifieke CAD-revisie is een afzonderlijke relatie en mag onbekend zijn.
+- PrintChill bewaart van elke geregistreerde documentrevisie een eigen kopie. Voor bewerking opent de engineer een werkkopie. Opslaan in Bambu Studio werkt die werkkopie bij. Pas na bevestiging van de wijziging in PrintChill ontstaat de volgende Part version.
+- Vanuit een historische Part version of het bijbehorende Print Report zijn de exacte geregistreerde bestanden terug te halen, ook na verplaatsing van de bronmap en na herstel uit een back-up. De back-up omvat daarvoor zowel de bestandsinhoud als de versierelaties.
 
 - CAD, STL en 3MF hebben onafhankelijke versiehistories. De STL-letter is gelijk aan de CAD-letter; de bronrelatie bepaalt de herkomst.
 - Een snapshot verwijst naar concrete versies, nooit naar ‘latest’. Nieuwe CAD D of 3MF H verandert S-001 niet.
@@ -191,6 +227,7 @@ Part Details vervangt de dubbele bestandentab. Het Part-versionpaneel blijft de 
 ## Consolidatie filament en tijdindicatie
 
 Part Details toont geselecteerde model-/slicingfilamenten; projectconfiguratie is geen live AMS-inventaris. Tijdindicatie gebruikt complete voorspellingen per plaat, of ingesloten G-code-tijdcommentaar, afgerond op vijf minuten. Zonder complete gegevens: Slice required. Geen schatting uit filamentlengte en nominale printsnelheid. Bronnen, scope en beperkingen: [[3MF_PRINT_DETAILS_RESEARCH]].
+
 
 ## Prototype v4 — samples en UI-review
 

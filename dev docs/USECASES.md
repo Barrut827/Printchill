@@ -2,31 +2,33 @@
 
 ## Inhoudsopgave
 
-- [Doel en scope](#doel-en-scope)
-- [Werkwijze](#werkwijze)
-- [Identificatie en traceerbaarheid](#identificatie-en-traceerbaarheid)
-- [Status en prioriteit](#status-en-prioriteit)
-- [Use-caseregister](#use-caseregister)
-- [UC-001 — SolidWorks-metadata read-only naar JSON exporteren](#uc-001)
-- [UC-002 — Part aanmaken, reviseren en voorbereiden voor printen](#uc-002)
-- [UC-003 — Print Report van een printpoging vastleggen](#uc-003)
-- [UC-004 — Een bestaand part openen in SolidWorks of Bambu Studio](#uc-004)
-- [UC-005 — Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren](#uc-005)
-- [UC-006 — Parts visueel browsen en voorbereiden voor herhaalprint](#uc-006)
-- [UC-007 — Tags aanmaken, toekennen en gebruiken](#uc-007)
-- [UC-008 — Parts zoeken, filteren en zoekopdrachten opslaan](#uc-008)
-- [UC-009 — Waar-gebruikt-relaties bekijken en volgen](#uc-009)
-- [UC-010 — Snapshot van documentversies vastleggen en raadplegen](#uc-010)
-- [UC-011 — Part versions en logbook beheren](#uc-011)
-- [UC-012 — Attachments en softwareverwijzingen per Part version beheren](#uc-012)
-- [UC-013 — Samplebestanden en assemblycomponenten inspecteren](#uc-013)
-- [UC-014 — Part versions vergelijken en efficiënt doorzoeken](#uc-014)
-- [UC-015 — Werk en rapportconcepten lokaal bewaren en herstellen](#uc-015)
-- [UC-016 — Design state en maturity toepassen](#uc-016)
+- [[#Doel en scope]]
+- [[#Werkwijze]]
+- [[#Identificatie en traceerbaarheid]]
+- [[#Status en prioriteit]]
+- [[#Use-caseregister]]
+- [[#UC-001 SolidWorks-metadata read-only naar JSON exporteren]]
+- [[#UC-002 Part aanmaken, reviseren en voorbereiden voor printen]]
+- [[#UC-003 Print Report van een printpoging vastleggen]]
+- [[#UC-004 Een bestaand part openen in SolidWorks of Bambu Studio]]
+- [[#UC-005 Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren]]
+- [[#UC-006 Parts visueel browsen en voorbereiden voor herhaalprint]]
+- [[#UC-007 Tags aanmaken, toekennen en gebruiken]]
+- [[#UC-008 Parts zoeken, filteren en zoekopdrachten opslaan]]
+- [[#UC-009 Waar-gebruikt-relaties bekijken en volgen]]
+- [[#UC-010 Snapshot van documentversies vastleggen en raadplegen]]
+- [[#UC-011 Part versions en logbook beheren]]
+- [[#UC-012 Attachments en softwareverwijzingen per Part version beheren]]
+- [[#UC-013 Samplebestanden en assemblycomponenten inspecteren]]
+- [[#UC-014 Part versions vergelijken en efficiënt doorzoeken]]
+- [[#UC-015 Werk en rapportconcepten lokaal bewaren en herstellen]]
+- [[#UC-016 Design state en maturity toepassen]]
+- [[#UC-017 Legacybestanden handmatig aan een Part koppelen]]
+- [[#UC-018 Een printontwerp aanpassen en de eerdere print reproduceren]]
 - [Architectuur en definities](Architecture.md)
-- [Volledig use-casetemplate](#volledig-use-casetemplate)
-  - [UC-XXX — Template: werkwoord + gebruikersdoel](#uc-xxx)
-- [Controle vóór implementatie](#controle-vóór-implementatie)
+- [[#Volledig use-casetemplate]]
+  - [UC-XXX — Template: werkwoord + gebruikersdoel](#UC-XXX%20Werkwoord%20%2B%20gebruikersdoel)
+- [[#Controle vóór implementatie]]
 
 > [!important] Feedback verwerkt in prototype 2
 > Part versions tellen vanaf **001** op wanneer een beheerd bestand verandert; CAD/STL/3MF behouden onafhankelijke letterrevisies. Print Reports en attachments koppelen aan een exacte Part version zonder verhoging. Dit vervangt eerdere verplichte snapshotcontext. UC-010 is uitgesteld als latere baseliningfunctie. UI-taal: Engels.
@@ -52,15 +54,17 @@ Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de det
 | UC-010 | Snapshot van documentversies vastleggen en raadplegen | Engineer / maker | Uitgesteld | Nog te bepalen | Nog te bepalen | Zie detailbeschrijving |
 | UC-011 | Part versions en logbook beheren | Engineer / maker | Concept | Must | UI-prototype 2 | UC-002, UC-005 |
 | UC-012 | Attachments en softwareverwijzingen per Part version beheren | Engineer / maker | Concept | Must | UI-prototype 2 | UC-011 |
-| UC-016 | Design state en maturity toepassen | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
-| UC-015 | Werk en rapportconcepten lokaal bewaren en herstellen | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
-| UC-014 | Part versions vergelijken en efficiënt doorzoeken | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
 | UC-013 | Samplebestanden en assemblycomponenten inspecteren | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
+| UC-014 | Part versions vergelijken en efficiënt doorzoeken | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
+| UC-015 | Werk en rapportconcepten lokaal bewaren en herstellen | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
+| UC-016 | Design state en maturity toepassen | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
+| UC-017 | Legacybestanden handmatig aan een Part koppelen | Engineer / designer / hobbyist | Concept | Nog te bepalen | Nog te bepalen | UC-002, UC-011 |
+| UC-018 | Een printontwerp aanpassen en de eerdere print reproduceren | Engineer / maker | Concept | Nog te bepalen | MVP-scenario | UC-003, UC-004, UC-005, UC-011, UC-015, UC-017 |
 
 
-### UC-001
+### UC-001 SolidWorks-metadata read-only naar JSON exporteren
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** SolidWorks-metadata read-only naar JSON exporteren
 
@@ -199,11 +203,11 @@ Gebruiker start de macro in SolidWorks Design Premium 2026 SP0, 64-bit.
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Concept volgens template; eerdere gebruikersinhoud behouden | Gebruiker, redactie Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
-### UC-002
+### UC-002 Part aanmaken, reviseren en voorbereiden voor printen
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Part aanmaken, reviseren en voorbereiden voor printen
 > [!info] Aanvulling prototype 2
@@ -271,7 +275,7 @@ De engineer kiest in de SolidWorks-ribbon **Save to Printchill** voor een nieuw 
 | 9 | Past printinstellingen aan en bewaart het project | Detecteert het 3MF-bestand, leest de bronverwijzing partnummer-naam-revisie.STL en koppelt de specifieke STL-revisie aan het printproject |
 | 10 | Bekijkt het partoverzicht | Toont beschikbaar printmateriaal, printduur, filamentgewicht, filamentlengte en aantal platen uit het 3MF |
 | 11 | Stuurt het bestand naar de printer en print het part | Houdt de geregistreerde bronrelaties beschikbaar |
-| 12 | Beoordeelt het geprinte part en constateert afwijkingen | Biedt de betreffende revisie en het printproject aan als context voor [[#UC-003]] |
+| 12 | Beoordeelt het geprinte part en constateert afwijkingen | Biedt de betreffende revisie en het printproject aan als context voor [UC-003](#UC-003%20Print%20Report%20van%20een%20printpoging%20vastleggen) |
 
 #### Alternatieve scenario’s
 
@@ -333,7 +337,7 @@ De engineer kiest in de SolidWorks-ribbon **Save to Printchill** voor een nieuw 
 #### Afhankelijkheden en afbakening
 
 - **Afhankelijk van:** SolidWorks-integratie, beheerde opslag, STL-export, Bambu Studio en 3MF-detectie.
-- **Gerelateerde use cases:** [[#UC-001]] levert metadataonderzoek, [[#UC-003]] registreert feedback na printen.
+- **Gerelateerde use cases:** [UC-001](#UC-001%20SolidWorks-metadata%20read-only%20naar%20JSON%20exporteren) levert metadataonderzoek, [UC-003](#UC-003%20Print%20Report%20van%20een%20printpoging%20vastleggen) registreert feedback na printen.
 - **Buiten scope:** printeraansturing vanuit PrintChill en automatische maatbeoordeling.
 - **Ontwerpbesluiten:** [[DJF]] en [[3MF_METADATA_RESEARCH]] leveren onderzoek voor de integratie.
 - **Planning:** nog te bepalen in [[ROADMAP]].
@@ -362,11 +366,11 @@ De engineer kiest in de SolidWorks-ribbon **Save to Printchill** voor een nieuw 
 
 | 0.2 | 2026-11-15 | Terminologie afgestemd op documentversies, snapshots en Print Reports; bestaande scenario’s behouden | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
-### UC-003
+### UC-003 Print Report van een printpoging vastleggen
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Print Report van een printpoging vastleggen
 
@@ -398,11 +402,11 @@ De engineer of productiemedewerker bewaart meetresultaten, notities, screenshots
 
 #### Trigger
 
-Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Create print run** bij het betreffende part.
+Na de print uit [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen) constateert de gebruiker afwijkingen en kiest **Create print run** bij het betreffende part.
 
 #### Voorwaarden
 
-- De daadwerkelijk gebruikte Part version en betrokken Parts zijn beschikbaar; de vaste bestandscombinatie is geregistreerd via [[#UC-011]].
+- De daadwerkelijk gebruikte Part version en betrokken Parts zijn beschikbaar; de vaste bestandscombinatie is geregistreerd via [UC-011](#UC-011%20Part%20versions%20en%20logbook%20beheren).
 - De gebruiker heeft meetresultaten of observaties en mag een rapport opslaan.
 
 #### Resultaat bij succes
@@ -491,7 +495,7 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 #### Afhankelijkheden en afbakening
 
 - **Afhankelijk van:** geregistreerde part- en 3MF-revisies, parameteruitlezing, klembord en bijlageopslag.
-- **Gerelateerde use cases:** [[#UC-002]] levert bestanden; [[#UC-011]] legt de gebruikte combinatie vast.
+- **Gerelateerde use cases:** [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen) levert bestanden; [UC-011](#UC-011%20Part%20versions%20en%20logbook%20beheren) legt de gebruikte combinatie vast.
 - **Buiten scope:** automatische CAD-wijzigingen en automatische tolerantiebeoordeling.
 - **Ontwerpbesluiten:** verdere uitwerking in [[DJF]].
 - **Planning:** nog te bepalen in [[ROADMAP]].
@@ -519,12 +523,14 @@ Na de print uit [[#UC-002]] constateert de gebruiker afwijkingen en kiest **Crea
 
 | 0.2 | 2026-11-15 | Terminologie afgestemd op documentversies, Part versions en Print Reports; bestaande scenario’s behouden | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 
-### UC-004
+### UC-004 Een bestaand part openen in SolidWorks of Bambu Studio
 
-[Back to top](#inhoudsopgave)
+**MVP-scope.** Vanuit de geselecteerde Part version opent de engineer met **Open in Bambu Studio** de bijbehorende 3MF als werkkopie. Dit geldt ook voor een oudere Part version. Als Bambu Studio ontbreekt of het starten mislukt, toont PRC een fout en blijft de geregistreerde versie intact. Het SolidWorks-pad, inclusief macro’s en assemblybewerking, volgt later.
+
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Een bestaand part openen in SolidWorks of Bambu Studio
 
@@ -591,7 +597,7 @@ De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part
 | --- | --- | --- | --- | --- |
 | A1 | 3 | Engineer kiest het Bambu-logo | PrintChill start Bambu Studio en opent het bijbehorende 3MF van de geselecteerde versie. Engineer bekijkt het bestand, meet kenmerken, kan opnieuw printen en sluit Bambu Studio | Einde |
 | A2 | 2 | Engineer wil een oudere revisie bekijken | Selecteert de oudere revisie en het bijbehorende bestand | Verder bij stap 3 of A1 |
-| A3 | 4 | Engineer besluit wijzigingen te bewaren | Vervolgt met [[#UC-005]] | Nieuwe revisie volgens UC-005 |
+| A3 | 4 | Engineer besluit wijzigingen te bewaren | Vervolgt met [UC-005](#UC-005%20Wijzigingen%20aan%20een%20CAD-part%20of%20slicerproject%20als%20nieuwe%20revisie%20bewaren) | Nieuwe revisie volgens UC-005 |
 | A4 | 3 / A1 | Meerdere CAD- of 3MF-bestanden zijn gekoppeld | Engineer kiest het gewenste bestand binnen de geselecteerde revisie | Bestand opent in de gekozen applicatie |
 
 #### Fouten en uitzonderingen
@@ -600,14 +606,14 @@ De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part
 | --- | --- | --- | --- | --- |
 | E1 | 2–3 | Bestand ontbreekt of leesrechten ontbreken | Toont welke revisie of welk bestand ontoegankelijk is | Registratie blijft beschikbaar |
 | E2 | 3 / A1 | Applicatie kan niet starten of bestand weigert te openen | Toont de fout en biedt opnieuw proberen aan | Geregistreerde bestanden blijven beschikbaar |
-| E3 | A1 | Bij de gekozen versie ontbreekt een 3MF | Toont dat een slicerproject moet worden geselecteerd of aangemaakt via [[#UC-002]] | Bronrelaties blijven beschikbaar |
+| E3 | A1 | Bij de gekozen versie ontbreekt een 3MF | Toont dat een slicerproject moet worden geselecteerd of aangemaakt via [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen) | Bronrelaties blijven beschikbaar |
 
 #### Businessregels
 
 - De standaardselectie is nog te bepalen. Bij een gekozen Part version blijven alle documentrevisies vast; nooit stilzwijgend vervangen door latest.
 - Het applicatiesymbool opent het bestand van de geselecteerde revisie.
 - Een herhaalprint gebruikt het geopende 3MF-project.
-- Bewaren van ontwerp- of slicerwijzigingen volgt [[#UC-005]].
+- Bewaren van ontwerp- of slicerwijzigingen volgt [UC-005](#UC-005%20Wijzigingen%20aan%20een%20CAD-part%20of%20slicerproject%20als%20nieuwe%20revisie%20bewaren).
 
 #### Gegevens en relaties
 
@@ -637,8 +643,8 @@ De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** bestandsregistratie en relaties uit [[#UC-002]], bereikbare opslag en applicatie-integratie.
-- **Gerelateerde use cases:** [[#UC-005]] voor wijzigingen, [[#UC-003]] voor printfeedback.
+- **Afhankelijk van:** bestandsregistratie en relaties uit [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen), bereikbare opslag en applicatie-integratie.
+- **Gerelateerde use cases:** [UC-005](#UC-005%20Wijzigingen%20aan%20een%20CAD-part%20of%20slicerproject%20als%20nieuwe%20revisie%20bewaren) voor wijzigingen, [UC-003](#UC-003%20Print%20Report%20van%20een%20printpoging%20vastleggen) voor printfeedback.
 - **Afbakening:** bekijken, meten en starten van een herhaalprint gebeuren in de geopende applicatie.
 - **Ontwerpbesluiten:** applicatiestart en sessiehergebruik uitwerken in [[DJF]].
 - **Planning:** nog te bepalen in [[ROADMAP]].
@@ -665,11 +671,11 @@ De engineer klikt tijdens het browsen in PrintChill op de thumbnail van een part
 
 | 0.2 | 2026-11-15 | Terminologie afgestemd op documentversies, snapshots en Print Reports; bestaande scenario’s behouden | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
-### UC-005
+### UC-005 Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Wijzigingen aan een CAD-part of slicerproject als nieuwe revisie bewaren
 
@@ -704,12 +710,12 @@ De engineer bewaart kleine ontwerp- of printinstellingswijzigingen als nieuwe re
 
 #### Trigger
 
-De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of de printinstellingen en kiest **Save PRC** in SolidWorks of **Save** in Bambu Studio.
+De engineer opent een bestaand bestand via [UC-004](#UC-004%20Een%20bestaand%20part%20openen%20in%20SolidWorks%20of%20Bambu%20Studio), wijzigt het ontwerp of de printinstellingen en kiest **Save PRC** in SolidWorks of **Save** in Bambu Studio.
 
 #### Voorwaarden
 
 - Het bestaande partnummer en de laatste geregistreerde revisie zijn in PrintChill beschikbaar.
-- De gekozen bronrevisie is geopend via [[#UC-004]].
+- De gekozen bronrevisie is geopend via [UC-004](#UC-004%20Een%20bestaand%20part%20openen%20in%20SolidWorks%20of%20Bambu%20Studio).
 - De gebruiker heeft schrijfrechten op de gebruikte opslag.
 - Voor de slicerroute volgt PrintChill de map waarin Bambu Studio de 3MF bewaart.
 
@@ -729,7 +735,7 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 
 | Stap | Actoractie | Systeemgedrag |
 | --- | --- | --- |
-| 1 | Opent het part in SolidWorks volgens [[#UC-004]] | Biedt het betreffende part en de bronrevisie aan |
+| 1 | Opent het part in SolidWorks volgens [UC-004](#UC-004%20Een%20bestaand%20part%20openen%20in%20SolidWorks%20of%20Bambu%20Studio) | Biedt het betreffende part en de bronrevisie aan |
 | 2 | Maakt kleine wijzigingen | SolidWorks bevat de gewijzigde ontwerpstaat |
 | 3 | Klikt op Save PRC | Zoekt het partnummer op in de database en leest de laatste version identifier variable, waarvan de exacte definitie nog te bepalen is |
 | 4 | Wacht op revisieregistratie | Maakt een nieuwe revisie van het bestaande partnummer en schrijft de nieuwe versie-identificatie in het SolidWorks-partattribuut |
@@ -741,14 +747,14 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 | ID | Aftakking vanaf stap | Voorwaarde | Verloop | Eindtoestand of hervatting |
 | --- | --- | --- | --- | --- |
 | A1 | 1 | Wijziging betreft printinstellingen | Volg het onderstaande Bambu Studio-scenario | Nieuwe 3MF-revisie geregistreerd |
-| A2 | 3 | Partnummer is onbekend in de database | Vervolg registratie van het part via [[#UC-002]] | Hervat na registratie van de broncontext |
+| A2 | 3 | Partnummer is onbekend in de database | Vervolg registratie van het part via [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen) | Hervat na registratie van de broncontext |
 | A3 | 5 | Engineer wil nieuwe geometrie in een bestaand Bambu-project herladen | Raadpleeg [[ISSUES#ISS-001]] over Reload from disk bij een gewijzigde STL-naam | Afhandeling wordt na de praktijktest bepaald |
 
 ##### Bambu Studio-scenario A1
 
 | Stap | Actoractie | Systeemgedrag |
 | --- | --- | --- |
-| B1 | Opent het 3MF-project volgens [[#UC-004]] | Bambu Studio toont de gekozen projectrevisie |
+| B1 | Opent het 3MF-project volgens [UC-004](#UC-004%20Een%20bestaand%20part%20openen%20in%20SolidWorks%20of%20Bambu%20Studio) | Bambu Studio toont de gekozen projectrevisie |
 | B2 | Maakt kleine wijzigingen aan de printinstellingen | Bambu Studio bevat de aangepaste instellingen |
 | B3 | Klikt op Save in Bambu Studio | Bewaart het 3MF in de gevolgde map |
 | B4 | Wacht op detectie | PrintChill signaleert een nieuw of gewijzigd 3MF via het bestandstijdstip in die map en controleert de opgeslagen inhoud |
@@ -807,8 +813,8 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** [[#UC-004]], database, SolidWorks-integratie, STL-export en 3MF-mapdetectie.
-- **Gerelateerde use cases:** [[#UC-002]] voor eerste registratie en [[#UC-003]] voor printfeedback.
+- **Afhankelijk van:** [UC-004](#UC-004%20Een%20bestaand%20part%20openen%20in%20SolidWorks%20of%20Bambu%20Studio), database, SolidWorks-integratie, STL-export en 3MF-mapdetectie.
+- **Gerelateerde use cases:** [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen) voor eerste registratie en [UC-003](#UC-003%20Print%20Report%20van%20een%20printpoging%20vastleggen) voor printfeedback.
 - **Afbakening:** ontwerpwijzigingen gebeuren in SolidWorks, printinstellingen worden in Bambu Studio gewijzigd.
 - **Ontwerpbesluiten:** revisiebeleid en detectie uitwerken in [[DJF]], save-detectie onderzocht in [[3MF_METADATA_RESEARCH]].
 - **Planning:** nog te bepalen in [[ROADMAP]], Reload from disk opvolgen via [[ISSUES#ISS-001]].
@@ -837,11 +843,11 @@ De engineer opent een bestaand bestand via [[#UC-004]], wijzigt het ontwerp of d
 
 | 0.2 | 2026-11-15 | Terminologie afgestemd op documentversies, snapshots en Print Reports; bestaande scenario’s behouden | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
-### UC-006
+### UC-006 Parts visueel browsen en voorbereiden voor herhaalprint
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Parts visueel browsen en voorbereiden voor herhaalprint
 
@@ -968,7 +974,7 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** [[#UC-002]], [[#UC-004]], [[#UC-008]], [[#UC-011]], [[Architecture]].
+- **Afhankelijk van:** [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen), [UC-004](#UC-004%20Een%20bestaand%20part%20openen%20in%20SolidWorks%20of%20Bambu%20Studio), [UC-008](#UC-008%20Parts%20zoeken%2C%20filteren%20en%20zoekopdrachten%20opslaan), [UC-011](#UC-011%20Part%20versions%20en%20logbook%20beheren), [[Architecture]].
 - **Buiten scope:** Printeraansturing, automatische printbevestiging en exacte CAD-maatvoering.
 - **Ontwerpbesluiten:** [[Architecture]], [[DJF]].
 - **Planning:** [[ROADMAP]], volgorde nog af te stemmen.
@@ -993,12 +999,12 @@ Gebruiker opent PrintChill om een Part opnieuw te printen.
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Concept volgens template; eerdere gebruikersinhoud behouden | Gebruiker, redactie Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 
-### UC-007
+### UC-007 Tags aanmaken, toekennen en gebruiken
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Tags aanmaken, toekennen en gebruiken
 
@@ -1104,7 +1110,7 @@ Gebruiker kiest tagbewerking op een Part-kaart of meerdere geselecteerde Parts.
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** [[#UC-006]], [[#UC-008]], Partregistratie.
+- **Afhankelijk van:** [UC-006](#UC-006%20Parts%20visueel%20browsen%20en%20voorbereiden%20voor%20herhaalprint), [UC-008](#UC-008%20Parts%20zoeken%2C%20filteren%20en%20zoekopdrachten%20opslaan), Partregistratie.
 - **Buiten scope:** Tag verwijderen/hernoemen/samenvoegen; beleid voor overige bijzondere tekens.
 - **Ontwerpbesluiten:** [[Architecture]], [[DJF]].
 - **Planning:** [[ROADMAP]], volgorde nog af te stemmen.
@@ -1128,12 +1134,12 @@ Gebruiker kiest tagbewerking op een Part-kaart of meerdere geselecteerde Parts.
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Concept volgens template; eerdere gebruikersinhoud behouden | Gebruiker, redactie Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 
-### UC-008
+### UC-008 Parts zoeken, filteren en zoekopdrachten opslaan
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Parts zoeken, filteren en zoekopdrachten opslaan
 
@@ -1242,7 +1248,7 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** [[#UC-003]], [[#UC-006]], [[#UC-007]], metadata-index.
+- **Afhankelijk van:** [UC-003](#UC-003%20Print%20Report%20van%20een%20printpoging%20vastleggen), [UC-006](#UC-006%20Parts%20visueel%20browsen%20en%20voorbereiden%20voor%20herhaalprint), [UC-007](#UC-007%20Tags%20aanmaken%2C%20toekennen%20en%20gebruiken), metadata-index.
 - **Buiten scope:** Automatisch classificeren van onbekende materialen en een uitgebreide querytaal buiten de beschreven basis.
 - **Ontwerpbesluiten:** [[Architecture]], [[DJF]].
 - **Planning:** [[ROADMAP]], volgorde nog af te stemmen.
@@ -1267,12 +1273,12 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Concept volgens template; eerdere gebruikersinhoud behouden | Gebruiker, redactie Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 
-### UC-009
+### UC-009 Waar-gebruikt-relaties bekijken en volgen
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Waar-gebruikt-relaties bekijken en volgen
 
@@ -1383,7 +1389,7 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** [[#UC-002]], [[#UC-005]], [[#UC-011]], CAD-/3MF-indexering.
+- **Afhankelijk van:** [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen), [UC-005](#UC-005%20Wijzigingen%20aan%20een%20CAD-part%20of%20slicerproject%20als%20nieuwe%20revisie%20bewaren), [UC-011](#UC-011%20Part%20versions%20en%20logbook%20beheren), CAD-/3MF-indexering.
 - **Buiten scope:** Automatische erkenning van onbekende geometrie en het wijzigen van bronrelaties vanuit het diagram.
 - **Ontwerpbesluiten:** [[Architecture]], [[DJF]].
 - **Planning:** [[ROADMAP]], volgorde nog af te stemmen.
@@ -1407,12 +1413,12 @@ Gebruiker kiest Where used op de Part-kaart of bij een documentversie.
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Concept volgens template; eerdere gebruikersinhoud behouden | Gebruiker, redactie Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 
-### UC-010
+### UC-010 Snapshot van documentversies vastleggen en raadplegen
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Snapshot van documentversies vastleggen en raadplegen
 
@@ -1530,7 +1536,7 @@ Latere baseline-actie; bediening en scope worden opnieuw uitgewerkt. Het hoofdsc
 
 #### Afhankelijkheden en afbakening
 
-- **Afhankelijk van:** [[#UC-002]], [[#UC-004]], [[#UC-005]], [[Architecture]]. Print Reports via [[#UC-003]].
+- **Afhankelijk van:** [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen), [UC-004](#UC-004%20Een%20bestaand%20part%20openen%20in%20SolidWorks%20of%20Bambu%20Studio), [UC-005](#UC-005%20Wijzigingen%20aan%20een%20CAD-part%20of%20slicerproject%20als%20nieuwe%20revisie%20bewaren), [[Architecture]]. Print Reports via [UC-003](#UC-003%20Print%20Report%20van%20een%20printpoging%20vastleggen).
 - **Buiten scope:** Snapshotleden wijzigen, statusworkflow en automatische bevestiging van printsucces.
 - **Ontwerpbesluiten:** [[Architecture]], [[DJF]].
 - **Planning:** [[ROADMAP]], volgorde nog af te stemmen.
@@ -1555,12 +1561,12 @@ Latere baseline-actie; bediening en scope worden opnieuw uitgewerkt. Het hoofdsc
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Concept volgens template; eerdere gebruikersinhoud behouden | Gebruiker, redactie Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 
-### UC-011
+### UC-011 Part versions en logbook beheren
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Part versions en logbook beheren
 
@@ -1679,11 +1685,11 @@ Prototypecontroles worden vastgelegd in [design-qa](../prototype/design-qa.md); 
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Gebruikersfeedback verwerkt | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
-### UC-012
+### UC-012 Attachments en softwareverwijzingen per Part version beheren
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Attachments en softwareverwijzingen per Part version beheren
 
@@ -1797,49 +1803,20 @@ Prototypecontroles worden vastgelegd in [design-qa](../prototype/design-qa.md); 
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Gebruikersfeedback verwerkt | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 
-## UC#13 - Part Compare
+### UC-013 Samplebestanden en assemblycomponenten inspecteren
 
-1;engineer heeft een part gevonden
-2; opent de card. en krijg standaard de latest version te zien.
-3; engineer gaat naar logbook om historie te bekijken.
-4; wil weten wat verschil is tussen de 2 laatste versies. (note; dit kan ook met meerdere versie bijvoorbeeld van de 12 versies, 1e de 3e en de 10e en laatste)
-5; klikt checkbox aan voor de versie en klikt op compare
-6; een nieuw scherm opent met;
-	a; links de oude , rechts de laatste versie
-	b; 2 3D modellen (STL's) over elkaar heen geprojecteerd, de oude versie is transparant gemaakt , de laatste niet. hierdoor zie je duidelijk de verschillen in design.
-	c; een overzicht met de related files (STL, 3MF, CAD) revisies deltas (als ze er zijn)
-	c; daaronder 1 tabel met 1st colom alle part attributes, kolom 2; attribute waarde oud part , kolom 3 attributes laatste versie. de cellen die anders zijn , zijn ge-high light.
-
-
-## UC#14 - omgang met samenstellingen (assy's)
-
-assy's bestaan in de CAD, en zijn erg dominant in klassieke PDM systemen.
-echter in PRC gaat hem op de parts, die print je immers en wil je daarom managen. de samenstelling zou hier als volgt in kunnen passen.
-je hebt een part die aan de CAD assy is gekoppeld. op dit nivea kan een overkoepelend 3MF file met alle plates die alle assy parts bevat gemaakt zijn en gekoppeld.
-dan krijg je:
-
-
-1234-5678 robotic upper arm assy
-	gekoppelde aan part version:
-	- 3MF met 6 platen en heel veel parts (alle child parts)
-	- 1234-5678 upper arm .asm file is wel op deze assy card gekoppeld
-	- een STL op assy niveau kan er ook zijn, maar dat is zelden nuttig.
-	
-	verdere info op dit assembly part te vinden:
-	- alle STL's die zijn weer aan de 3MF gekoppeld maar zie je niet op deze part card terug, wel op part card van de child components via de where used een link naar deze 3MF file.
-	- de (child) parts in die assembly zijn weer op de part structure tab terug te vinden
-	
-	
-
-
-### UC-013
-
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Samplebestanden en assemblycomponenten inspecteren
+
+#### Voorbeeld met een assembly en meerdere printplaten
+
+De engineer opent assembly 1234-5678 (robotarm) en kiest een Part version. De kaart toont het CAD-assemblybestand en het overkoepelende 3MF-project met zes platen. Een STL op assemblyniveau is optioneel. Via **Part structure** opent de engineer een child op Part number, naam en revisie. Op die kaart staan de eigen STL en, via **Where used**, het gedeelde 3MF-project als de relatie bekend is. Bij een mono-part blijft de structuur leeg.
+
+**Acceptatiecontrole.** Volg vanuit de assembly een child naar zijn STL en via Where used terug naar de gebruikte projectrevisie. Controleer dat de STL bij de child hoort en dat de assembly zonder eigen STL te openen is.
 
 #### Metadata
 
@@ -1938,13 +1915,19 @@ Zie prototype/design-qa.md; native SolidWorks-macro kan alleen op Windows/SolidW
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-17 | Sampleanalyse en UI-reviewverwerking beschreven | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
-### UC-014
+### UC-014 Part versions vergelijken en efficiënt doorzoeken
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Part versions vergelijken en efficiënt doorzoeken
+
+#### Vergelijken vanuit het logbook
+
+De engineer opent de Part-kaart op de laatste versie en vinkt in het logbook de gewenste versies aan. Bij twee versies toont **Compare** links de oudere en rechts de nieuwere. De 3D-weergave legt hun STL-modellen over elkaar met het oude model transparant. Daarnaast toont de vergelijking de CAD-, STL- en 3MF-revisies. De attributentabel heeft één rij per attribuut en één kolom per gekozen versie. Afwijkende waarden zijn gemarkeerd.
+
+**Acceptatiecontrole.** Selecteer eerst de laatste twee versies en daarna bijvoorbeeld 001, 003, 010 en de laatste. Controleer dat de kolommen precies die selectie in chronologische volgorde tonen. Ontbreekt een STL, dan blijft de vergelijking van attributen en bestandsrevisies beschikbaar. Hoe de overlay bij meer dan twee modellen wordt bediend is een open ontwerpvraag.
 
 #### Metadata
 
@@ -2043,11 +2026,11 @@ Zie prototype/design-qa.md; native SolidWorks-macro kan alleen op Windows/SolidW
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-17 | Sampleanalyse en UI-reviewverwerking beschreven | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
-### UC-015
+### UC-015 Werk en rapportconcepten lokaal bewaren en herstellen
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Werk en rapportconcepten lokaal bewaren en herstellen
 
@@ -2148,11 +2131,11 @@ Zie prototype/design-qa.md; native SolidWorks-macro kan alleen op Windows/SolidW
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-17 | Sampleanalyse en UI-reviewverwerking beschreven | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
-### UC-016
+### UC-016 Design state en maturity toepassen
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** Design state en maturity toepassen
 
@@ -2253,16 +2236,74 @@ Zie prototype/design-qa.md; native SolidWorks-macro kan alleen op Windows/SolidW
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-17 | Sampleanalyse en UI-reviewverwerking beschreven | Codex |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
+
+### UC-017 Legacybestanden handmatig aan een Part koppelen
+
+[Back to top](#Inhoudsopgave)
+
+Een engineer, designer of hobbyist weet dat drie verschillend genaamde legacybestanden bij hetzelfde ontwerp horen. De gebruiker wil ze als CAD, STL en 3MF op één Part-kaart beheren.
+
+#### Succespad
+
+1. De gebruiker maakt een Part aan met een herkenbare naam. PrintChill kent een Part number toe en opent de lege kaart.
+2. Op de kaart kiest de gebruiker **Add object** en sleept de drie bestanden samen naar het venster of selecteert ze via de bestandskiezer.
+3. PrintChill toont per bestand de oorspronkelijke naam en de herkende rol (CAD, STL of 3MF). De gebruiker controleert de selectie.
+4. Via **Rename** krijgt de gebruiker per bestand een naamvoorstel met Part number, Part-naam, versieaanduiding en oorspronkelijke extensie.
+5. Na bevestiging toont versie 001 de drie beheerde kopieën met hun eigen documentrevisies. De originelen behouden hun naam. Latere wijzigingen volgen UC-011.
+
+#### Acceptatiecriteria
+
+| ID | Situatie | Verwacht resultaat |
+| --- | --- | --- |
+| UC-017-AC-01 | Drie verschillende namen, één bestand per rol | Zowel slepen als de bestandskiezer levert dezelfde drie voorstellen op. |
+| UC-017-AC-02 | De gebruiker annuleert bij het naamvoorstel | De bestanden behouden hun naam en de Part-kaart heeft nog geen koppelingen. |
+| UC-017-AC-03 | Een doelnaam bestaat al of twee bestanden krijgen dezelfde rol | De gebruiker ziet welke selectie aandacht vereist en kan deze aanpassen vóór bevestiging. |
+| UC-017-AC-04 | De gebruiker bevestigt een geldige selectie | De kaart opent voor elke rol het gekozen bestand, ook na heropenen van de kaart. |
+| UC-017-AC-05 | Eén bestand kan niet worden opgeslagen | De gebruiker ziet welk bestand faalde. Opnieuw proberen levert elke koppeling hoogstens één keer op. |
+
+**Open ontwerpvragen.** Welke versieaanduiding komt in de beheerde bestandsnaam en hoe blijven interne CAD-verwijzingen binnen een beheerde kopie geldig?
+
+[Back to top](#Inhoudsopgave)
+
+--------
+### UC-018 Een printontwerp aanpassen en de eerdere print reproduceren
+
+[Back to top](#Inhoudsopgave)
+
+Na een proefprint wil de engineer de printinstellingen aanpassen. Later wil die kunnen achterhalen met welk project de eerste proef is geprint.
+
+1. De engineer registreert de STL en het bijbehorende 3MF-project als Part version 001 (UC-017), print het onderdeel en legt het resultaat vast in een Print Report op 001 (UC-003).
+2. Vanuit 001 opent de engineer een werkkopie van het 3MF-project in Bambu Studio (UC-004), wijzigt de laaghoogte en slaat het project op. De engineer kan verder experimenteren en opnieuw opslaan.
+3. PRC detecteert de gewijzigde werkkopie en toont op de Part-kaart één blijvend voorstel om de wijziging te bevestigen. Verder opslaan vanuit hetzelfde Bambu-venster werkt dit voorstel bij. PRC controleert de werkkopie opnieuw bij terugkeer naar de app en na herstart.
+4. De engineer bevestigt. PRC neemt de laatste volledig opgeslagen, leesbare 3MF over. Het logbook toont 002 met de nieuwe 3MF-revisie en dezelfde STL-revisie als 001. Dezelfde werkkopie heeft nu 002 als basis voor verder werk (UC-005, UC-011).
+5. Later opent de engineer het eerste Print Report en haalt via 001 het oorspronkelijke 3MF-project met de oorspronkelijke laaghoogte terug.
+
+Bij **Opslaan als** buiten de werkmap kan de engineer via **Andere 3MF kiezen** de nieuwe file aanwijzen. Als de Part sinds het openen via een andere route is gereviseerd, toont PRC eerst de basisversie en de actuele combinatie. De engineer beoordeelt op welke combinatie de gewijzigde 3MF terechtkomt.
+
+| ID | Controle | Verwacht resultaat |
+| --- | --- | --- |
+| UC-018-AC-01 | Sla de werkkopie tweemaal op en open het logbook vóór bevestiging. | Alleen 001 is geregistreerd. Het rapport opent de oorspronkelijke 3MF. |
+| UC-018-AC-02 | Bevestig de gewijzigde 3MF en open beide Part versions. | 001 en 002 delen de STL en openen elk de juiste 3MF. Het eerste rapport verwijst nog naar 001. |
+| UC-018-AC-03 | Verplaats de bronmap, herstel een back-up in een lege workspace en haal de 3MF via het eerste rapport terug. | De teruggehaalde bestandsinhoud is byte voor byte gelijk aan de oorspronkelijke 3MF van 001. |
+| UC-018-AC-04 | Sla driemaal op, bevestig eenmaal, sla in hetzelfde venster opnieuw op en herstart PRC. | Het logbook bevat 001 en 002. Eén voorstel op basis van 002 staat klaar voor 003. |
+| UC-018-AC-05 | Bevestig terwijl Bambu nog schrijft of de kopie onleesbaar is. | Het voorstel blijft open. PRC registreert pas een versie zodra een stabiele, geldige kopie beschikbaar is en de bevestiging slaagt. |
+| UC-018-AC-06 | Dubbelklik op bevestigen of bied opnieuw identieke bytes aan. | Eén inhoudelijke wijziging levert precies één nieuwe Part version op. |
+
+[Back to top](#Inhoudsopgave)
+
+
+
+# UC Info & WoW
 ## Volledig use-casetemplate
 
 > [!info] Gebruik van het template
 > Kopieer onderstaande sectie voor iedere nieuwe use case. Vervang `UC-XXX` door het volgende vrije ID en vul de velden in. Gebruik **Niet van toepassing** met een korte reden waar nodig. Markeer onbekende punten als **Nog te bepalen**; presenteer aannames niet als besluiten.
 
-### UC-XXX
+### UC-XXX Werkwoord + gebruikersdoel
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 **Titel:** [Werkwoord + gebruikersdoel]
 
@@ -2384,7 +2425,7 @@ Maak criteria afzonderlijk toetsbaar. Dek relevante alternatieven, fouten, recht
 | --- | --- | --- | --- |
 | 0.1 | [JJJJ-MM-DD] | Eerste concept | [Naam of rol] |
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 
 ## Doel en scope
@@ -2402,7 +2443,7 @@ De eerste productcontext is SolidWorks 2026 en Bambu Studio. Dit betekent nog ni
 - Beschrijf het gebruikersdoel en waarneembaar systeemgedrag; leg technische ontwerpkeuzes vast in [[DJF]].
 - Gebruik één primaire gebruikersdoelstelling per use case.
 - Houd dit document, [[ROADMAP]] en de architectuurdocumentatie onderling consistent.
-- Voeg elke nieuwe use case toe aan de inhoudsopgave met een link naar de kop met het unieke ID, bijvoorbeeld `[UC-001 — Model importeren](#uc-001)`. Gebruik het ID als kop en plaats de titel op de regel eronder, zoals in het template. Behoud bovenaan en onderaan elke use case de link `[Back to top](#inhoudsopgave)`.
+- Gebruik `### UC-017 Titel` als kop. Neem dezelfde ID en titel op in de inhoudsopgave en het register. Link naar de volledige kop en behoud de teruglinks.
 - Onderstaande indeling is geïnspireerd op requirementsbeheer in IBM DOORS. Het is een projecttemplate, geen officieel IBM-template.
 - CRUD beschrijft het use-casetype. Gebruik CRUD-C voor aanmaken, CRUD-R voor lezen, CRUD-U voor bijwerken en CRUD-D voor verwijderen. Neem het type op in de metadata.
 
@@ -2431,7 +2472,7 @@ Gebruik de use-case-ID in roadmapitems, ontwerpbesluiten en relevante tests. Ver
 
 Een status verandert alleen op basis van het bijbehorende resultaat. Een geslaagde deeltest maakt een use case nog niet geverifieerd.
 
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)
 
 | Prioriteit | Betekenis |
 | --- | --- |
@@ -2452,4 +2493,4 @@ Een status verandert alleen op basis van het bijbehorende resultaat. Een geslaag
 - Prioriteit, afhankelijkheden, status en planning zijn consistent met het register en de roadmap.
 - Er is een implementatieplan met een afweging van impact en ontwerpkeuzes, conform [[AGENT]].
   
-[Back to top](#inhoudsopgave)
+[Back to top](#Inhoudsopgave)

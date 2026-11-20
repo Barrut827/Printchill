@@ -57,7 +57,12 @@ roadmap topic: custom partnumbering via settings. niet nu.
 
 
 
+## DJF-005 — Lokale MVP en openen in Bambu Studio
+
+UC-018 bepaalt de eerste oplevering: een engineer kan een geregistreerde 3MF vanuit PRC in Bambu Studio bewerken en de wijziging expliciet als volgende Part version bevestigen. De lokale Windows-backend kan zowel de werkkopie beheren als het geïnstalleerde programma starten. SolidWorks-integratie, macro’s en het reconstrueren van assemblywerkkopieën met hun interne verwijzingen volgen in een latere fase.
+
 ## Eerste UI-prototype
+
 
 HTML met Vite, Three.js voor echte STL-previews en Phosphor-iconen. Zo zijn de flows uit UC-003 t/m UC-010 direct te bespreken en lokaal te testen. Geen backend of framework nodig voor deze proef. Snapshots blijven vaste combinaties; nieuwe 3MF-versies wijzigen bestaande combinaties niet. [Scope en grenzen](../prototype/README.md).
 
