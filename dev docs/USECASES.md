@@ -28,6 +28,8 @@
 - [[#UC-019 Parts in collecties organiseren]]
 - [[#UC-020 Part-wiki schrijven, aan versies koppelen en terugvinden]]
 - [[#UC-021 Related objects van een Part aanvullen of vervangen]]
+- [[#UC-022 Wiki en Print Reports als PDF exporteren]]
+- [[#UC-023 Print Reports en instellingen analyseren voor verbeteradvies]]
 - [Architectuur en definities](Architecture.md)
 - [[#Volledig use-casetemplate]]
   - [UC-XXX — Template: werkwoord + gebruikersdoel](#UC-XXX%20Werkwoord%20%2B%20gebruikersdoel)
@@ -66,6 +68,8 @@ Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de det
 | UC-019 | Parts in collecties organiseren | Engineer / maker | In ontwikkeling | Must | MVP 0.3.0 | UC-006, UC-008, UC-015 |
 | UC-020 | Part-wiki schrijven, aan versies koppelen en terugvinden | Engineer / maker | Ter beoordeling | Nog te bepalen | Volgende MVP; nummer nog te bepalen | UC-002, UC-006, UC-008, UC-011, UC-015 |
 | UC-021 | Related objects van een Part aanvullen of vervangen | Engineer / maker | Geïmplementeerd | Must | MVP 0.3.4 | UC-002, UC-005, UC-011, UC-017 |
+| UC-022 | Wiki en Print Reports als PDF exporteren | Engineer / maker | Concept; niet geïmplementeerd | Later | Nog te bepalen | UC-003, UC-020 |
+| UC-023 | Print Reports en instellingen analyseren voor verbeteradvies | Engineer / maker | Concept; niet geïmplementeerd | Later | Nog te bepalen | UC-003, UC-011, beschikbare 3MF-data |
 
 
 ### UC-001 SolidWorks-metadata read-only naar JSON exporteren
@@ -376,6 +380,9 @@ De engineer kiest in de SolidWorks-ribbon **Save to Printchill** voor een nieuw 
 
 ### UC-003 Print Report van een printpoging vastleggen
 
+> [!info] Geplande uitbreiding — modelmeting (2026-11-21)
+> Huidige MVP: nominale en gemeten waarde handmatig invullen. Vervolg: meet punten/vlakken in de STL-viewer en voeg de nominale afstand met M-nummer, eenheid en exacte STL-revisie toe aan het report; vul daarnaast bijvoorbeeld 100,8 mm werkelijk gemeten in bij 101 mm nominaal. Acceptatie: selectie blijft na heropenen/herstel aan dezelfde revisie gekoppeld; onbekende units blokkeren een schijnbaar zekere mm-waarde; wisselen naar een andere revisie hergebruikt geen oude selectie als nieuw bewijs. Ondersteunde meettypen en mesh-tolerantie vóór implementatie vastleggen. Export volgt UC-022; nog niet geïmplementeerd.
+
 **Correctie MVP 0.3.5.** Enter in de parameterzoeker, parameterlijst, suggesties of andere enkelregelige reportvelden mag geen rapport bewaren/sluiten. In de parameterkiezer kiest/voegt Enter een beschikbare selectie toe; in Notes blijft Enter een nieuwe regel. Alleen de expliciete Save-knop bewaart. Elk opgeslagen report krijgt een **Edit**-knop, ook in het algemene reportoverzicht. Bewerken behoudt rapport-ID, oorspronkelijke printdatum, Part number en Part version. Afbeeldingen, metingen en parameter-/suggestiesnapshots worden geladen; Save changes werkt hetzelfde report bij. Annuleren bewaart hoogstens een afzonderlijk editconcept. Een gelijktijdige wijziging wordt niet stil overschreven.
 
 **Feedback MVP 0.3.4.** Een nieuw report toont standaard geen procesparameters. De engineer ziet dat support slecht loskomt, voegt foto's en een toelichting toe, kiest **Add parameter**, zoekt **Support Z offset** en voegt de beschikbare 3MF-parameter toe. De regel toont de geregistreerde waarde, bijvoorbeeld **0.2 mm**, met daarnaast een leeg veld **Suggestion**. De engineer vult **0.15** in. De suggestie wordt bij het report bewaard en verandert geen 3MF of Part version. Ontbrekende parameters worden niet verzonnen; eerdere reports blijven leesbaar.
@@ -551,6 +558,9 @@ Na de print uit [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorber
 
 
 ### UC-004 Een bestaand part openen in SolidWorks of Bambu Studio
+
+> [!info] Connectorplan 2026-11-21
+> Bambu is beschikbaar; de native SolidWorks-mono-partflow volgt [[SOLIDWORKS_INTEGRATION_PLAN]], samen met UC-002/005/021. Fusion 360/FreeCAD en PrusaSlicer/OrcaSlicer/Cura staan op [[ROADMAP#Toekomstige connectors]]; zij delen deze gebruikersdoelen maar krijgen vóór bouw eigen compatibiliteits- en acceptatiecriteria. Assemblies blijven later.
 
 **MVP-scope.** Vanuit de geselecteerde Part version opent de engineer met **Open in Bambu Studio** de bijbehorende 3MF als werkkopie. Dit geldt ook voor een oudere Part version. Als Bambu Studio ontbreekt of het starten mislukt, toont PRC een fout en blijft de geregistreerde versie intact. Het SolidWorks-pad, inclusief macro’s en assemblybewerking, volgt later.
 
@@ -2387,8 +2397,8 @@ Vlakke collecties; geen hiërarchie, assemblies of SolidWorks-relaties. Afhankel
 | Prioriteit | Nog te bepalen |
 | Beoogde release | Volgende MVP; nummer nog te bepalen |
 | Eigenaar | Producteigenaar |
-| Documentrevisie | 0.1 |
-| Laatst gewijzigd | 2026-11-20 |
+| Documentrevisie | 0.2 |
+| Laatst gewijzigd | 2026-11-21 |
 | Goedkeuring | Gebruiker kiest BlockNote en Part-gebonden pagina's met optionele versieverwijzingen; onderstaande detailuitwerking nog te beoordelen |
 
 #### Doel en waarde
@@ -2491,11 +2501,13 @@ Pagina's blijven na herstart en herstel beschikbaar onder hun Part number. Versi
 | UC-020-AC-09 | Bestaande wiki-treffer | Tekst wijzigen, pagina verwijderen en later herstellen | Oude tekst/prullenbak verdwijnen uit standaardzoeken; herstelde actuele inhoud is weer vindbaar | Niet uitgevoerd |
 | UC-020-AC-10 | Wiki met oudere revisie, afbeelding en versieverwijzingen | Back-up apart herstellen en daarna een merge met overlappende Part numbers uitvoeren | Alle wiki-brondata en afbeeldingen herstellen; niet vervangen Parts behouden hun wiki; zoekresultaten en verwijzingen kloppen | Niet uitgevoerd |
 | UC-020-AC-11 | Opgeslagen wiki en ontbrekende/beschadigde index | Index herstellen en dezelfde query opnieuw uitvoeren | Zelfde actuele resultaten uit herbouwde index; tijdens herstel wordt onvolledigheid gemeld | Niet uitgevoerd |
+| UC-020-AC-12 | Pagina met inline- en blokformule in LaTeX | Bewerken, opslaan, herstarten en back-up herstellen | Bron en formuleweergave behouden; ongeldige syntax geeft een fout zonder bronverlies; geen uitvoerbare code of impliciete Part version | Gepland; niet uitgevoerd |
 
 #### Afhankelijkheden en afbakening
 
 - **Afhankelijk van:** UC-002 (Part-identiteit), UC-006 (navigatie), UC-008 (zoeken), UC-011 (versiecontext) en UC-015 (back-up/herstel). Technische uitwerking: [[Architecture#Part-wiki met BlockNote en lokale zoekindex]].
 - **Eerste scope:** pagina's/subpagina's, blokeditor, afbeeldingen, eigen revisies, herstelbare verwijdering, versieverwijzingen en geïntegreerd zoeken.
+- **Daarna:** inline-/blokformules met LaTeX-bron en lokale rendering, na een compatibiliteits-/licentieproef. Dit is formuleweergave, geen numerieke rekenengine. PDF-export volgt UC-022.
 - **Later:** tegelijk samenwerken, comments, goedkeuringsworkflow, OCR/PDF-inhoud doorzoeken en vastgelegde wiki-revisies als instructiebewijs bij Print Reports. Geen Docmost-service of volledige Confluence-kloon.
 
 #### Open vragen en aannames
@@ -2510,6 +2522,7 @@ Pagina's blijven na herstart en herstel beschikbaar onder hun Part number. Versi
 | Documentrevisie | Datum | Wijziging en verificatie |
 | --- | --- | --- |
 | 0.1 | 2026-11-20 | Gebruikerskeuze BlockNote, Part-eigendom, expliciete versieverwijzingen en wiki-zoeken uitgewerkt. Documentcontrole; geen implementatie of functionele acceptatie. |
+| 0.2 | 2026-11-21 | Vervolgscope formules en verwijzing naar PDF-export toegevoegd; niet geïmplementeerd. |
 
 [[#Inhoudsopgave|Back to top]]
 
@@ -2576,6 +2589,78 @@ De engineer vindt later een ontbrekende STL/CAD/3MF of wil een verkeerde koppeli
 Automatische regressie in `related-files.test.mjs` en `import.test.mjs`: aanvullen, vervangen, identieke bytes, versieconflict, ongeldige rol/3MF, uploadopruiming, historie en herstel; gebruikersacceptatie open. UC-017 beschrijft eerste registratie, UC-005 externe revisieworkflows en UC-011 de versie-invarianten. Deze use case beschrijft uitsluitend handmatig aanvullen/vervangen vanuit PRC. Technische opzet: [[Architecture]].
 
 [[#Inhoudsopgave|Back to top]]
+
+### UC-022 Wiki en Print Reports als PDF exporteren
+
+[[#Inhoudsopgave|Back to top]]
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID / type | UC-022 / CRUD-R, export |
+| Status / prioriteit | Concept; niet geïmplementeerd / Later |
+| Release / eigenaar | Nog te bepalen / Producteigenaar |
+| Documentrevisie / datum | 0.1 / 2026-11-21 |
+
+#### Doel, actor en trigger
+
+Engineer exporteert een opgeslagen wikirevisie of Print Report om instructies of printbewijs buiten PRC te delen. De engineer kiest expliciet de bron; een concept wordt eerst bewaard of geannuleerd.
+
+#### Hoofdscenario en regels
+
+1. Open een opgeslagen pagina/revisie of report en kies Export PDF.
+2. PRC toont een printweergave met Part number, naam, bronidentiteit en exportdatum. Versiecontext blijft expliciet; een algemene wiki krijgt geen fictieve Part version.
+3. Engineer gebruikt eerst browser Save as PDF; een directe downloader kan later dezelfde bronweergave gebruiken.
+4. PDF bevat leesbare tekst, tabellen, afbeeldingen, metingen, gekozen parameters/suggesties en beschikbare formules van deze bron. Voor de eerste wiki-export geldt één pagina; subpagina's alleen na expliciete selectie in een latere uitbreiding.
+
+Export verandert geen bron, report of Part version. Geen tijdelijke objectpaden, tokens of verborgen metadata opnemen. Ontbrekende afbeelding of ongeldige formule vooraf melden; niet ongemerkt bewijs weglaten. Browserannulering wijzigt niets. De gebruiker bevestigt zelf de bestandsbestemming.
+
+#### Acceptatiecriteria
+
+| ID | Test | Verwacht resultaat | Verificatie |
+| --- | --- | --- | --- |
+| UC-022-AC-01 | Exporteer historische pagina en report bij 001 terwijl 002 bestaat. | PDF vermeldt exact de gekozen bron/revisie of report-ID en 001; nooit stilzwijgend latest. | Niet uitgevoerd |
+| UC-022-AC-02 | Exporteer lange tabel, foto's, LaTeX en Nederlandse tekens. | Leesbare paginering zonder afgesneden waarden/beelden; formules behouden betekenis. | Niet uitgevoerd |
+| UC-022-AC-03 | Exporteer report met nominale/gemeten waarden en parameter/suggestion. | Bronwaarden en voorstellen herkenbaar onderscheiden; geen technische velden of geheimen. | Niet uitgevoerd |
+| UC-022-AC-04 | Annuleer export; probeer ontbrekende asset/ongeldige formule. | Geen bronwijziging; probleem zichtbaar vóór een onvolledige export. | Niet uitgevoerd |
+
+Afhankelijk: UC-003/020, render- en licentieproef. Alleen de beschikbare bronsoort kan worden opgeleverd; wiki-export vereist de wiki. Geen PDF-import, OCR of digitale ondertekening. Zie [[Architecture#Wiki-formules en PDF-export]].
+
+### UC-023 Print Reports en instellingen analyseren voor verbeteradvies
+
+[[#Inhoudsopgave|Back to top]]
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID / type | UC-023 / analyse en advies |
+| Status / prioriteit | Concept; niet geïmplementeerd / Later |
+| Release / eigenaar | Nog te bepalen / Producteigenaar |
+| Documentrevisie / datum | 0.1 / 2026-11-21 |
+
+#### Doel, actor en hoofdscenario
+
+Engineer wil bijvoorbeeld vastzittende support verbeteren op basis van foto's, meetwaarden, feedback en de gebruikte 3MF-instellingen.
+
+1. Selecteer Part version(s) en relevante Print Reports; PRC toont de te analyseren gegevens en ontbrekende context.
+2. Selecteer/configureer de analyseprovider. Bij een externe provider ziet de gebruiker vóór verzending welke tekst/beelden meegaan en bevestigt verzending. Native CAD- en 3MF-bytes worden niet standaard meegestuurd.
+3. De analyse levert mogelijke oorzaken en concrete parameteradviezen, met verwijzing naar bronreport, versie en oorspronkelijke parameterwaarde.
+4. Engineer beoordeelt het voorstel en past desgewenst zelf een werkkopie in de slicer aan. De normale PRC-bevestiging registreert pas later een nieuwe versie.
+
+Broninhoud is invoer, geen opdracht aan een agent met schrijfrechten. Geen automatische settingswijziging, CAD-bediening of kwaliteitsgarantie. Bewaar bij een expliciet opgeslagen advies bronselectie, model/provider en datum zodat de herkomst duidelijk blijft; wijzig geen eerdere reports. Offline/providerfout laat bestaande data intact.
+
+#### Acceptatiecriteria
+
+| ID | Test | Verwacht resultaat | Verificatie |
+| --- | --- | --- | --- |
+| UC-023-AC-01 | Analyseer supportprobleem met twee reports en bekende Z-offset. | Advies verwijst naar juiste reports/versies en echte bronwaarden; voorstel staat apart. | Niet uitgevoerd |
+| UC-023-AC-02 | Bron mist materiaal/parameter of reports spreken elkaar tegen. | Ontbrekende context en onzekerheid zichtbaar; geen verzonnen bronwaarde of bewezen oorzakelijkheid. | Niet uitgevoerd |
+| UC-023-AC-03 | Annuleer externe verzending; provider valt uit. | Geen ongewenste verzending of datawijziging; begrijpelijke fout en opnieuw proberen. | Niet uitgevoerd |
+| UC-023-AC-04 | Rapporttekst bevat instructie om bestanden/settings te wijzigen. | Geen schrijfactie; analyse blijft adviserend en bronbestanden blijven identiek. | Niet uitgevoerd |
+
+Voor bouw nog vaststellen: provider/lokaal model, kosten, bewaarbeleid, beeldondersteuning en een representatieve benchmark met beoordeelde printproblemen. Afhankelijk van bruikbare UC-003-data; geen bewezen advieskwaliteit op grond van alleen een demo. Zie [[ROADMAP]].
 
 # UC Info & WoW
 ## Volledig use-casetemplate

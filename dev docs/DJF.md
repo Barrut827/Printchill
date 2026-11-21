@@ -1,5 +1,13 @@
 # PrintChill — Design Justification File
 
+## DJF-007 — Documentatiestructuur en connectorpad (2026-11-21)
+
+Architecture krijgt een compacte indeling geïnspireerd op [arc42](https://arc42.org/overview/): context, structuur, runtime, deployment, begrippen, afspraken en risico's. Actuele MVP-keuzes, geplande functies en prototypehistorie zijn expliciet gescheiden; naamgevingsonderzoek blijft behouden als productnotitie. Dit voorkomt dat een prototype of oud voorstel als runtimecontract wordt gelezen. Roadmap bevat één actuele voortgangstabel en werkpakketten met afhankelijkheden en oplevercriteria; acceptatieresultaten blijven in het MVP-testplan.
+
+SolidWorks start met mono-parts via Windows-helper + VBA; dit sluit aan op de POC en beperkt installatiecomplexiteit ten opzichte van een add-in. COM/macrostart en save/export moeten eerst op 2026 SP0 bewezen worden. PRC beheert nummers en commits, de macro alleen de werkkopie; native Save maakt geen Part version. Een basisversieproperty vermijdt circulaire wijzigingen van reeds gehashte CAD-bytes. CAD/STL-labels en herkomstbewijs krijgen vóór exportimplementatie een expliciet beleid. Details: [[SOLIDWORKS_INTEGRATION_PLAN]]. Assemblies volgen later.
+
+Wiki-formules blijven opgeslagen LaTeX met lokale weergave. PDF begint als gedeelde printweergave met browser Save as PDF; een directe exporter vereist eerst render-/licentieafweging. De officiële [BlockNote PDF-exporter](https://www.blocknotejs.org/docs/features/export/pdf) valt onder het XL-licentiemodel; niet automatisch toevoegen aan de basiseditor. UC-022 begrenst export, UC-023 toekomstig AI-advies. Advies krijgt bronverwijzingen en schrijfrechten op geen enkele CAD-/slicerregistratie. Deze wijziging implementeert geen connector, wiki, PDF- of AI-functionaliteit.
+
 ## Geplande Part-wiki — BlockNote en SQLite FTS5
 
 Gebruiker kiest BlockNote voor de ingebouwde wiki (UC-020). Een afgebakend React-onderdeel benut de bestaande editorbediening zonder de hele PRC-UI om te bouwen. Pagina's blijven bij het Part number; expliciete pagina-/blokverwijzingen leggen versiecontext vast zonder de tekst te bevriezen of Part versions te verhogen. Stabiele blok-ID's ondersteunen kantlijnbadges en terugverwijzingen. Eigen paginarevisies houden dit onafhankelijk van technische History.

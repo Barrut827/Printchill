@@ -1,20 +1,19 @@
 
-short term to do:
-- Lees je opnieuw in door de agent.md opnieuw te lezen.
-- push en commit het huidige werk eerst voordat je verder gaat.
-- maak een table of content in de architecture file. scan de architecture file en deel overzichtelijker in. kijk online naar een template om software architectuur vast te leggen en put hier inspiratie uit.
-- maak een plan voor de Solidworks macro om:
-	- CAD files te openen vanuit PRC
-	- CAD file op te slaan in PRC en wijzigingen te doen
-	- koppeling part numbers , versions (PRC is hier leading)
-- schoon de roadmap op en maak deze visueel aantrekkelijker en overzichtelijker:
-	- toekomst features:
-		- CAD connectors voor Fusion 360 en FreeCAd
-		- slicer connection; Prusa, Orca, Cura
-		- wiki pages met blocknote geimplementeerd
-			- default tekst verwerking
-			- formules om berekeningen vast te leggen (Latex add in en rendering?)
-			- export as PDF.
-		- print report meten en gemeten waarden via STL viewer; in vieweren iets opmeten aan 3D model. meting zegt 101mm, gemeten waarde er bij invullen 100.8mm 
-			- export as pdf
-		- print analysis function; middels AI agent print reports and settings analyseren, en op basis daar van adviseren.
+# To-do — Codex Agent
+
+## Afgewerkt op 2026-11-21
+
+- [x] [[AGENT]] opnieuw lezen en implementatie-/documentatieaanpak bepalen.
+- [x] Huidig werk eerst committen en naar `origin/main` pushen: checkpoint `6256ca2` (MVP 0.3.5); 15 regressietests geslaagd.
+- [x] [[Architecture]] herindelen met een inhoudsopgave, geïnspireerd op het officiële [arc42-template](https://arc42.org/overview/). Huidige keuzes, plannen en prototypehistorie apart; bestaande gebruikersnotities behouden.
+- [x] [[SOLIDWORKS_INTEGRATION_PLAN]] maken voor CAD openen, nieuw CAD opslaan, wijzigen en koppeling aan PRC-Part numbers/versions. Inclusief fasen, fouten, verificatie en grens met assemblies.
+- [x] [[ROADMAP]] opruimen met stroomdiagram, actuele stand, afhankelijkheden en oplevercriteria. Toekomstscope opgenomen: Fusion 360/FreeCAD; PrusaSlicer/OrcaSlicer/Cura; BlockNote-tekstverwerking, LaTeX en PDF; STL-metingen met nominale/gemeten waarde; report-PDF; AI-printanalyse.
+- [x] [[USECASES]] en [[DJF]] laten aansluiten: wiki-formules, geplande STL-metingen, UC-022 PDF-export en UC-023 analyseadvies. Deze functies zijn gepland, niet door deze documentatietaak geïmplementeerd.
+
+## Open onderzoek
+
+### ISS-001
+
+**STL met gewijzigde naam herladen in Bambu Studio** · Open sinds 2026-11-12 · relatie UC-005-A3/AC-08. Overgenomen uit de verwijderde issuelijst zodat bestaande UC-links weer een doel hebben. Niet onderdeel van de hierboven afgeronde documentatieopdrachten.
+
+Onderzoek op een controlekopie of Reload from disk een STL met een nieuwe bestandsnaam kan vervangen. Vergelijk met hetzelfde bronpad en controleer behoud van positionering, supports, painting en printinstellingen. Leg Bambu-versie, begin-/eindbestanden, stappen en foutmeldingen vast; koppel CAD/STL-bronrevisies expliciet. Sluit pas na reproduceerbaar testbewijs en een bijgewerkte UC-005-workflow.

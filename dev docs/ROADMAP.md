@@ -1,77 +1,105 @@
 # PrintChill — Roadmap
 
-## MVP 0.3.4 — import per rol, related objects en reportvoorstellen
+Stand **2026-11-21 · MVP 0.3.5**. Volgorde op afhankelijkheid en risico; toekomstige releasenummers en datums zijn nog niet toegezegd. Eerst functionaliteit betrouwbaar, daarna verdere UI-verfijning. “Geïmplementeerd” betekent niet automatisch door de gebruiker geaccepteerd.
 
-UC-017: CAD/STL/3MF in afzonderlijke stappen kiezen of slepen. Nieuwe [[USECASES#UC-021 Related objects van een Part aanvullen of vervangen|UC-021]] (CRUD-U): aanvullen/vervangen via Edit related objects met behoud van historie. UC-003: standaard lege parametersectie; gericht zoeken en bronwaarde met afzonderlijke Suggestion vastleggen. Gebruikersacceptatie open; BlockNote-wiki blijft de afzonderlijk beschreven vervolgstap UC-020.
+## Inhoudsopgave
 
-## Gepland — Part-wiki met BlockNote
+- [[#Route naar de volgende MVP]]
+- [[#Huidige stand en acceptatie]]
+- [[#Geplande werkpakketten]]
+- [[#Toekomstige connectors]]
+- [[#Overige productbacklog]]
+- [[#Opleveren en testen]]
+- [[#Historie]]
 
-[[USECASES#UC-020 Part-wiki schrijven, aan versies koppelen en terugvinden|UC-020]] beschrijft pagina's/subpagina's per Part number, optionele versieverwijzingen op pagina's en secties, eigen revisies, afbeeldingen en zoeken vanuit de bestaande linkerzoekbalk. Techniek: afgebakende BlockNote/React-editor, lokale SQLite-opslag en herbouwbare FTS5-index; zie [[Architecture#Part-wiki met BlockNote en lokale zoekindex]]. Release en acceptatiegrenzen nog vaststellen; niet aanwezig in MVP 0.3.0.
+## Route naar de volgende MVP
 
-## MVP 0.3.0 — v5-UI en collecties
+```mermaid
+flowchart LR
+  A["Nu: 0.3.5 accepteren"] --> B["SolidWorks mono-part: S0-S4"]
+  A --> C["Wiki: BlockNote + zoekindex"]
+  C --> D["Formules + wiki-PDF"]
+  A --> E["STL-metingen + report-PDF"]
+  B --> F["Later: assemblies + andere CAD"]
+  B --> G["Gedeeld connectorcontract"]
+  G --> H["Andere slicers"]
+  E --> I["Printanalyse / AI"]
+```
 
-Runtime-overdracht van de goedgekeurde v5-UI, collecties (UC-019), Part-metadata onder Tags, blijvende History-vertakkingen en versiegebonden Git-links. Bestaande reports, plaatpreviews en back-upreview blijven beschikbaar. Gebruikersvalidatie van de nieuwe collectieflow en UI staat open; UC-018 blijft eerder geaccepteerd. Wiki, SolidWorks-connector en assemblies volgen later.
+**Advies:** rond de open acceptatie van 0.3.5 af en begin de volgende functionele build met de SolidWorks S0/S1-proef. Dat toetst het belangrijkste nog onbewezen externe koppelvlak. Werk wiki daarna als afzonderlijk pakket uit; beide hoeven niet in één release. Assemblies volgen pas na een betrouwbare mono-partflow.
 
-## MVP 0.2.0 — bibliotheek, zoeken en herstel
+## Huidige stand en acceptatie
 
-UI-roadmap uit proef v5: Part Wiki voor ontwerpnotities, instructies en links. Het prototype reserveert een tab; de geplande opslag en acceptatiecriteria zijn nu uitgewerkt in UC-020, voorafgaand aan implementatie.
-
-Vervolg 0.2.6: opgeslagen plaat-PNG’s, beschikbare 3MF-projectparameters als zoekfilter, versiegebonden Print Reports met meetverslag en afbeeldingen, UC-015-previewcriteria en VS Code-testtaken. Handmatige acceptatie van UC-008, reports en back-upmerge volgt via de lokale stack. UC-018 blijft geaccepteerd. SolidWorks blijft een afzonderlijke vervolgstap.
-
-- UC-006: kaarten en sorteerbare tabel op workspacegegevens, versiegebonden STL-inspectie met afmetingen en printdetails uit de geselecteerde 3MF.
-- UC-008: naam, nummer, tags en materiaal combineren, filters op bestandstype en printpoging, zoekcriteria lokaal bewaren en opnieuw uitvoeren.
-- UC-015: back-up beoordelen en Part-nummers na bevestiging samenvoegen; apart openen blijft beschikbaar. Een eerste opening van schema 1 maakt een migratieback-up.
-- Pilotcontrole: open een workspace uit 0.1.1, vind een Part via kaart én zoekopdracht, controleer een historische revisie in Bambu en herstel een back-up met overlappende nummers. Gebruik een testworkspace bij het beoordelen van vervanging.
-
-## Windows-MVP — van eerste import tot reproduceerbare print
-
-Voorstel voor één gebruiker per lokale workspace. UC-018 is de acceptatieproef voor de release. Elke fase levert een testbaar onderdeel via de bestaande web-UI.
-
-| Volgorde | Scope | Klaar wanneer |
+| Gebied | Stand in 0.3.5 | Volgende controle |
 | --- | --- | --- |
-| 1. Installeren en starten | Lokale backend, gebundelde UI, SQLite, Settings en workspace openen/aanmaken (basis UC-015). | Een standaardgebruiker start PRC op een schone Windows-pc, kiest een map en opent die na herstart opnieuw. |
-| 2. Registreren en terugvinden | UC-017, Part-aanmaak uit UC-002, kaart en bibliotheek uit UC-006, versie 001 uit UC-011. | Een echte STL en 3MF verschijnen op één kaart. Ook STL-only import werkt. Na verplaatsing van de bronmap zijn de beheerde bestanden beschikbaar. |
-| 3. Dagelijks reviseren | Bambu-pad uit UC-004, bevestiging uit UC-005, logbook uit UC-011 en detectie uit UC-018. | Start Bambu Studio met de gekozen werkkopie; test herhaalde saves, vervangen van het bestand, dubbel bevestigen, herstart en een verouderde basisversie. |
-| 4. Printbewijs en herstel | Minimaal Print Report uit UC-003 (poging, datum, uitkomst, notitie, exacte Part version); back-up/herstel uit UC-015. | Het rapport op 001 opent na registratie van 002 én na herstel op een andere installatie byte-identiek de oorspronkelijke 3MF. |
-| 5. Pilot opleveren | Alle voorgaande fasen samen, getest met een echte printerworkflow en lokaal geïnstalleerde Bambu Studio. | UC-018 doorlopen, volle schijf of afgebroken registratie herstellen, upgrade met behoud van een bestaande workspace testen. |
+| Import / revisies · UC-002/005/017/021 | Per rol kiezen/drop; later aanvullen/vervangen; onveranderlijke historie. | Gebruikersacceptatie via T03–T08. Native CAD-flow nog gepland. |
+| Bibliotheek / zoeken · UC-006/007/008 | v5-UI, STL-viewer, plaat-PNG's, tags, samengestelde en bewaarde queries. | T09–T16; wiki-zoeken volgt met UC-020. |
+| Collecties / History · UC-019/011/012 | Meerdere collecties, afleidingslinks en versiegebonden Git-links. | T17–T20; algemene attachments zijn nog geen volledige UC-012. |
+| Reports · UC-003 | Plakken, metingen met nominale waarde, gekozen parameters/suggesties, Enter-beveiliging en Edit. | T21–T31; nog geen modelmeting of PDF-export. |
+| Back-up / herstel · UC-015 | Preview, merge en apart herstel; Windows-kiezer. | T01–T02 en T32–T36; upgrade/restore met eigen data beoordelen. |
+| Dagelijks Bambu reviseren · UC-018 | Eerder door gebruiker geaccepteerd. | Alleen regressiecontrole bij wijzigingen aan gedeeld versie-/jobbeheer (T37). |
+| SolidWorks / Wiki | UI-placeholder en ontwerpdocumenten. | Niet als gerealiseerd of geaccepteerd markeren. |
 
-**Deploymentvoorstel.** Lever een versiegebonden Windows x64-installer voor de huidige gebruiker. Bundel UI, backend en benodigde runtime. Een snelkoppeling start één lokale backend en opent de UI in de standaardbrowser. Bind uitsluitend op loopback, valideer de UI-origin en beperk bestandsacties tot de gekozen workspace en expliciete import/export. Detecteer Bambu Studio of laat de gebruiker het uitvoerbare bestand eenmalig kiezen in Settings. Installeer de applicatie apart van de gebruikersdata. Publiceer eerst een pilot-installer als GitHub Release met installatie-, upgrade- en herstelinstructies. Maak vóór een schemamigratie een herstelbare back-up.
+Eén actuele acceptatietabel: [Testplan builds 0.3.0–0.3.5](../MVP/TESTPLAN.md). Het UC-register bewaart de volledige scopes; bovenstaande tabel beschrijft uitsluitend de daadwerkelijk gebouwde MVP-deelsets.
 
-**Na de MVP.** SolidWorks-integratie en macro’s (UC-001), assemblywerkkopieën en componentinspectie (UC-013), tags en uitgebreide zoekopdrachten (UC-007/008), Where used (UC-009), snapshots (UC-010), attachments (UC-012), vergelijken (UC-014) en lifecycle (UC-016). Onderstaande fasen geven de bredere product- en prototypehistorie.
+## Geplande werkpakketten
 
-| Fase | Use cases | Afhankelijkheid / resultaat |
+| Volgorde | Pakket / UC | Afhankelijkheid | Oplevercriterium |
+| --- | --- | --- | --- |
+| 1 | Acceptatie en gerichte fixes 0.3.5 | Huidige build en samples | Open tests ingevuld; afwijkingen opgelost of expliciet als beperking vastgelegd. |
+| 2 | SolidWorks mono-part · UC-002/004/005/021 | S0-compatibiliteitsproef, rolbewuste jobs | CAD openen, nieuw CAD registreren, Save → PRC-confirm en bewezen CAD/STL-export; historie/restore intact. Zie [[SOLIDWORKS_INTEGRATION_PLAN]]. |
+| 3 | Basiswiki · UC-020 + UC-008 | Partidentiteit; migratie/back-up; FTS5-proef | Tekst, koppen, lijsten, tabellen, afbeeldingen, pagina's/subpagina's; versiebadges; linkerzoekbalk vindt opgeslagen inhoud; restore herbouwt index. |
+| 4 | Wiki-formules · UC-020 | Basiswiki en lokale renderproef | Inline/blok LaTeX bewerken, bewaren en renderen; ongeldige formule toont fout met behoud van bron. Geen automatische rekenengine. |
+| 5 | PDF-export · UC-022 | Opgeslagen wiki-/reportbron en gedeelde printweergave | PDF met identiteit, bronrevisie, tekst/tabellen/foto's/formules; lange inhoud zonder afsnijden. Browser Save as PDF eerst, directe exporter na licentie-/renderproef. |
+| 6 | Reportmetingen via STL · UC-003 | Exacte STL-revisie, unit- en selectieproef | Bijvoorbeeld modelmaat 101 mm en gemeten 100,8 mm met M-nummer, geselecteerde geometrie en bronrevisie bewaren. Geen onbewezen featureherkenning. |
+| 7 | Versievergelijking / relaties · UC-009/013/014 | Betrouwbare export-/bronrelaties | Expliciete versiecontext; “where used” zonder claims op basis van alleen bestandsnamen. Assemblies pas na mono-partconnector. |
+| 8 | Printanalyse · UC-023 | Genoeg bruikbare reports, metingen en settings | Engineer selecteert bewijs; advies toont gebruikte versies/parameters en onzekerheid. Geen automatische wijziging of onbewezen kwaliteitsclaim. |
+
+Pakketten 4–6 zijn apart opleverbaar; deze volgorde is geen verplichting ze op één release te wachten. Nieuwe code start pas met uitgewerkte UC-acceptatiecriteria en een begrensde technische proef.
+
+## Toekomstige connectors
+
+| Connector | Eerste scope | Voorwaarde / status |
 | --- | --- | --- |
-| POC | UC-001 | Metadata-extractie; basisproef uitgevoerd, uitgebreide controles nog open |
-| Documentbeheer | UC-002, UC-004, UC-005 | Part-identiteit, onafhankelijke documentversies, openen en bronrelaties; [[To Do Lijst - Codex Agent#ISS-001]] onderzoeken |
-| Versiehistorie en feedback | UC-011, UC-003, UC-012 | Part versions, Logbook, Print Reports en attachments per versie |
-| Latere baselines | UC-010 | Snapshotfunctie later opnieuw uitwerken |
-| Bibliotheek | UC-006, UC-007, UC-008 | Visueel browsen, tags en zoeken; werken met reeds beschikbare data |
-| Gebruiksoverzicht | UC-009 | Betrouwbare, versiegebonden relatie-index en Part-versioncontext |
+| SolidWorks 2026 | Mono-part openen, save/copy, STL-export en PRC-identiteit | Eerste connector; plan S0–S4. Assemblies en add-in later. |
+| Fusion 360 | PRC-Part koppelen, CAD openen/bewaren en STL-export | Backlog; eigen compatibiliteits-/authenticatieproef en UC-004/005-uitwerking vóór implementatie. |
+| FreeCAD | `.FCStd`, properties/configuratiecontext en gecontroleerde STL-export | Backlog; toepasselijke FreeCAD-versies eerst bepalen. Sample-inspectie is geen connector. |
+| Bambu Studio | Bestaande werkkopieflow en automatische printgegevens | Huidige referentie; regressie behouden. |
+| PrusaSlicer | Project openen, bevestigde gewijzigde revisie, beschikbare slicingmetadata | Backlog; project-/G-codecontract en CLI-compatibiliteit onderzoeken. |
+| OrcaSlicer | Zelfde gebruikersflow met eigen metadata-/versiecontrole | Backlog; Bambu-afkomst bewijst geen identiek contract. |
+| Cura | Native project/3MF openen, save/copy en printmetadata | Backlog; projectscope en instellingen eerst toetsen. |
 
-Definities: [[Architecture]]. Detail en acceptatiecriteria: [[USECASES]]. Statusbeleid wordt afzonderlijk uitgewerkt.
+Alle connectors hergebruiken PRC-identiteit, werkkopieën, inhoudscontrole en expliciete registratie. Geen connector mag een eigen versiegeschiedenis naast PRC aanleggen. Releasenummers en ondersteunde applicatieversies volgen na hun technische proef.
 
-Eerste [HTML UI-prototype](../prototype/README.md) beschikbaar om bibliotheek, Part versions, documentrevisies en Print Reports te beoordelen. Dit is ontwerpvalidatie; de bovenstaande implementatiefasen en UC-acceptatie blijven open.
+## Overige productbacklog
 
-Prototype 2 verwerkt feedback over Part versions, Engels, prominente Part numbers, Where used-diagram, versiegebonden kaarten, Logbook en Attachments. Volledige productieacceptatie blijft open.
+| Thema | Scope / afhankelijkheid |
+| --- | --- |
+| Lifecycle · UC-016 | Design state en maturity volgens doelbeleid; geen volledige runtime-claim op basis van prototype v4. |
+| Snapshots · UC-010 | Latere baselines over exacte versies van meerdere Parts; geen dagelijkse extra registratiestap. |
+| Attachments · UC-012 | Algemene documenten en export; huidige reports/Git-links dekken slechts een deel. |
+| Assemblies · UC-013 | Native componentstructuur, externe referenties, configuraties en beheerde assemblywerkkopieën. |
+| Nummering | Instelbare Partnummering en beleid bij versie 999; bestaande historische nummers behouden. |
+| UI-verfijning | Na functionele acceptatie: consistente uitlijning, dichtheid, toegankelijkheid en bediening; nieuwste v5-feedback blijft leidend. |
+| Teamgebruik | Auth, rechten, concurrency, serverdatabase/objectopslag en lokale CAD-agent; geen gedeelde SQLite-map als tussenoplossing. |
 
-Part Details (UC-006): 3MF-projectmetadata in de UI-proef. Automatische import, effectieve object-/plaatinstellingen en volledige slicingtotalen blijven vervolgstappen.
+## Opleveren en testen
 
-Geconsolideerd: geselecteerde filamenten en Print time · indication. Vervolg: echte geslicete 3MF-fixture vergelijken met Bambu Studio, veilige import van slicingresultaten en later een lokale/background slicerconnector.
+Blijf voorlopig bij de lokale Windows x64-stack, startbaar via VS Code/F5 en `start.cmd`; meegeleverde runtime en appbestanden apart van de workspace. Nieuwe schema's vereisen een volledige voorafgaande migratieback-up. Elke oplevering krijgt een eigen buildversie in app, launcher, pakket en testplantitel, plus relevante unit-/API-/browsertests en handmatige native-appacceptatie.
 
-## Prototype v4
+Commit checkpoints en push naar `origin/main`; releasepakketten bevatten uitsluitend app/runtime/licenties/gebruiksinstructies. Ontwikkeldocumenten blijven in de repository en buiten het releasepakket. Geen nieuwe release-tag voor uitsluitend deze planningswijziging.
 
-UC-013 t/m UC-016: samplecatalogus/componenten, echte A/B-previews, engineeringtabel/vergelijking, lokale opslag/concepts en bestaand lifecyclebeleid. UI-reviewpunten worden expliciet nagelopen in prototype/design-qa.md.
+## Historie
 
-Nog open voor native CAD: assemblymacro op SolidWorks 2026 SP0 compileren en uitvoeren, tree/configuraties controleren, bronhashes vergelijken; daarna desgewenst gelicentieerde Document Manager-worker. Productieauth, gelijktijdig werken, echte CAD/slicerconnectors, slicing en geometrische afwijkingsanalyse blijven afzonderlijke stappen.
+| Build / proef | Betekenis |
+| --- | --- |
+| Metadata-POC | Read-only VBA-export (UC-001); geen schrijfconnector. |
+| Prototype 1–4 | Ontwerpvalidatie van viewer, versiecontext, reports, structuur en lifecycle; geen volledige productacceptatie. |
+| MVP 0.1.x | Lokale import, Bambu-werkkopieën, bevestiging en herstel; UC-018 door gebruiker geaccepteerd. |
+| MVP 0.2.x | Bibliotheek, queries, plaatbeelden, reports en back-uppreview. |
+| Prototype v5 → MVP 0.3.0 | Goedgekeurde UI naar runtime, collecties en History-vertakkingen. |
+| MVP 0.3.1–0.3.3 | Clipboardfoto's, broncontext, meettabel en nominale waarden. |
+| MVP 0.3.4 | Import per rol, Edit related objects en gerichte parameterfeedback. |
+| MVP 0.3.5 | Expliciet report bewaren, Enter-beveiliging en bestaande reports bewerken. |
 
-## Toekomstige uitbreiding — FreeCAD
-
-- FreeCAD-integratie staat op de backlog, zonder geplande release of deadline; SolidWorks blijft de eerste CAD-integratie.
-- Onderzoek: metadata en custom properties uit `.FCStd`, assembly-childrelaties en het koppelen van CAD-revisies aan STL-exporten en Part versions.
-- Afhankelijkheden: stabiele CAD-import en relatieopslag; vóór implementatie een eigen use case en compatibiliteitsproef met FreeCAD-versies en assemblystructuren uitwerken. De huidige sample-inspectie is nog geen volledige integratie.
-
-## Feature backlog:
-- solidworks macro addin
-- Part Wiki
-- part compare tussen versie
-- parameter analysis 3MF icm feedback print report.
+Rationale: [[DJF]]. Techniek: [[Architecture]]. Volledige functionele eisen: [[USECASES]].
