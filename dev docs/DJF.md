@@ -1,5 +1,17 @@
 # PrintChill — Design Justification File
 
+## Geplande Part-wiki — BlockNote en SQLite FTS5
+
+Gebruiker kiest BlockNote voor de ingebouwde wiki (UC-020). Een afgebakend React-onderdeel benut de bestaande editorbediening zonder de hele PRC-UI om te bouwen. Pagina's blijven bij het Part number; expliciete pagina-/blokverwijzingen leggen versiecontext vast zonder de tekst te bevriezen of Part versions te verhogen. Stabiele blok-ID's ondersteunen kantlijnbadges en terugverwijzingen. Eigen paginarevisies houden dit onafhankelijk van technische History.
+
+SQLite FTS5 indexeert de actuele opgeslagen wiki-inhoud voor de bestaande linkerzoekbalk. Dit vermijdt een extra zoekdienst in de lokale Windows-stack. De index is afgeleid, transactioneel bij te werken en herbouwbaar uit de bronrevisies; afbeeldingen en volledige historie blijven onderdeel van de reguliere back-up. Implementatie, runtimeondersteuning en acceptatiegrenzen worden nog gecontroleerd. Technische details: [[Architecture#Part-wiki met BlockNote en lokale zoekindex]].
+
+## MVP 0.3.0 — collecties en UI-overdracht
+
+Collecties zijn een aparte many-to-many-relatie in SQLite. Dit ondersteunt meerdere verzamelingen per Part zonder bestanden te kopiëren of revisies aan te maken. Namen zijn uniek zonder hoofdletteronderscheid. Stabiele collectie-ID's houden lidmaatschappen intact bij hernoemen. Bij merge koppelen gelijke namen aan dezelfde collectie, terwijl niet vervangen Parts behouden blijven.
+
+De v5-UI gebruikt de bestaande lokale API, metadata-extractie, viewer en reportopslag. UI-state blijft in de browser; geregistreerde gegevens blijven bij de backend. Git-verwijzingen zijn versiegebonden. Een afgeleid Part hergebruikt bestandsobjecten en bewaart een expliciete bronrelatie voor de History-grafiek. Schema 4 wordt voorafgegaan door een herstelbare back-up. Nieuwe dependencies zijn niet nodig.
+
 ## DJF-003 — Begrippen en gebruikersdatamodel
 
 een part is de major carrier van informatie. een part heeft een uniek part number zie DJF-04. een part heeft related objects.

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrintChill · UI prototype v5</title><!--STYLE--></head>
+<body>
+<aside id="sidebar">
+  <a class="brand" href="#library"><span class="mark">P</span><span>PrintChill<small>YOUR ENGINEERING WORKSPACE</small></span></a>
+  <nav aria-label="Main navigation"><button data-page="library" class="nav active">▦ <span>Part library</span><span id="part-count"></span></button><button data-page="reports" class="nav">▤ <span>Print reports</span><span id="report-count"></span></button><button data-page="settings" class="nav">⚙ <span>Settings</span></button></nav>
+  <section><label class="section-label" for="search">FIND A PART</label><input id="search" type="search" placeholder="Name, number or #tag"><button class="text-button" id="filters-toggle" aria-expanded="false">＋ Advanced filters</button><div id="filters" hidden><label>File type<select id="file-filter"><option value="">Any file</option><option>STL</option><option>3MF</option><option>CAD</option></select></label><label>Project material<select id="material-filter"><option value="">Any material</option></select></label><label>Print attempts<select id="report-filter"><option value="">All parts</option><option value="yes">With a print report</option></select></label><button id="clear-filters">Clear filters</button></div></section>
+  <section id="parameter-filters" hidden><label>Project parameter<select id="parameter-filter"><option value="">Any parameter</option></select></label><label>Value contains<input id="parameter-value" placeholder="e.g. 0.2"></label><label>Printed in<select id="days-filter"><option value="">Any time</option><option value="3">Last 3 days</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></label><label>Printed material<input id="print-material-filter" placeholder="e.g. PETG-CF"></label></section>
+  <section><div class="section-heading"><span class="section-label">COLLECTIONS</span><button class="text-button" id="create-collection" aria-label="Create collection">+</button></div><div id="collection-list"></div></section>
+  <section><span class="section-label">TAGS</span><div id="tag-list"></div></section>
+  <section><span class="section-label">SAVED SEARCHES</span><div id="saved-list"></div><button id="save-search" class="text-button">＋ Save current search</button></section>
+  <div class="sidebar-bottom"><span class="avatar">LW</span><span>Local workshop<small>Offline UI prototype · v5</small></span></div>
+</aside>
+<main><header><div class="crumb">My workshop <span>/</span> <b id="breadcrumb">Library</b></div><div class="row"><span class="demo-label">UI PROTOTYPE V5</span><button id="help" class="icon-button" title="About this prototype" aria-label="About this prototype">?</button></div></header><div id="content"></div></main>
+<dialog id="modal" aria-labelledby="modal-title"><form id="modal-form"><h2 id="modal-title"></h2><div id="modal-body"></div><div class="actions"><button type="button" id="modal-close">Cancel</button><button class="primary" id="modal-submit">Save</button></div></form></dialog>
+<div id="message" role="status" aria-live="polite"></div>
+<!--SCRIPT--></body></html>

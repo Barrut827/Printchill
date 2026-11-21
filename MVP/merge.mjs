@@ -12,12 +12,15 @@ function inspect(ws,source){
   const db=new DatabaseSync(file,{readOnly:true});
   try{
     if(db.prepare('PRAGMA application_id').get().application_id!==1347568433 ||
-       ![1,2,3].includes(db.prepare('PRAGMA user_version').get().user_version) ||
+       ![1,2,3,4].includes(db.prepare('PRAGMA user_version').get().user_version) ||
        db.prepare('PRAGMA integrity_check').get().integrity_check!=='ok')throw Error('Invalid backup database.');
     const read=table=>db.prepare('SELECT * FROM '+table).all();
     const parts=read('parts'),versions=read('versions'),reports=read('reports');
     const tags=db.prepare("SELECT name FROM sqlite_master WHERE name='part_tags'").get()?read('part_tags'):[];
+    const optional=table=>db.prepare('SELECT name FROM sqlite_master WHERE name=?').get(table)?read(table):[];
+    const collections=optional('collections'),memberships=optional('part_collections'),info=optional('part_info'),repositories=optional('version_links');
     const ids=new Set(parts.map(p=>p.id)),keys=new Set();
+    if(memberships.some(m=>!ids.has(m.part)||!collections.some(c=>c.id===m.collection))||info.some(i=>!ids.has(i.part))||repositories.some(i=>!versions.some(v=>v.part===i.part&&v.v===i.v)))throw Error('Invalid collection or Part metadata reference.');
     for(const row of versions){
       if(!ids.has(row.part))throw Error('Invalid Part reference.');
       for(const f of Object.values(JSON.parse(row.files))){
@@ -33,13 +36,13 @@ function inspect(ws,source){
     const preview={name:manifest.name||path.basename(source),created:manifest.created||null,bytes,parts:parts.length,
       additions:parts.filter(p=>!conflicts.includes(p.id)).map(p=>p.id),conflicts,versions:localVersions.length,reports:localReports.length,
       pending:jobs.filter(j=>j.changed||j.missing).map(j=>j.part)};
-    preview.token=digest(JSON.stringify([ws.root,source,parts,versions,reports,tags,preview,localVersions,localReports,jobs]));
-    return {preview,parts,versions,reports,tags,keys};
+    preview.token=digest(JSON.stringify([ws.root,source,parts,versions,reports,tags,collections,memberships,info,repositories,preview,localVersions,localReports,jobs,ws.all('SELECT * FROM collections'),ws.all('SELECT * FROM part_collections'),ws.all('SELECT * FROM part_info'),ws.all('SELECT * FROM version_links')]));
+    return {preview,parts,versions,reports,tags,keys,collections,memberships,info,repositories};
   }finally{db.close();}
 }
 export function backupPreview(ws,source){return inspect(ws,source).preview;}
 export function mergeBackup(ws,source,token){
-  const {preview,parts,versions,reports,tags,keys}=inspect(ws,source);
+  const {preview,parts,versions,reports,tags,keys,collections,memberships,info,repositories}=inspect(ws,source);
   if(preview.token!==token)throw Error('Workspace or backup changed. Preview again.');
   if(preview.pending.length)throw Error('Resolve pending working copies before replacing these Parts.');
   for(const key of keys){
@@ -54,13 +57,18 @@ export function mergeBackup(ws,source,token){
   }
   ws.transaction(()=>{
     for(const id of preview.conflicts){
-      for(const table of ['jobs','reports','versions','part_tags'])ws.run('DELETE FROM '+table+' WHERE part=?',id);
-      ws.run('DELETE FROM parts WHERE id=?',id);
+      for(const table of ['jobs','reports','version_links','versions','part_tags','part_collections','part_info'])ws.run('DELETE FROM '+table+' WHERE part=?',id);
     }
-    for(const p of parts)ws.run('INSERT INTO parts(id,name) VALUES(?,?)',p.id,p.name);
+    for(const p of parts)ws.run('INSERT INTO parts(id,name) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name',p.id,p.name);
     for(const r of versions)ws.run('INSERT INTO versions(part,v,files,created) VALUES(?,?,?,?)',r.part,r.v,r.files,r.created);
     for(const r of reports)ws.run('INSERT INTO reports(part,v,outcome,note,created,material,details) VALUES(?,?,?,?,?,?,?)',r.part,r.v,r.outcome,r.note,r.created,r.material||'',r.details||'{}');
     for(const r of tags)ws.run('INSERT INTO part_tags VALUES(?,?)',r.part,r.tag);
+    const mapping=new Map();
+    for(const c of collections){const local=ws.one('SELECT id FROM collections WHERE name=? COLLATE NOCASE',c.name);mapping.set(c.id,local?.id||ws.collection(null,c.name));}
+    for(const m of memberships)ws.run('INSERT INTO part_collections VALUES(?,?)',m.part,mapping.get(m.collection));
+    for(const i of info)ws.run('INSERT INTO part_info VALUES(?,?,?,?,?)',i.part,i.created,i.repo,i.parent,i.base);
+    for(const i of repositories)ws.run('INSERT INTO version_links VALUES(?,?,?)',i.part,i.v,i.repo);
+    for(const p of parts)ws.run("INSERT OR IGNORE INTO part_info(part,created) VALUES(?,COALESCE((SELECT min(created) FROM versions WHERE part=?),''))",p.id,p.id);
   });
   return preview.parts;
 }

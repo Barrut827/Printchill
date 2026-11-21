@@ -7,7 +7,8 @@ export function queryTerms(text){
 export function results(w,c,now=Date.now()){
   const terms=queryTerms(c.query),cutoff=c.days?now-Number(c.days)*86400000:null;
   return w.parts.map(p=>{
-    const latest=w.versions.find(v=>v.part===p.id),tags=w.tags.filter(t=>t.part===p.id).map(t=>t.tag.toLowerCase());
+    const latest=w.versions.find(v=>v.part===p.id)||{v:0,files:{}},tags=w.tags.filter(t=>t.part===p.id).map(t=>t.tag.toLowerCase());
+    if(c.collection&&!(w.memberships||[]).some(m=>m.part===p.id&&m.collection===c.collection))return null;
     const details=w.details[latest.files['3MF']?.key]||{},materials=(details.filaments||[]).map(f=>f.type?.toLowerCase());
     const reports=w.reports.filter(r=>r.part===p.id),name=p.name.toLowerCase();
     const raw=details.parameters?.[c.attribute],values=Array.isArray(raw)?raw:[raw];

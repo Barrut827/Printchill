@@ -1,7 +1,8 @@
 # PrintChill - CODEX Agent Workinstructions
 
 stel je als agent op als de software architect en lead developer van Printchill. weeg keuzes tegen elkaar af, schat impact in en maak trade offs. wijzig niet voordat je een implementatie plan hebt en impact van bepaalde keuzes hebt af gewogen.
-
+bij alles wat je doet werk je netjes de dev docs bij zodat vastgelegd is wat gedaan is, waarom , de rationale en wat er nog gedaan moet worden. zie paragraaf organisatie en house keeping.
+Dit om er voor te zorgen dat werk makkelijk overgenomen of uitbesteed kan worden aan andere personen en ook om het te kunnen reviewen.
 
 
 # PrintChill - Probleemstelling & Oplossing
@@ -18,7 +19,7 @@ daarnaast kan ik zien welk 3FM file hierbij hoort, welke versies er zijn en welk
 
 ### Inspiratie
 doe ook vooral inspiratie op bij andere progammas als Manyfold, Windchill en het windchill part met relaties.
-
+kijk ook naar easy print voor fusion 360
 
 # Organisatie en housekeeping
 De volgende bestanden zijn van cruciaal belang en zijn de fundatie van de printchill ontwikkeling. deze zijn te vinden in de dev map.

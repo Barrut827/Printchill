@@ -1,6 +1,20 @@
 # PrintChill — Roadmap
 
+## MVP 0.3.4 — import per rol, related objects en reportvoorstellen
+
+UC-017: CAD/STL/3MF in afzonderlijke stappen kiezen of slepen. Nieuwe [[USECASES#UC-021 Related objects van een Part aanvullen of vervangen|UC-021]] (CRUD-U): aanvullen/vervangen via Edit related objects met behoud van historie. UC-003: standaard lege parametersectie; gericht zoeken en bronwaarde met afzonderlijke Suggestion vastleggen. Gebruikersacceptatie open; BlockNote-wiki blijft de afzonderlijk beschreven vervolgstap UC-020.
+
+## Gepland — Part-wiki met BlockNote
+
+[[USECASES#UC-020 Part-wiki schrijven, aan versies koppelen en terugvinden|UC-020]] beschrijft pagina's/subpagina's per Part number, optionele versieverwijzingen op pagina's en secties, eigen revisies, afbeeldingen en zoeken vanuit de bestaande linkerzoekbalk. Techniek: afgebakende BlockNote/React-editor, lokale SQLite-opslag en herbouwbare FTS5-index; zie [[Architecture#Part-wiki met BlockNote en lokale zoekindex]]. Release en acceptatiegrenzen nog vaststellen; niet aanwezig in MVP 0.3.0.
+
+## MVP 0.3.0 — v5-UI en collecties
+
+Runtime-overdracht van de goedgekeurde v5-UI, collecties (UC-019), Part-metadata onder Tags, blijvende History-vertakkingen en versiegebonden Git-links. Bestaande reports, plaatpreviews en back-upreview blijven beschikbaar. Gebruikersvalidatie van de nieuwe collectieflow en UI staat open; UC-018 blijft eerder geaccepteerd. Wiki, SolidWorks-connector en assemblies volgen later.
+
 ## MVP 0.2.0 — bibliotheek, zoeken en herstel
+
+UI-roadmap uit proef v5: Part Wiki voor ontwerpnotities, instructies en links. Het prototype reserveert een tab; de geplande opslag en acceptatiecriteria zijn nu uitgewerkt in UC-020, voorafgaand aan implementatie.
 
 Vervolg 0.2.6: opgeslagen plaat-PNG’s, beschikbare 3MF-projectparameters als zoekfilter, versiegebonden Print Reports met meetverslag en afbeeldingen, UC-015-previewcriteria en VS Code-testtaken. Handmatige acceptatie van UC-008, reports en back-upmerge volgt via de lokale stack. UC-018 blijft geaccepteerd. SolidWorks blijft een afzonderlijke vervolgstap.
 
@@ -28,7 +42,7 @@ Voorstel voor één gebruiker per lokale workspace. UC-018 is de acceptatieproef
 | Fase | Use cases | Afhankelijkheid / resultaat |
 | --- | --- | --- |
 | POC | UC-001 | Metadata-extractie; basisproef uitgevoerd, uitgebreide controles nog open |
-| Documentbeheer | UC-002, UC-004, UC-005 | Part-identiteit, onafhankelijke documentversies, openen en bronrelaties; [[ISSUES#ISS-001]] onderzoeken |
+| Documentbeheer | UC-002, UC-004, UC-005 | Part-identiteit, onafhankelijke documentversies, openen en bronrelaties; [[To Do Lijst - Codex Agent#ISS-001]] onderzoeken |
 | Versiehistorie en feedback | UC-011, UC-003, UC-012 | Part versions, Logbook, Print Reports en attachments per versie |
 | Latere baselines | UC-010 | Snapshotfunctie later opnieuw uitwerken |
 | Bibliotheek | UC-006, UC-007, UC-008 | Visueel browsen, tags en zoeken; werken met reeds beschikbare data |

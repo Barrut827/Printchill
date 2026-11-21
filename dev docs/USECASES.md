@@ -25,6 +25,9 @@
 - [[#UC-016 Design state en maturity toepassen]]
 - [[#UC-017 Legacybestanden handmatig aan een Part koppelen]]
 - [[#UC-018 Een printontwerp aanpassen en de eerdere print reproduceren]]
+- [[#UC-019 Parts in collecties organiseren]]
+- [[#UC-020 Part-wiki schrijven, aan versies koppelen en terugvinden]]
+- [[#UC-021 Related objects van een Part aanvullen of vervangen]]
 - [Architectuur en definities](Architecture.md)
 - [[#Volledig use-casetemplate]]
   - [UC-XXX — Template: werkwoord + gebruikersdoel](#UC-XXX%20Werkwoord%20%2B%20gebruikersdoel)
@@ -60,6 +63,9 @@ Voeg hier bij elke nieuwe use case een rij toe en gebruik hetzelfde ID in de det
 | UC-016 | Design state en maturity toepassen | Engineer / maker | In uitvoering | Must | Prototype v4 | UC-006, UC-011 |
 | UC-017 | Legacybestanden handmatig aan een Part koppelen | Engineer / designer / hobbyist | Concept | Nog te bepalen | Nog te bepalen | UC-002, UC-011 |
 | UC-018 | Een printontwerp aanpassen en de eerdere print reproduceren | Engineer / maker | Concept | Nog te bepalen | MVP-scenario | UC-003, UC-004, UC-005, UC-011, UC-015, UC-017 |
+| UC-019 | Parts in collecties organiseren | Engineer / maker | In ontwikkeling | Must | MVP 0.3.0 | UC-006, UC-008, UC-015 |
+| UC-020 | Part-wiki schrijven, aan versies koppelen en terugvinden | Engineer / maker | Ter beoordeling | Nog te bepalen | Volgende MVP; nummer nog te bepalen | UC-002, UC-006, UC-008, UC-011, UC-015 |
+| UC-021 | Related objects van een Part aanvullen of vervangen | Engineer / maker | Geïmplementeerd | Must | MVP 0.3.4 | UC-002, UC-005, UC-011, UC-017 |
 
 
 ### UC-001 SolidWorks-metadata read-only naar JSON exporteren
@@ -370,6 +376,16 @@ De engineer kiest in de SolidWorks-ribbon **Save to Printchill** voor een nieuw 
 
 ### UC-003 Print Report van een printpoging vastleggen
 
+**Correctie MVP 0.3.5.** Enter in de parameterzoeker, parameterlijst, suggesties of andere enkelregelige reportvelden mag geen rapport bewaren/sluiten. In de parameterkiezer kiest/voegt Enter een beschikbare selectie toe; in Notes blijft Enter een nieuwe regel. Alleen de expliciete Save-knop bewaart. Elk opgeslagen report krijgt een **Edit**-knop, ook in het algemene reportoverzicht. Bewerken behoudt rapport-ID, oorspronkelijke printdatum, Part number en Part version. Afbeeldingen, metingen en parameter-/suggestiesnapshots worden geladen; Save changes werkt hetzelfde report bij. Annuleren bewaart hoogstens een afzonderlijk editconcept. Een gelijktijdige wijziging wordt niet stil overschreven.
+
+**Feedback MVP 0.3.4.** Een nieuw report toont standaard geen procesparameters. De engineer ziet dat support slecht loskomt, voegt foto's en een toelichting toe, kiest **Add parameter**, zoekt **Support Z offset** en voegt de beschikbare 3MF-parameter toe. De regel toont de geregistreerde waarde, bijvoorbeeld **0.2 mm**, met daarnaast een leeg veld **Suggestion**. De engineer vult **0.15** in. De suggestie wordt bij het report bewaard en verandert geen 3MF of Part version. Ontbrekende parameters worden niet verzonnen; eerdere reports blijven leesbaar.
+
+**Vervolgfeedback 2026-11-21 — MVP 0.3.3.** Meetregels bevatten naast nummer en positie een aparte nominale waarde uit het 3D-model en een gemeten waarde. De nominale waarde is invoerbaar en blijft behouden in concept, report en back-up; oudere regels zonder nominale waarde blijven leesbaar. Reportvelden en dropdowns zijn per rij even hoog en uitgelijnd. Herhaalde toelichting onder de velden vervalt.
+
+**Gebruikersfeedback 2026-11-21 — MVP 0.3.2.** Printer en geselecteerd materiaal vooraf invullen uit de gekozen 3MF; aanpasbaar voor de daadwerkelijke print. Lege/null-procesparameters niet tonen of als lege velden opnemen in nieuwe snapshots. Nul en false blijven geldig; profielslotnummers blijven herkenbaar. Metingen vormen een tabel met drie kolommen: automatisch M1/M2/M3, vrij ingevulde gemeten positie en gemeten waarde met eenheid. Een plusknop voegt de volgende regel toe. Volledig lege regels worden overgeslagen; half ingevulde regels vragen correctie. Concepten, opgeslagen reports en back-ups behouden de meetregels; oude vrije meetnotities blijven leesbaar.
+
+**Correctie MVP 0.3.1.** Afbeeldingen krijgen bovenaan een zichtbaar plakvak en Paste from clipboard. Ctrl+V wordt tijdens het geopende report documentbreed opgevangen, met ondersteuning voor klembord-items én bestanden; tekst blijft normaal in invoervelden plakken. Voorbeeld/teller en fouten staan bij het plakvak. Save wacht op lopende afbeeldingimport; de handler wordt bij sluiten opgeruimd. Automatische Chrome-test gebruikt het echte klembord en de toetsen Ctrl+V; gebruikersacceptatie blijft open.
+
 **MVP-vervolg 0.2.6.** Reportinvoer bevat meetverslag met eenheden, geselecteerde 3MF-projectparameters, afbeeldingen via upload/plakken en herstelbare concepten. Bewaren verandert de Part version niet. De oorspronkelijke parameterarrays blijven herkenbaar; effectieve objectoverrides worden niet berekend. Geautomatiseerde regressiecontrole is aanwezig; handmatige acceptatie van de volledige reportflow blijft open.
 
 [Back to top](#Inhoudsopgave)
@@ -382,7 +398,7 @@ De engineer kiest in de SolidWorks-ribbon **Save to Printchill** voor een nieuw 
 | --- | --- |
 | ID | UC-003 |
 | Titel | Print Report van een printpoging vastleggen |
-| Type | CRUD-C / CRUD-R |
+| Type | CRUD-C / CRUD-R / CRUD-U |
 | Status | Concept |
 | Prioriteit | Nog te bepalen |
 | Beoogde release | Nog te bepalen |
@@ -424,15 +440,15 @@ Na de print uit [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorber
 
 | Stap | Actoractie | Systeemgedrag |
 | --- | --- | --- |
-| 1 | Meet het geprinte onderdeel en constateert afwijkingen | Biedt zoeken naar het part aan |
+| 1 | Beoordeelt een print en constateert bijvoorbeeld dat support slecht loskomt | Biedt zoeken naar het part aan |
 | 2 | Zoekt het part en selecteert de daadwerkelijk geprinte Part version | Toont de vastgelegde documentversies; verwijst naar UC-011 als de Part version nog niet is geregistreerd |
 | 3 | Kiest Create print run bij de gebruikte Part version | Opent een Print Report met notities en meetresultaten voor één printpoging |
-| 4 | Bekijkt de procesgegevens | Toont bovenaan laaghoogte, temperatuur, materiaal, walls, binnen- en buitenwandsnelheid, retractie-instellingen en first-layer speed uit het 3MF |
+| 4 | Bekijkt de reportcontext | Vult printer en materiaal uit de gekozen 3MF in; toont standaard geen procesparameterregels |
 | 5 | Vult gemeten maten en afwijkingen ten opzichte van het 3D-model in | Neemt waarden, eenheden en notities op in het rapport |
 | 6 | Kopieert screenshots uit SolidWorks en Bambu Studio en plakt met Ctrl+V | Voegt de afbeeldingen aan het rapport toe |
 | 7 | Uploadt een foto van het geprinte part | Toont de foto als bijlage |
-| 8 | Kiest + bij de parametertabel en zoekt een aanvullende parameter | Toont alle gevonden 3MF-parameters en filtert op de zoekopdracht |
-| 9 | Selecteert de gewenste parameter | Voegt de parameter met waarde en context aan de tabel toe |
+| 8 | Kiest Add parameter en zoekt Support Z offset | Zoekt op herkenbare naam en interne sleutel binnen de ingevulde parameters van de gekozen 3MF |
+| 9 | Selecteert de parameter, kiest Add en vult bij Suggestion bijvoorbeeld 0.15 in | Toont de geregistreerde waarde met eenheid, bijvoorbeeld 0.2 mm, en bewaart de suggestie apart |
 | 10 | Kiest Save print run en sluit het venster | Bewaart het Print Report bij de gebruikte Part version, met Part-, 3MF- en eventuele plaatcontext |
 
 #### Alternatieve scenario’s
@@ -461,6 +477,7 @@ Na de print uit [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorber
 - Een printpoging mag succesvol, mislukt of afgebroken zijn; een Part version alleen bewijst geen succes.
 - De gebruiker bevestigt de revisie wanneer de laatste opgeslagen versie afwijkt van het geprinte onderdeel.
 - Parameterwaarden behouden hun naam, eenheid en beschikbare object-, materiaal- of plaatcontext.
+- Alleen expliciet toegevoegde parameters worden als bronwaarden opgenomen. Een Suggestion is gebruikersfeedback, geen wijziging van de bronwaarde, het 3MF-project of een Part version.
 - Metingen worden met eenheden en de referentiemaat of beschreven afwijking vastgelegd.
 
 #### Gegevens en relaties
@@ -484,15 +501,20 @@ Na de print uit [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorber
 | ID | Gegeven | Wanneer | Dan | Verificatie |
 | --- | --- | --- | --- | --- |
 | UC-003-AC-01 | Geprinte revisie met 3MF | Gebruiker kiest Create print run | Rapport opent met de geselecteerde broncontext | Niet uitgevoerd |
-| UC-003-AC-02 | Beschikbare procesparameters | Rapport wordt geopend | De genoemde standaardparameters verschijnen bovenaan met waarden en context | Niet uitgevoerd |
-| UC-003-AC-03 | Metingen en notities | Gebruiker vult het rapport in | Waarden, eenheden en afwijkingen zijn vastgelegd | Niet uitgevoerd |
-| UC-003-AC-04 | Screenshot op klembord en fotobestand | Gebruiker plakt en uploadt | Beide afbeeldingen verschijnen en blijven na opslaan beschikbaar | Niet uitgevoerd |
-| UC-003-AC-05 | Aanvullende parameter in 3MF | Gebruiker zoekt via + en selecteert | Parameter en waarde verschijnen in de tabel | Niet uitgevoerd |
+| UC-003-AC-02 | Beschikbare procesparameters | Een nieuw rapport opent | De parametersectie is leeg; alleen expliciet via Add parameter toegevoegde parameters verschijnen | Gebruikersacceptatie open |
+| UC-003-AC-03 | Report met meettabel | Gebruiker vult bij M1 positie, nominale modelwaarde en gemeten waarde in, voegt M2 toe, heropent het concept en bewaart | Automatische unieke nummers en afzonderlijke nominale/gemeten waarden met eenheden blijven behouden; oudere regels zonder nominale maat blijven leesbaar; lege regels worden overgeslagen | Automatische regressie; gebruikersacceptatie open |
+| UC-003-AC-04 | Screenshot op klembord en fotobestand | Gebruiker plakt met Ctrl+V vanuit een reportveld of plakvak, gebruikt Paste from clipboard of uploadt | Afbeeldingen verschijnen direct en blijven in concept en opgeslagen report beschikbaar; tekst plakt normaal; fouten staan bij het plakvak | Automatische Chrome-regressie in reports.test.mjs en ui.test.mjs; gebruikersacceptatie open |
+| UC-003-AC-05 | Support laat slecht los; support-Z-parameter bestaat in de gekozen 3MF | Engineer voegt foto/notitie toe, zoekt Support Z offset via Add parameter, voegt de parameter toe en vult Suggestion in | Report toont bronwaarde met eenheid en bewaart de suggestie apart; heropenen en back-up behouden beide; bronbestanden veranderen niet | Gebruikersacceptatie open |
 | UC-003-AC-06 | Volledig rapport | Gebruiker bewaart en heropent | Inhoud en bijlagen verwijzen naar de gebruikte Part version en daarin vastgelegde 3MF-versie | Niet uitgevoerd |
 | UC-003-AC-07 | Oudere geprinte revisie | Gebruiker selecteert deze voor registratie | Rapport wordt aan die revisie gekoppeld | Niet uitgevoerd |
 | UC-003-AC-08 | Opslagfout | Gebruiker kiest Save print run | Invoer blijft beschikbaar voor een nieuwe poging | Niet uitgevoerd |
 | UC-003-AC-09 | Twee printpogingen met dezelfde Part version | Gebruiker maakt twee rapporten | Afzonderlijke rapport-ID’s verwijzen naar dezelfde vaste combinatie | Niet uitgevoerd |
 | UC-003-AC-10 | Mislukte of afgebroken print | Gebruiker registreert resultaat | Rapport bewaart de uitkomst zonder de Part version te wijzigen of succes te suggereren | Niet uitgevoerd |
+| UC-003-AC-11 | Gekozen historische 3MF met printerprofiel en toegewezen filamenten | Report openen | Printermodel en geselecteerde materialen zijn vooraf ingevuld uit die revisie en blijven aanpasbaar; onbekende gegevens worden niet verzonnen | Automatische regressie; gebruikersacceptatie open |
+| UC-003-AC-12 | Null/lege en geldige nul/false-parameters | Parameters bekijken, toevoegen en report bewaren | Alleen ingevulde waarden verschijnen; 0/false en oorspronkelijke profielslotnummers blijven herkenbaar; oude snapshots worden niet herschreven | Automatische regressie; gebruikersacceptatie open |
+| UC-003-AC-13 | Open nieuw of bestaand report | Engineer drukt Enter in parameterzoeker/lijst, Suggestion of een enkelregelig veld | Geen report-submit of sluiten; parameterselectie blijft bruikbaar; Notes ondersteunt nieuwe regels; alleen expliciete Save bewaart | Automatische browserregressie; gebruikersacceptatie open |
+| UC-003-AC-14 | Opgeslagen report met bronversie, foto's en meetgegevens | Engineer kiest Edit en Save changes | Eén report met hetzelfde ID, printdatum en broncontext wordt aangepast; inhoud en bijlagen blijven behouden; geen nieuwe printpoging of Part version | Automatische opslag-/browserregressie; gebruikersacceptatie open |
+| UC-003-AC-15 | Twee vensters bewerken hetzelfde report | Eén venster bewaart, daarna probeert het verouderde venster te bewaren | Conflict wordt gemeld; opgeslagen data wordt niet stil overschreven; eigen concept blijft beschikbaar tot herladen | Automatische opslagregressie; gebruikersacceptatie open |
 
 #### Afhankelijkheden en afbakening
 
@@ -750,7 +772,7 @@ De engineer opent een bestaand bestand via [UC-004](#UC-004%20Een%20bestaand%20p
 | --- | --- | --- | --- | --- |
 | A1 | 1 | Wijziging betreft printinstellingen | Volg het onderstaande Bambu Studio-scenario | Nieuwe 3MF-revisie geregistreerd |
 | A2 | 3 | Partnummer is onbekend in de database | Vervolg registratie van het part via [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen) | Hervat na registratie van de broncontext |
-| A3 | 5 | Engineer wil nieuwe geometrie in een bestaand Bambu-project herladen | Raadpleeg [[ISSUES#ISS-001]] over Reload from disk bij een gewijzigde STL-naam | Afhandeling wordt na de praktijktest bepaald |
+| A3 | 5 | Engineer wil nieuwe geometrie in een bestaand Bambu-project herladen | Raadpleeg [[To Do Lijst - Codex Agent#ISS-001]] over Reload from disk bij een gewijzigde STL-naam | Afhandeling wordt na de praktijktest bepaald |
 
 ##### Bambu Studio-scenario A1
 
@@ -819,7 +841,7 @@ De engineer opent een bestaand bestand via [UC-004](#UC-004%20Een%20bestaand%20p
 - **Gerelateerde use cases:** [UC-002](#UC-002%20Part%20aanmaken%2C%20reviseren%20en%20voorbereiden%20voor%20printen) voor eerste registratie en [UC-003](#UC-003%20Print%20Report%20van%20een%20printpoging%20vastleggen) voor printfeedback.
 - **Afbakening:** ontwerpwijzigingen gebeuren in SolidWorks, printinstellingen worden in Bambu Studio gewijzigd.
 - **Ontwerpbesluiten:** revisiebeleid en detectie uitwerken in [[DJF]], save-detectie onderzocht in [[3MF_METADATA_RESEARCH]].
-- **Planning:** nog te bepalen in [[ROADMAP]], Reload from disk opvolgen via [[ISSUES#ISS-001]].
+- **Planning:** nog te bepalen in [[ROADMAP]], Reload from disk opvolgen via [[To Do Lijst - Codex Agent#ISS-001]].
 
 #### Open vragen en aannames
 
@@ -829,7 +851,7 @@ De engineer opent een bestaand bestand via [UC-004](#UC-004%20Een%20bestaand%20p
 | UC-005-Q-02 | Betekent PRC part version ID bij een 3MF-save een partrevisie, projectrevisie of overkoepelende registratie? | Nog te bepalen | Besluit: PRC Part version is de numerieke overkoepelende registratie; documentrevisies blijven onafhankelijk, zie UC-011 |
 | UC-005-Q-03 | Welke map wordt gevolgd en hoe worden saves met identieke inhoud en herhaalde events behandeld? | Nog te bepalen | Open |
 | UC-005-Q-04 | Hoe blijft de vorige 3MF-revisie beschikbaar bij Save naar hetzelfde pad? | Nog te bepalen | Open |
-| UC-005-Q-05 | Werkt Reload from disk bij een nieuw geëxporteerde STL met andere naam en hoe blijven slicerinstellingen behouden? | Nog te bepalen | Open, [[ISSUES#ISS-001]] |
+| UC-005-Q-05 | Werkt Reload from disk bij een nieuw geëxporteerde STL met andere naam en hoe blijven slicerinstellingen behouden? | Nog te bepalen | Open, [[To Do Lijst - Codex Agent#ISS-001]] |
 
 #### Verificatieresultaat
 
@@ -1158,13 +1180,13 @@ Gebruiker kiest tagbewerking op een Part-kaart of meerdere geselecteerde Parts.
 | Prioriteit | Nog te bepalen |
 | Beoogde release | Nog te bepalen |
 | Eigenaar | Nog te bepalen |
-| Documentrevisie | 0.1 |
-| Laatst gewijzigd | 2026-11-15 |
+| Documentrevisie | 0.2 |
+| Laatst gewijzigd | 2026-11-20 |
 | Goedkeuring | Nog niet goedgekeurd |
 
 #### Doel en waarde
 
-Via één zoekbalk en optionele geavanceerde filters de juiste Parts vinden en dezelfde zoekopdracht later herhalen.
+Via één zoekbalk en optionele geavanceerde filters de juiste Parts vinden en dezelfde zoekopdracht later herhalen. De geplande uitbreiding UC-020 doorzoekt ook opgeslagen wiki-inhoud vanuit diezelfde linkerzoekbalk.
 
 #### Actoren
 
@@ -1194,7 +1216,7 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 
 | Stap | Actoractie | Systeemgedrag |
 | --- | --- | --- |
-| 1 | Typt een naam of nummer in de ene zoekbalk | Zoekt direct in partnaam en partnummer |
+| 1 | Typt tekst in de zoekbalk in de linkerzijbalk | Zoekt in partnaam en partnummer; met UC-020 ook in opgeslagen paginatitels en wiki-inhoud, met herkenbare wiki-treffers |
 | 2 | Typt #roboticarm + PETG | Behandelt # als tagzoekactie en + als EN-combinatie; toont geïnterpreteerde criteria |
 | 3 | Opent geavanceerde filters | Biedt alle zoekbare toegekende attributes en bestandstypen aan |
 | 4 | Kiest geprint, materiaal PETG en afgelopen drie dagen | Filtert op Print Report-context; materiaal en printmoment horen bij dezelfde passende printpoging |
@@ -1218,7 +1240,8 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 
 #### Businessregels
 
-- Standaard zoektekst zoekt partnaam en partnummer; # schakelt tagzoeken in.
+- Standaard zoektekst zoekt partnaam en partnummer; UC-020 breidt dit uit met opgeslagen paginatitels en wiki-inhoud. # blijft een tagzoekactie en zoekt niet naar toevallig dezelfde tekst in de wiki.
+- De wiki-uitbreiding is gepland, niet beschikbaar gesteld door deze documentwijziging. UC-020 beschrijft paginabeheer, versiekoppelingen en wiki-treffers; UC-008 blijft eigenaar van queryoperatoren, filters en opgeslagen zoekcriteria.
 - + combineert criteria met EN. PETG moet als materiaalcriterium herkenbaar worden geïnterpreteerd of expliciet worden bevestigd.
 - Alle toegekende attributes moeten via geavanceerd zoeken selecteerbaar zijn, mits de gebruiker ze mag zien.
 - Relatieve datumfilters worden opnieuw geëvalueerd; definitie van drie dagen en tijdzone wordt expliciet vastgesteld.
@@ -1249,6 +1272,7 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 | UC-008-AC-04 | Part met verschillende printpogingen | Geprint in drie dagen EN PETG geselecteerd | Alleen een PETG-poging binnen de periode telt als match | Niet uitgevoerd |
 | UC-008-AC-05 | Opgeslagen relatieve query | Later opnieuw geopend | Periode schuift mee; actuele resultaten worden berekend | Niet uitgevoerd |
 | UC-008-AC-06 | Ongeldige syntax | Gebruiker zoekt | Duidelijke fout; geen ongemerkte wijziging van querybetekenis | Niet uitgevoerd |
+| UC-008-AC-07 | Zoekwoord komt alleen in opgeslagen wiki-inhoud voor | De linkerzoekbalk zoekt met actieve filters | Bijbehorend Part verschijnt met wiki-context; + en filters blijven volgens UC-008 werken | Gepland; zie UC-020-AC-07 en AC-08 |
 
 #### Afhankelijkheden en afbakening
 
@@ -1270,12 +1294,14 @@ Gebruiker typt in de zoekbalk of opent geavanceerde filters.
 | Datum | Acceptatiecriteria | Controle en resultaat | Bewijs of beperking |
 | --- | --- | --- | --- |
 | 2026-11-15 | UC-008-AC-01 t/m AC-06 | Niet uitgevoerd | Gebruikersworkflow uitgewerkt; geen app-test |
+| 2026-11-20 | UC-008-AC-07 | Geplande wiki-uitbreiding beschreven; geen functionele test | Samenhang met UC-020 gecontroleerd |
 
 #### Wijzigingshistorie
 
 | Documentrevisie | Datum | Wijziging | Auteur |
 | --- | --- | --- | --- |
 | 0.1 | 2026-11-15 | Concept volgens template; eerdere gebruikersinhoud behouden | Gebruiker, redactie Codex |
+| 0.2 | 2026-11-20 | Geplande wiki-inhoud aan de linkerzoekbalk toegevoegd; details en criteria gekoppeld aan UC-020 | Gebruiker, redactie Codex |
 
 [Back to top](#Inhoudsopgave)
 
@@ -2257,7 +2283,7 @@ Een engineer, designer of hobbyist weet dat drie verschillend genaamde legacybes
 #### Succespad
 
 1. De gebruiker maakt een Part aan met een herkenbare naam. PrintChill kent een Part number toe en opent de lege kaart.
-2. Op de kaart kiest de gebruiker **Add object** en sleept de drie bestanden samen naar het venster of selecteert ze via de bestandskiezer.
+2. Bij import toont PRC drie afzonderlijke velden: **CAD**, **STL** en **3MF**, elk met **Add file** en drag-and-drop. De gebruiker kiest bijvoorbeeld eerst STL, daarna CAD in een andere map en later 3MF; eerdere selecties blijven staan. Eén bestand of twee bestanden volstaan ook. Aanvullen of vervangen na registratie volgt UC-021.
 3. PrintChill toont per bestand de oorspronkelijke naam en de herkende rol (CAD, STL of 3MF). De gebruiker controleert de selectie.
 4. Via **Rename** krijgt de gebruiker per bestand een naamvoorstel met Part number, Part-naam, versieaanduiding en oorspronkelijke extensie.
 5. Na bevestiging toont versie 001 de drie beheerde kopieën met hun eigen documentrevisies. De originelen behouden hun naam. Latere wijzigingen volgen UC-011.
@@ -2305,6 +2331,251 @@ Bij **Opslaan als** buiten de werkmap kan de engineer via **Andere 3MF kiezen** 
 [Back to top](#Inhoudsopgave)
 
 
+
+### UC-019 Parts in collecties organiseren
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-019 |
+| Actor | Engineer / maker |
+| Status | In ontwikkeling — MVP 0.3.0; gebruikersvalidatie open |
+| Doel | Parts in meerdere benoemde verzamelingen terugvinden zonder bestanden te dupliceren |
+
+#### Hoofdscenario
+
+1. Maak een collectie aan in de linkerzijbalk.
+2. Open een Part en kies onder Tags bij **Collected by:** de gewenste collecties.
+3. Bewaar de selectie. De Part version verandert niet.
+4. Selecteer een collectie in de zijbalk; de bibliotheek toont uitsluitend de bijbehorende Parts, gecombineerd met de actieve zoekfilters.
+5. Kies All parts om de collectieselectie op te heffen.
+
+#### Businessregels en uitzonderingen
+
+- Een Part kan in meerdere collecties voorkomen. Lidmaatschap geldt voor het Part number.
+- Namen zijn verplicht en uniek zonder onderscheid tussen hoofdletters en kleine letters.
+- Hernoemen behoudt relaties. Verwijderen verwijdert alleen de groepering en vraagt bevestiging; Parts en bestanden blijven bestaan.
+- Collecties en lidmaatschappen worden in SQLite bewaard en meegenomen in back-up en herstel.
+- Bij merge worden lidmaatschappen van vervangen Parts uit de back-up overgenomen; niet vervangen Parts behouden hun lidmaatschappen. Gelijke collectienamen worden samengevoegd.
+
+#### Acceptatiecriteria
+
+- [ ] UC-019-AC-01: Een Part kan in twee collecties staan; beide filters vinden hetzelfde Part.
+- [ ] UC-019-AC-02: Herstart behoudt namen en lidmaatschappen zonder extra Part version.
+- [ ] UC-019-AC-03: Hernoemen en verwijderen laten geregistreerde Parts en bestanden intact.
+- [ ] UC-019-AC-04: Back-up, afzonderlijk herstel en merge behouden de indeling volgens bovenstaande regels.
+
+#### Afbakening
+
+Vlakke collecties; geen hiërarchie, assemblies of SolidWorks-relaties. Afhankelijk van UC-006, UC-008 en UC-015.
+
+### UC-020 Part-wiki schrijven, aan versies koppelen en terugvinden
+
+[[#Inhoudsopgave|Back to top]]
+
+**Titel:** Part-wiki schrijven, aan versies koppelen en terugvinden
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-020 |
+| Titel | Part-wiki schrijven, aan versies koppelen en terugvinden |
+| Type | CRUD-C / CRUD-R / CRUD-U / CRUD-D |
+| Status | Ter beoordeling; niet geïmplementeerd |
+| Prioriteit | Nog te bepalen |
+| Beoogde release | Volgende MVP; nummer nog te bepalen |
+| Eigenaar | Producteigenaar |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-20 |
+| Goedkeuring | Gebruiker kiest BlockNote en Part-gebonden pagina's met optionele versieverwijzingen; onderstaande detailuitwerking nog te beoordelen |
+
+#### Doel en waarde
+
+Instructies, ontwerpkeuzes en een handmatig designlogboek bij één Part number vastleggen en terugvinden. De Wiki-tab biedt een verzorgde omgeving met pagina's en subpagina's, geïnspireerd op Docmost/Confluence, met BlockNote als editor. De technische History met bestandsrevisies blijft afzonderlijk bestaan.
+
+#### Actoren
+
+| Rol | Betrokkenheid |
+| --- | --- |
+| Primaire actor | Engineer / maker die documentatie schrijft of raadpleegt |
+| Ondersteunend systeem | PRC beheert pagina's, revisies, afbeeldingen, versieverwijzingen en zoeken |
+
+#### Trigger en voorwaarden
+
+- De gebruiker opent Wiki bij een bestaand Part, of zoekt tekst via de linkerzoekbalk.
+- Een Part number bestaat; geregistreerde bestanden of versie 001 zijn niet verplicht om algemene documentatie te maken.
+- Een versieverwijzing kan alleen worden gelegd naar een bestaande Part version van hetzelfde Part.
+
+#### Resultaat bij succes
+
+Pagina's blijven na herstart en herstel beschikbaar onder hun Part number. Versiegebonden pagina's of secties hebben herkenbare, klikbare badges in de kantlijn. De linkerzoekbalk vindt de opgeslagen inhoud en opent de relevante pagina of sectie.
+
+#### Garanties bij mislukking
+
+- Een mislukte save overschrijft geen eerdere paginarevisie; PRC meldt dat de wijziging niet is opgeslagen en houdt het concept beschikbaar voor opnieuw proberen.
+- Wiki-acties wijzigen geen CAD-, STL-, 3MF- of Part version. Verwijderen is herstelbaar; indexfouten wissen geen broninhoud.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Opent Wiki bij een Part number | Toont de eigen paginaboom, leesweergave en New page; wisselen van Part version vervangt de wiki niet |
+| 2 | Maakt een pagina of subpagina, bijvoorbeeld Montage-instructies of Design logbook | Bewaart de pagina onder hetzelfde Part; maakt een stabiele identiteit en bewaakt een geldige hiërarchie |
+| 3 | Schrijft met BlockNote | Biedt koppen, lijsten/checklists, tabellen, links en afbeeldingen via upload of plakken; toont concept-/opslagstatus |
+| 4 | Koppelt een pagina, subpagina of gemarkeerde sectie aan versie 002, eventueel ook 003 | Toont de expliciete versieverwijzingen in de kantlijn, ook bereikbaar via toetsenbord; algemene inhoud krijgt geen impliciete versie |
+| 5 | Kiest Save | Legt een eigen paginarevisie inclusief versieverwijzingen en bijlagen vast; maakt de opgeslagen inhoud direct doorzoekbaar |
+| 6 | Klikt op een versie-badge | Opent de exacte Part version; daar zijn verwijzingen terug naar de betreffende wiki-pagina's en secties zichtbaar |
+| 7 | Zoekt een term uit de wiki via de bestaande linkerzoekbalk | Toont het bijbehorende Part één keer, met paginatitel, tekstfragment en eventuele versiecontext bij de wiki-treffers |
+| 8 | Kiest een wiki-treffer | Opent de pagina bij het gevonden blok/de sectie; een gewone Part-treffer blijft Part details openen |
+
+#### Alternatieve scenario's
+
+| ID | Vanaf stap | Voorwaarde | Verloop |
+| --- | --- | --- | --- |
+| A1 | 4 | Algemene instructie | Geen versieverwijzing nodig; pagina blijft algemeen bij het Part number |
+| A2 | 4 | Inhoud betreft meerdere versies | Meerdere expliciete badges mogelijk; geen automatische koppeling aan nieuwe versies |
+| A3 | 5 | Eerdere tekst nodig | Opent paginageschiedenis; herstel maakt een nieuwe paginarevisie en behoudt de bestaande geschiedenis |
+| A4 | 2–5 | Pagina wordt verplaatst, hernoemd of verwijderd | Verplaatsen binnen dezelfde Part en hernoemen behouden identiteit; verwijderen verplaatst pagina en subpagina's na bevestiging naar de prullenbak |
+| A5 | 7 | Gebruiker combineert wiki-tekst met #tag, collectie of een ander filter | Past de zoekregels uit UC-008 toe op hetzelfde Part; opgeslagen zoekopdrachten bewaren criteria, geen vaste trefresultaten |
+
+#### Fouten en uitzonderingen
+
+| ID | Foutconditie | Systeemreactie en herstel |
+| --- | --- | --- |
+| E1 | Opslag of afbeeldingupload mislukt | Toont welke wijziging niet is bewaard; vorige revisie blijft bruikbaar; opnieuw proberen vanuit het concept |
+| E2 | Pagina intussen gewijzigd in een ander venster | Blokkeert stil overschrijven en biedt de actuele revisie naast het eigen concept ter beoordeling |
+| E3 | Sectie of versiedoel ontbreekt, bijvoorbeeld na back-upmerge | Markeert de verwijzing als niet beschikbaar; kiest niet automatisch een andere sectie of de nieuwste Part version |
+| E4 | Wiki-index ontbreekt of is onbruikbaar | Meldt dat wiki-resultaten onvolledig zijn en bouwt de index opnieuw op; presenteert metadataresultaten niet als volledige wiki-zoekresultaten |
+
+#### Businessregels
+
+- Part number is eigenaar van de pagina. Een versieverwijzing geeft context; het is geen eigendomsoverdracht of kopie naar een Part version.
+- Pagina, subpagina en gemarkeerde sectie kunnen elk nul, één of meerdere expliciete versieverwijzingen hebben. Een verwijzing van een bovenliggende pagina wordt niet stilzwijgend op alle kinderen toegepast.
+- Secties worden met stabiele blok-ID's geïdentificeerd. Een kop hernoemen of een blok verplaatsen mag de koppeling niet verbreken. Dupliceren krijgt nieuwe identiteiten; verwijzingen worden alleen expliciet overgenomen.
+- Een koppeling naar Part version 002 bevriest de tekst niet. Paginarevisies zijn een eigen historie; de technische Part History blijft ongewijzigd.
+- Standaard zoeken doorzoekt actuele opgeslagen pagina's, niet onopgeslagen concepten, prullenbakinhoud of alle historische paginarevisies.
+- Een vrije zoekterm mag in Partmetadata of wiki-inhoud voorkomen. + combineert termen op hetzelfde Part, eventueel over verschillende pagina's; # blijft een tagcriterium. Resultaten vermelden de concrete pagina's die tekst leveren, zonder te suggereren dat alle termen in één sectie staan.
+- Bijlagen horen bij paginarevisies; wiki-afbeeldingen zijn eigen beheerde kopieën en worden meegenomen in back-up/herstel.
+
+#### Gegevens en relaties
+
+| Gegeven | Gebruik | Invariant |
+| --- | --- | --- |
+| Wiki-pagina | Part number, titel, optionele ouderpagina en volgorde | Eén eigenaar; ouder behoort tot hetzelfde Part; geen cycli |
+| Paginarevisie | Titel, blokinhoud, versieverwijzingen, datum en revisienummer | Onveranderlijk na save; onafhankelijk van Part version |
+| Versieverwijzing | Pagina of blok → exacte Part version | Doelversie bestaat bij opslaan; geen verwijzing naar latest |
+| Bijlage | Paginarevisie → beheerde bestandsinhoud | Oude revisies blijven hun eigen bestanden terughalen |
+| Wiki-zoektreffer | Part, pagina, blok/sectie en tekstfragment | Verwijst naar actuele toegankelijke inhoud; index is herbouwbaar |
+
+#### Rechten en kwaliteitsvoorwaarden
+
+- **Toegang:** eerste uitwerking blijft lokaal en voor één gebruiker; backend valideert Part-, pagina-, blok- en bestandsrelaties. Een toekomstig rechtenmodel moet ook snippets en zoekresultaten afschermen.
+- **Consistentie:** inhoud, revisierelaties en zoekindex worden samen bijgewerkt. Herstart, archiveren, herstellen en back-upmerge mogen geen verouderde treffers achterlaten.
+- **Gebruiksgemak:** bewerken en lezen hebben een duidelijke status. Badges en zoektreffers werken via toetsenbord en klik; kantlijn/hover is niet de enige toegang.
+- **Prestaties en grenzen:** uploadlimieten, omvang van de testwiki en meetbare zoekreactietijd worden vóór implementatie vastgesteld. De wiki werkt zonder internet of externe zoekdienst.
+
+#### Acceptatiecriteria
+
+| ID | Gegeven | Wanneer | Dan | Verificatie |
+| --- | --- | --- | --- | --- |
+| UC-020-AC-01 | Part zonder bestanden | Gebruiker maakt een pagina met subpagina en herstart | Beide staan onder hetzelfde Part number; geen Part version aangemaakt | Niet uitgevoerd |
+| UC-020-AC-02 | Pagina met opmaak, tabel, checklist en geplakte afbeelding | Save en opnieuw openen | Inhoud, structuur en afbeelding blijven behouden | Niet uitgevoerd |
+| UC-020-AC-03 | Pagina en sectie met verwijzingen naar 002 en 003 | Badges en terugverwijzingen worden gevolgd | Exacte versies en juiste wiki-locaties openen; pagina blijft bij het Part number | Niet uitgevoerd |
+| UC-020-AC-04 | Gekoppelde sectie | Kop hernoemen, blok verplaatsen, dupliceren en oorspronkelijke sectie verwijderen | Hernoemen/verplaatsen behoudt koppeling; kopie krijgt nieuwe ID; verwijderd doel krijgt geen vervangende koppeling | Niet uitgevoerd |
+| UC-020-AC-05 | Twee opgeslagen paginarevisies | Oude revisie bekijken en herstellen | Herstel levert een nieuwe paginarevisie op; bestaande historie en Part versions blijven intact | Niet uitgevoerd |
+| UC-020-AC-06 | Twee vensters of mislukte save | Verouderd venster slaat op of opslag valt weg | Geen stil overschrijven; concept en vorige opgeslagen revisie blijven beschikbaar | Niet uitgevoerd |
+| UC-020-AC-07 | Unieke term alleen in een opgeslagen subpagina | Zoeken via de linkerzoekbalk en wiki-treffer kiezen | Part verschijnt met paginatitel/snippet; juiste pagina en blok worden geopend | Niet uitgevoerd |
+| UC-020-AC-08 | Termen op twee pagina's bij één Part en andere Parts met gedeeltelijke matches | Zoeken met +, #tag en collectie-/attribuutfilters; query bewaren en heropenen | Alleen hetzelfde Part voldoet aan alle criteria; criteria worden opnieuw geëvalueerd en treffers tonen hun bronpagina's | Niet uitgevoerd |
+| UC-020-AC-09 | Bestaande wiki-treffer | Tekst wijzigen, pagina verwijderen en later herstellen | Oude tekst/prullenbak verdwijnen uit standaardzoeken; herstelde actuele inhoud is weer vindbaar | Niet uitgevoerd |
+| UC-020-AC-10 | Wiki met oudere revisie, afbeelding en versieverwijzingen | Back-up apart herstellen en daarna een merge met overlappende Part numbers uitvoeren | Alle wiki-brondata en afbeeldingen herstellen; niet vervangen Parts behouden hun wiki; zoekresultaten en verwijzingen kloppen | Niet uitgevoerd |
+| UC-020-AC-11 | Opgeslagen wiki en ontbrekende/beschadigde index | Index herstellen en dezelfde query opnieuw uitvoeren | Zelfde actuele resultaten uit herbouwde index; tijdens herstel wordt onvolledigheid gemeld | Niet uitgevoerd |
+
+#### Afhankelijkheden en afbakening
+
+- **Afhankelijk van:** UC-002 (Part-identiteit), UC-006 (navigatie), UC-008 (zoeken), UC-011 (versiecontext) en UC-015 (back-up/herstel). Technische uitwerking: [[Architecture#Part-wiki met BlockNote en lokale zoekindex]].
+- **Eerste scope:** pagina's/subpagina's, blokeditor, afbeeldingen, eigen revisies, herstelbare verwijdering, versieverwijzingen en geïntegreerd zoeken.
+- **Later:** tegelijk samenwerken, comments, goedkeuringsworkflow, OCR/PDF-inhoud doorzoeken en vastgelegde wiki-revisies als instructiebewijs bij Print Reports. Geen Docmost-service of volledige Confluence-kloon.
+
+#### Open vragen en aannames
+
+| ID | Vraag | Eigenaar | Status |
+| --- | --- | --- | --- |
+| UC-020-Q-01 | Welke uploadgrenzen en representatieve volumes/reactietijden gelden voor acceptatie? | Producteigenaar / ontwikkelaar | Vaststellen vóór implementatie |
+| UC-020-Q-02 | Hoe lang worden concepten en prullenbakinhoud bewaard? | Producteigenaar | Open; eerdere opgeslagen revisies worden niet automatisch opgeschoond |
+
+#### Verificatieresultaat en wijzigingshistorie
+
+| Documentrevisie | Datum | Wijziging en verificatie |
+| --- | --- | --- |
+| 0.1 | 2026-11-20 | Gebruikerskeuze BlockNote, Part-eigendom, expliciete versieverwijzingen en wiki-zoeken uitgewerkt. Documentcontrole; geen implementatie of functionele acceptatie. |
+
+[[#Inhoudsopgave|Back to top]]
+
+### UC-021 Related objects van een Part aanvullen of vervangen
+
+[[#Inhoudsopgave|Back to top]]
+
+#### Metadata
+
+| Veld | Waarde |
+| --- | --- |
+| ID | UC-021 |
+| Titel | Related objects van een Part aanvullen of vervangen |
+| Type | CRUD-U |
+| Status | Geïmplementeerd; gebruikersacceptatie open |
+| Prioriteit | Must |
+| Beoogde release | MVP 0.3.4 |
+| Eigenaar | Producteigenaar |
+| Documentrevisie | 0.1 |
+| Laatst gewijzigd | 2026-11-21 |
+| Goedkeuring | Gebruiker vraagt Edit related objects bij de viewer; detailacceptatie nog open |
+
+#### Doel, actor en trigger
+
+De engineer vindt later een ontbrekende STL/CAD/3MF of wil een verkeerde koppeling vervangen. Vanuit **Related Objects** naast de viewer kiest de engineer **Edit related objects** bij de nieuwste Part version.
+
+#### Voorwaarden en resultaat
+
+- Een Part number bestaat, eventueel nog zonder geregistreerde bestanden.
+- Part number, metadata, collecties en oude reports blijven behouden. De nieuwe bestandscombinatie wordt als nieuwe Part version vastgelegd volgens UC-011; eerdere combinaties blijven onveranderd.
+
+#### Hoofdscenario
+
+| Stap | Actoractie | Systeemgedrag |
+| --- | --- | --- |
+| 1 | Kiest Edit related objects | Toont CAD-, STL- en 3MF-velden met bestaande bestandsnamen en de basisversie |
+| 2 | Kiest Add file bij een ontbrekende rol | Opent Windows-bestandskiezer voor die rol; andere velden blijven behouden |
+| 3 | Voegt in een volgende handeling nog een bestand toe, of sleept het op het juiste veld | Controleert rol en bewaart de selectie ter beoordeling; annuleerbare keuzes veranderen de registratie nog niet |
+| 4 | Vervangt eventueel een bestaande rol door een ander bestand | Toont de nieuwe selectie; niet gewijzigde rollen blijven in de combinatie |
+| 5 | Bevestigt | Controleert stabiele, leesbare bestanden en ongewijzigde basisversie; registreert één nieuwe combinatie en toont deze bij de viewer |
+
+#### Businessregels en uitzonderingen
+
+- Eén bestand per rol, geen verplichte volledige set. Dezelfde rol kan vóór bevestiging opnieuw worden gekozen.
+- Een lege Part krijgt bij de eerste bestandsregistratie 001. Aanvullen of vervangen maakt de volgende versie; gewijzigde rollen krijgen een volgende letterrevisie, nieuwe rollen beginnen bij A.
+- Identieke bestandsinhoud levert geen nieuwe Part version op. Niet geselecteerde rollen en alle historische bytes blijven behouden.
+- Een ongeldige rol, onleesbaar bestand, onderbroken upload of gewijzigde basisversie geeft een fout zonder gedeeltelijke versie. Selecties blijven waar mogelijk beschikbaar voor herstel.
+- Historische versies worden niet bewerkt. Een oude Bambu-werkkopie behoudt haar basis; eventuele latere bevestiging blijft de bestaande controle op verouderde basis volgen.
+- Annuleren wijzigt geen Part of report. Het wijzigen van naam/tags, assemblies en automatisch CAD/STL-herkomstbewijs vallen buiten deze use case.
+
+#### Acceptatiecriteria
+
+| ID | Situatie | Verwacht resultaat |
+| --- | --- | --- |
+| UC-021-AC-01 | Registreer eerst STL; voeg later CAD en 3MF toe | Zelfde Part number, nieuwe complete combinatie; oorspronkelijke versie blijft STL-only |
+| UC-021-AC-02 | Vervang alleen STL | Eén volgende Part version, STL-revisie telt op; CAD en 3MF blijven exact gelijk |
+| UC-021-AC-03 | Kies bestanden uit verschillende mappen in meerdere stappen, inclusief drag-and-drop | Eerdere selecties blijven behouden; een verkeerde rol wordt geweigerd |
+| UC-021-AC-04 | Annuleer of bied opnieuw dezelfde bytes aan | Geen nieuwe versie of gewijzigde historische bestanden |
+| UC-021-AC-05 | Basisversie verandert of één bestand is ongeldig | Geen gedeeltelijke registratie; duidelijke fout en mogelijkheid tot opnieuw beoordelen |
+| UC-021-AC-06 | Report bij oude versie en back-up na bestandswijziging | Report en historische bestanden blijven exact aan de oude combinatie gekoppeld en herstellen correct |
+
+#### Verificatie en afhankelijkheden
+
+Automatische regressie in `related-files.test.mjs` en `import.test.mjs`: aanvullen, vervangen, identieke bytes, versieconflict, ongeldige rol/3MF, uploadopruiming, historie en herstel; gebruikersacceptatie open. UC-017 beschrijft eerste registratie, UC-005 externe revisieworkflows en UC-011 de versie-invarianten. Deze use case beschrijft uitsluitend handmatig aanvullen/vervangen vanuit PRC. Technische opzet: [[Architecture]].
+
+[[#Inhoudsopgave|Back to top]]
 
 # UC Info & WoW
 ## Volledig use-casetemplate

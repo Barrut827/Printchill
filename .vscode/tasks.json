@@ -13,7 +13,7 @@
       "label": "PRC: Test functionaliteit",
       "type": "process",
       "command": "node.exe",
-      "args": ["--test", "store.test.mjs", "server.test.mjs", "release.test.mjs"],
+      "args": ["--test", "store.test.mjs", "server.test.mjs", "release.test.mjs", "collections.test.mjs", "report-data.test.mjs", "related-files.test.mjs"],
       "options": {"cwd": "${workspaceFolder}/MVP"},
       "problemMatcher": []
     },
@@ -21,7 +21,7 @@
       "label": "PRC: Test browserflow",
       "type": "process",
       "command": "node.exe",
-      "args": ["--test", "ui.test.mjs"],
+      "args": ["--test", "--test-concurrency=1", "ui.test.mjs", "reports.test.mjs", "import.test.mjs"],
       "options": {"cwd": "${workspaceFolder}/MVP"},
       "problemMatcher": []
     },

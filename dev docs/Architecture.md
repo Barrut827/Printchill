@@ -1,5 +1,42 @@
 # PrintChill — Architectuur en begrippen
 
+## MVP 0.3.5 — expliciet bewaren en reports bewerken
+
+Reportvelden onderscheppen Enter vóór impliciete form-submit: de parameterkiezer gebruikt Enter voor selectie/toevoegen, Notes voor nieuwe regels en andere tekstvelden voor invoer zonder Save. Een knop kan nog expliciet met Enter worden geactiveerd. Submit zonder expliciete Save-submitter wordt geblokkeerd; listeners leven alleen zolang het report openstaat.
+
+Edit gebruikt hetzelfde reportformulier met de opgeslagen bronversie, afbeeldingen, metingen, parameterwaarden en suggesties. Opgeslagen parameterwaarden krijgen bij laden voorrang boven opnieuw uitgelezen metadata. Editconcepten hebben een eigen sleutel per workspace en report-ID. De backend valideert met dezelfde regels als bij aanmaak en werkt de bestaande SQL-rij transactioneel bij; ID, oorspronkelijke printdatum en Part/version-relatie blijven ongewijzigd. Een SHA-256-token over het oorspronkelijke report controleert gelijktijdige edits zonder grote afbeeldingen tweemaal te versturen. Conflicten behouden het concept en bieden herladen; identieke herhaalde save maakt geen extra report. Er is geen databasemigratie of report-revisiehistorie toegevoegd.
+
+## MVP 0.3.4 — selectie per rol en gerichte printfeedback
+
+Dezelfde bestandsform-module bedient eerste registratie en UC-021. CAD, STL en 3MF hebben elk een eigen selectie, Windows-bestandskiezer en dropzone. Een volgende selectie wist andere rollen niet. Browserdrops worden binair en begrensd (256 MB per bestand) via een origin-/token-beveiligde uploadroute naar `staging/upload-<uuid>/` geschreven. De backend bewaart rol en workspace bij het tijdelijke upload-ID; de client hoeft geen lokaal absoluut pad uit een browser-File te halen. Controle en capture gebruiken daarna de bestaande beheerde objectopslag. Bevestigen ruimt tijdelijke uploads op; annuleren probeert ze te verwijderen, onderbroken uploads worden teruggedraaid en achtergebleven uploads na 24 uur opgeruimd. Tijdelijke uploads horen niet bij een back-up.
+
+Edit related objects levert een nieuwe Part version vanuit een gecontroleerde basisversie. Bestaande rollen blijven behouden, nieuwe rollen beginnen bij revisie A en veranderde rollen tellen één letter op. Identieke bytes leveren geen nieuwe versie. De commit controleert opnieuw de basisversie; ongeldige bestanden of conflicten laten alle historische registraties intact. Bambu-werkkopieën houden hun oorspronkelijke basis en volgen later de bestaande conflictcontrole. Geen schemamigratie nodig.
+
+Een nieuw Print Report heeft geen standaardparameters. De engineer voegt beschikbare, ingevulde 3MF-parameters gericht toe. Zoeken gebruikt interne sleutels én herkenbare namen; `support_top_z_distance` wordt Support Z offset met eenheid mm. De oorspronkelijke waarde blijft in `details.parameters`; gebruikersvoorstellen staan afzonderlijk in `details.suggestions`, gekoppeld aan dezelfde sleutel. Suggesties schrijven nooit naar de 3MF of Part version. Conceptopslag, reportweergave en databaseback-up bewaren beide. Oude opgeslagen reports blijven leesbaar; oude concepten krijgen hun voorheen automatisch gekozen standaardparameters niet opnieuw opgedrongen.
+
+## MVP 0.3.3 — nominale en gemeten maat
+
+Meetregels krijgen een optioneel tekstveld `nominal` voor de door de gebruiker uit het 3D-model overgenomen nominale waarde. Dit is een afzonderlijk veld naast `position` en de gemeten `value`; geen automatische herkenning van willekeurige CAD-maten. De bestaande JSON-opslag bewaart het veld zonder schemamigratie. Oude reports en concepten zonder dit veld blijven bruikbaar met een lege nominale cel. De vier tabelkolommen en veldhoogten zijn gelijk in invoer en leesweergave; de bovenliggende reportvelden zijn per rij uitgelijnd, zonder herhaalde hulptekst.
+
+## MVP 0.3.2 — reportcontext en metingen
+
+Een gedeelde pure reportmodule bepaalt context en presentatie: printermodel uit de gekozen 3MF-projectinstellingen, materiaal uit de toegewezen/gebruikte filamenten. Alleen bij één eenduidig geconfigureerd materiaal is een fallback toegestaan. De gebruiker kan de daadwerkelijke printer of het materiaal aanpassen; het report bewaart de gekozen waarden als snapshot. Lege/null-parameters worden overgeslagen, ook in oudere reportweergaven; nul en false blijven zichtbaar. Arraywaarden behouden in de weergave de oorspronkelijke slotnummers.
+
+`details.measurements` ondersteunt gestructureerde regels `{id: 'M1', position: 'Hole diameter', value: '19.8 mm'}` met automatische oplopende nummers. De backend valideert unieke M-nummers en ingevulde tekstvelden; waarden blijven tekst om eenheden en decimale komma's toe te staan. De bestaande JSON-opslag en back-up nemen de regels mee zonder schemamigratie. Oude reports met een string blijven leesbaar; bij een oud concept blijven de oorspronkelijke notities apart bewaard naast nieuwe meetregels. Technische Part versions veranderen niet.
+
+## MVP 0.3.1 — screenshots in Print Reports
+
+Het report biedt bovenaan een plakvak met preview, teller en lokale foutmeldingen. Een documentbrede paste-listener in capture-fase verwerkt zowel `clipboardData.items` als `.files`, uitsluitend zolang dit report openstaat. Gewone tekst behoudt standaardgedrag. Paste from clipboard leest op expliciete klik de ondersteunde afbeeldingsrepresentatie via de browser-Clipboard API; geweigerde toegang wordt zichtbaar gemeld. Sluiten ruimt de listener op via AbortController. Afbeeldingen worden in volgorde gevalideerd en toegevoegd; Save wacht op de importwachtrij. Bestaande reportopslag, concepten en limieten blijven leidend; geen databasemigratie. De Chrome-regressie gebruikt een echte PNG op het klembord en Ctrl+V, plus items-only- en foutscenario's.
+
+## MVP 0.3.0 — UI en collecties
+
+- De goedgekeurde v5-indeling vormt de runtime-UI: circa 20% zijbalk, gelijke kaarten, Part details naast de STL-viewer, tabbladen voor platen, History en reports. Back-up en herstel staan onder Settings.
+- Collecties zijn vlakke, benoemde verzamelingen met een many-to-many-relatie naar Part numbers. Eén Part kan in meerdere collecties staan. Lidmaatschap is actuele Part-metadata en verhoogt geen Part version. Onder Tags staat **Collected by:**.
+- Schema 4 voegt `collections`, `part_collections`, `part_info` en `version_links` toe. Een bestaande workspace krijgt vóór migratie een volledige back-up naast de workspace. Bestandsobjecten en historische revisies blijven behouden.
+- Een lege Part krijgt direct een nummer; versie 001 ontstaat pas na registratie van de eerste bestanden. Save as / derive begint bij 001 en bewaart het bronnummer en de bronversie voor de History-vertakking. De bestandsinhoud wordt gedeeld via bestaande onveranderlijke objecten.
+- Git-links blijven aan een exacte Part version gekoppeld. Collecties en bronrelaties gaan mee in de databaseback-up. Merge vervangt lidmaatschappen van conflicterende Parts; overige Parts behouden hun indeling. Collecties met dezelfde naam worden samengevoegd zonder onderscheid in hoofdletters.
+- SolidWorks-integratie en Wiki blijven roadmapfuncties; de UI claimt hiervoor geen werkende connector of editor.
+
 ## Inhoudsopgave
 
 - [Naamgeving](#naamgeving)
@@ -9,7 +46,10 @@
 - [Regels](#regels)
 - [UI-uitgangspunten](#ui-uitgangspunten)
 - [Open ontwerpvragen](#open-ontwerpvragen)
+- [[#Part-wiki met BlockNote en lokale zoekindex]]
+## Gerelateerde documentatie
 
+[[USECASES]] · [[POC]] · [[PDM_VERSIONING_RESEARCH]] · [[SOLIDWORKS_JSON_POC]] · [[DJF]]
 ## Naamgeving applicatie
 
 Samana ontleent zijn betekenis aan de gereconstrueerde Germaanse vorm *samana*, die ‘samen’ of ‘gezamenlijk’ betekent en verwant is aan het Oudnoordse *saman*. Als bedrijfsnaam staat het voor het samenbrengen van ideeën, mensen en techniek: van een eerste klantvraag naar een doordacht ontwerp en een tastbaar product. Daarmee past Samana bij 3D-printen, CAD-ontwerp en maatwerk, terwijl de naam ook ruimte biedt voor toekomstige engineeringactiviteiten. De vloeiende, internationaal klinkende naam heeft een rustigere en professionelere uitstraling dan Printchill en legt de nadruk op samenwerking en oplossingen. Samana wordt al door andere organisaties gebruikt; de geschiktheid als merknaam voor jouw activiteiten moet daarom nog worden vastgesteld.
@@ -42,35 +82,36 @@ Conceptueel model; geen vastgesteld databaseschema of gerealiseerde applicatie. 
 
 ## Definities
 
-| Begrip                  | Definitie                                                                                                                                                                           | Voorbeeld                                                               |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| **Part**                | Het logische onderdeel met een vaste identiteit, onafhankelijk van bestandsnamen en versies. ‘Object’ is een technische verzamelterm; geen aparte gebruikersentiteit                | Makita blower wall mount, partnummer 7382-4916                          |
-| **Document**            | Een beheerd bestand met eigen identiteit en versiehistorie. Een document kan verschillende vastgelegde versies hebben                                                               | SolidWorks-part, STL-document of 3MF-printproject                       |
-| **Documentrevisie**     | Een vastgelegde, onveranderlijke toestand van één document, inclusief inhoud en bijbehorende metadata                                                                               | CAD C, STL C of 3MF G                                                   |
-| **Part version**        | Onveranderlijke geregistreerde toestand van een PRC Part met exacte CAD-, STL- en 3MF-revisies. Nummer start bij 001 en telt op bij bestandswijzigingen                             | Part 7382-4916, version 003: CAD C, STL C, 3MF G                        |
-| **Snapshot**            | Latere baseliningfunctionaliteit; geen extra verplichte laag voor de dagelijkse Part-workflow. Scope nog uit te werken, een snapshot kan meerdere parts bevatten.                   | S-001 bevat CAD C, STL C en 3MF G, git link, print reports, attachments |
-| **Print Report**        | Verslag van één daadwerkelijke printpoging, gekoppeld aan de gebruikte Part version; bevat printer, materiaal, beschikbare instellingen, resultaat, metingen, foto's en opmerkingen | PR-001 beschrijft een print van Part version 003                        |
-| **Status**              | Afzonderlijk te ontwerpen eigenschap. Voorlopige termen: `draft`, `print-candidate`, `printed`, `scrap`; niveau en overgangen zijn nog niet vastgesteld                             | Geen impliciete statusovergang door een save of snapshot                |
-| **Tag**                 | Herbruikbaar zoeklabel op Parts; vergelijking op naam is hoofdletterongevoelig                                                                                                      | `#roboticarm`                                                           |
-| **Collectie / project** | Navigatiegroepering uit de gebruikersworkflow; betekenis en onderlinge structuur nog te bepalen                                                                                     | Parts voor een robotarm                                                 |
+| Begrip              | Definitie                                                                                                                                                                           | Voorbeeld                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| **Part**            | Het logische onderdeel met een vaste identiteit, onafhankelijk van bestandsnamen en versies. ‘Object’ is een technische verzamelterm; geen aparte gebruikersentiteit                | Makita blower wall mount, partnummer 7382-4916                          |
+| **Document**        | Een beheerd bestand met eigen identiteit en versiehistorie. Een document kan verschillende vastgelegde versies hebben                                                               | SolidWorks-part, STL-document of 3MF-printproject                       |
+| **Documentrevisie** | Een vastgelegde, onveranderlijke toestand van één document, inclusief inhoud en bijbehorende metadata                                                                               | CAD C, STL C of 3MF G                                                   |
+| **Part version**    | Onveranderlijke geregistreerde toestand van een PRC Part met exacte CAD-, STL- en 3MF-revisies. Nummer start bij 001 en telt op bij bestandswijzigingen                             | Part 7382-4916, version 003: CAD C, STL C, 3MF G                        |
+| **Snapshot**        | Latere baseliningfunctionaliteit; geen extra verplichte laag voor de dagelijkse Part-workflow. Scope nog uit te werken, een snapshot kan meerdere parts bevatten.                   | S-001 bevat CAD C, STL C en 3MF G, git link, print reports, attachments |
+| **Print Report**    | Verslag van één daadwerkelijke printpoging, gekoppeld aan de gebruikte Part version; bevat printer, materiaal, beschikbare instellingen, resultaat, metingen, foto's en opmerkingen | PR-001 beschrijft een print van Part version 003                        |
+| **Status**          | Afzonderlijk te ontwerpen eigenschap. Voorlopige termen: `draft`, `print-candidate`, `printed`, `scrap`; niveau en overgangen zijn nog niet vastgesteld                             | Geen impliciete statusovergang door een save of snapshot                |
+| **Tag**             | Herbruikbaar zoeklabel op Parts; vergelijking op naam is hoofdletterongevoelig                                                                                                      | `#roboticarm`                                                           |
+| **Collections**     | Navigatiegroepering uit de gebruikersworkflow; betekenis en onderlinge structuur nog te bepalen, soort van verzamelbak van parts. een part kan in meerdere collecties voort komen   | Parts voor een robotarm of keuken organizers                            |
 
 Documentrevisies gebruiken letters; Part versions gebruiken minimaal drie cijfers vanaf 001. Interne IDs identificeren documenten, revisies en Part versions onafhankelijk van labels. Gedrag na 999 staat nog open.
 
 ## Relaties
 
-| Relatie              | Van → naar                                                                                        | Omgekeerd zichtbaar als    |
-| -------------------- | ------------------------------------------------------------------------------------------------- | -------------------------- |
-| **Hoort bij**        | Document → Part                                                                                   | Documenten                 |
-| **Heeft versie**     | Document → Versie                                                                                 | Versie van                 |
-| **Geëxporteerd uit** | STL-versie → CAD-versie met configuratie, CAD revisie =  STL revisie                              | Exports                    |
-| **Gebruikt**         | 3MF-versie → één of meerdere STL-/modelversies; CAD-assemblyversie → onderdeelversies waar bekend | Waar gebruikt / Where used |
-| **Legt vast**        | Snapshot → specifieke documentversies en hun bronrelaties                                         | Opgenomen in snapshots     |
-| **Geprint met**      | Print Report → exacte Part version                                                                | Print Reports              |
-| **Bevat**            | Part version → exacte documentrevisies                                                            | Opgenomen in Part versions |
-| **Ondersteunt**      | Attachment / Git-verwijzing → Part version                                                        | Attachments                |
-| **Afgeleid van**     | Part → ander Part                                                                                 | Afgeleide Parts            |
-| **Heeft tag**        | Part → Tag                                                                                        | Parts met deze tag         |
-|                      |                                                                                                   |                            |
+| Relatie                              | Van → naar                                                                                        | Omgekeerd zichtbaar als    |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------- | -------------------------- |
+| **Hoort bij**                        | Document → Part                                                                                   | Documenten                 |
+| **Heeft versie**                     | Document → Versie                                                                                 | Versie van                 |
+| **Geëxporteerd uit**                 | STL-versie → CAD-versie met configuratie, CAD revisie =  STL revisie                              | Exports                    |
+| **Gebruikt**                         | 3MF-versie → één of meerdere STL-/modelversies; CAD-assemblyversie → onderdeelversies waar bekend | Waar gebruikt / Where used |
+| **Legt vast**                        | Snapshot → specifieke documentversies en hun bronrelaties                                         | Opgenomen in snapshots     |
+| **Geprint met**                      | Print Report → exacte Part version                                                                | Print Reports              |
+| **Bevat**                            | Part version → exacte documentrevisies                                                            | Opgenomen in Part versions |
+| **Ondersteunt**                      | Attachment / Git-verwijzing → Part version                                                        | Attachments                |
+| **Afgeleid van**                     | Part → ander Part                                                                                 | Afgeleide Parts            |
+| **Heeft tag**                        | Part → Tag                                                                                        | Parts met deze tag         |
+| Related objects (desribing relation) | part --> object (CAD,3MF ,STL)                                                                    | Related to                 |
+| Related objects (reference)          | part -->  documents / wiki pages, git link,print report, collections, snapshots                   | Related to                 |
 
 Een standaard CAD- of STL-document hoort bij het betreffende Part. Een 3MF-project en een snapshot kunnen meerdere Parts omvatten; de documentassociaties en bronrelaties mogen daarom niet tot één Part worden beperkt. Onderdeel-/plaatcontext blijft bewaard waar beschikbaar.
 
@@ -104,30 +145,76 @@ Een back-up gaat naar een apart gekozen bestemming buiten de workspace. De MVP-b
 - Historische versies en snapshotrelaties worden niet stilzwijgend overschreven. Wijzigingen leiden tot nieuwe registraties.
 - De v0.2-macro gebruikt `source.active_configuration` voor configuratiecontext. De bestaande JSON-`export_id` identificeert de extractie, geen Part, documentversie of snapshot.
 
-## UI-uitgangspunten
+## Part-wiki met BlockNote en lokale zoekindex
 
-Uit UC-006 t/m UC-009: circa 20% zijbalk met zoeken, filters, collecties en projecten; de overige ruimte toont Part-kaarten. Een kaart toont identiteit, beschikbare versie-/printcontext en tags. Hover/focus kan details tonen; dezelfde functies zijn via klik/toetsenbord bereikbaar.
+**Status:** gekozen richting voor [[USECASES#UC-020 Part-wiki schrijven, aan versies koppelen en terugvinden|UC-020]]; nog niet geïmplementeerd. MVP 0.3.0 behoudt de Wiki-placeholder. Een volgende schemaversie wordt pas bij implementatie toegekend, met vooraf een volledige migratieback-up.
 
-De 3D-viewer toont welke STL-versie wordt bekeken, met een optionele bounding box en eenheden. Ontbrekende printgegevens blijven onbekend; tijd, materiaal en laatste print krijgen een expliciete 3MF-/Print Report-context binnen de gekozen Part version. Een Part toont zijn expliciete numerieke Part version met de daarin vastgelegde bestandsrevisies.
+### Editor en modulegrens
+
+BlockNote levert de editor binnen de PRC Wiki-tab; Docmost/Confluence is de referentie voor leesweergave, paginaboom en schrijfervaring. Gebruik een afgebakend React-onderdeel met de kant-en-klare BlockNote-bediening, lokaal gebundeld met de bestaande bouwstap. De overige PRC-UI hoeft daarvoor niet naar React. Bij openen/sluiten worden editor, concept en eventhandlers expliciet geladen/vrijgegeven. Geen externe wiki-service, cloudaccount of CDN nodig. De basispakketten zijn MPL-2.0; XL-pakketten hebben een andere licentie en zijn geen uitgangspunt. Pakketversies en benodigde afhankelijkheden worden bij implementatie vastgezet. [BlockNote-integratie](https://www.blocknotejs.org/docs/getting-started/vanilla-js), [licenties](https://github.com/TypeCellOS/BlockNote#license-).
+
+Alleen de PRC-backend schrijft naar SQLite en bestandsopslag. Wiki-acties voor pagina's, save, revisieherstel, prullenbak, bijlagen en zoeken lopen via de bestaande lokale API met dezelfde origin-/tokencontrole. De backend valideert documentstructuur, blok-ID's, limieten en verwijzingen; documentinhoud is geen uitvoerbare HTML. Afbeeldingen worden gecontroleerd en als beheerde bestanden aangeboden. Een wiki-module is verantwoordelijk voor opslag/relaties; een zoekmodule voor de queryinterpretatie en index.
+
+### Eigendom, revisies en versieverwijzingen
+
+De pagina hoort blijvend bij een Part number, ook als nog geen Part version bestaat. Een ouderpagina moet tot hetzelfde Part behoren; verplaatsingen mogen geen cycli maken. Paginarevisies zijn onafhankelijk van CAD/STL/3MF en verhogen geen Part version. De technische History blijft bestaan naast het handmatig geschreven designlogboek.
+
+Conceptueel model; tabelnamen zijn een voorstel, geen huidige database-interface:
+
+| Object | Voorgestelde gegevens en verantwoordelijkheid |
+| --- | --- |
+| `wiki_pages` | Stabiele pagina-ID, eigenaar-Part, ouderpagina, volgorde, actuele revisie en prullenbakstatus |
+| `wiki_revisions` | Pagina-ID + eigen revisienummer, titel, BlockNote-JSON met inhoudsschemaversie, wijzigingsdatum; na save onveranderlijk |
+| `wiki_version_refs` | Paginarevisie + optionele blok-ID → exacte `(part, v)`; zonder blok-ID geldt de verwijzing voor de pagina |
+| `wiki_assets` | Paginarevisie → objectkey, bestandsnaam en type; afbeeldingen/bijlagen in bestaande `objects/` |
+| `wiki_drafts` | Afzonderlijk concept met basisrevisie en opslagstatus; niet opgenomen in de standaardzoekindex |
+| `wiki_search` | Afgeleide full-textindex met Part-, pagina-, revisie- en blok/sectie-ID voor navigatie |
+
+Voor secties gebruiken we stabiele BlockNote-blok-ID's of een expliciet sectieblok met eigen ID; geen koptekst, positie of regelnummer als sleutel. Hernoemen en verplaatsen behouden die ID. Dupliceren levert nieuwe ID's op. Een sectie heeft een afgebakende blok-/kindgroep; verplaatsen van losse tekst maakt die tekst niet stilzwijgend versiegebonden. [BlockNote-blokidentiteit](https://www.blocknotejs.org/docs/foundations/document-structure).
+
+Een pagina, subpagina of sectie kan expliciet naar meerdere bestaande versies van hetzelfde Part verwijzen. Een badge in de kantlijn opent de exacte versie; die versie biedt terugverwijzingen naar de wiki. Zonder koppeling is inhoud algemeen. Er is geen impliciete overerving naar subpagina's of automatisch naar nieuwe Part versions. Koppelingen worden samen met de inhoud gereviseerd. Een verwijderd doel krijgt een zichtbare ontbrekende-verwijzingstatus; de app kiest nooit vanzelf latest. De pagina blijft bewerkbaar: een versieverwijzing bevriest de tekst niet. Later kan een Print Report een exacte paginarevisie en blok-ID vastleggen als instructiebewijs.
+
+Save gebruikt de bekende basisrevisie als conflictcontrole, ook voor twee lokale vensters. Een verouderde basis overschrijft niets; het eigen concept blijft beschikbaar. Een inhoudelijke save maakt een nieuwe paginarevisie. Herstellen van een eerdere revisie maakt opnieuw een revisie en wist geen historie. Conceptopslag staat apart van de expliciete Save en krijgt een eigen zichtbare status; backendfouten mogen niet als succesvolle opslag verschijnen.
+
+### Zoeken vanuit de linkerzijbalk
+
+De bestaande zoekbalk wordt standaard uitgebreid met paginatitels, sectiekoppen en leesbare wiki-inhoud, naast Partmetadata. De centrale zoekservice combineert deze tekstmatches met de regels van UC-008: vrije termen matchen metadata **of** wiki, + vereist alle criteria op hetzelfde Part, # is uitsluitend een tagfilter. Termen mogen over meerdere pagina's van dat Part voorkomen. Collectie-, bestandstype-, projectparameter- en Print Report-filters blijven gelden; een materiaalnaam in lopende tekst vervangt geen expliciet materiaalfilter. Combineren gebeurt vóór paginering; de bibliotheek dedupliceert op Part number.
+
+Een wiki-treffer bevat Part number, pagina-ID/titel, blok/sectie-ID, tekstfragment en eventuele expliciete versiecontext. De UI maakt zichtbaar waarom het Part matcht en biedt directe navigatie naar de pagina/sectie. Een gewone Part-treffer blijft Part details openen. Bewaarde zoekopdrachten blijven criteria opslaan en evalueren de actuele wiki opnieuw; geen vaste lijst gevonden pagina's.
+
+**Indexkeuze: SQLite FTS5 binnen `workspace.sqlite`.** Geen aparte zoekserver nodig voor de lokale MVP. Extraheer op de backend leesbare tekst uit gevalideerde BlockNote-JSON, inclusief geneste blokken, tabellen en bijschriften; indexeer geen ruwe JSON, opmaakcodes of bestandsbytes. Indexrecords hebben de juiste blok/sectiecontext voor snippets. Een paginatitel krijgt meer gewicht dan lopende tekst. Begin met Unicode-woordtokenisatie (`unicode61`) en gecontroleerde prefixzoeking; dat belooft geen willekeurige substring-, typo- of taalafhankelijke zoekfunctie. De bestaande naamzoeking kan haar huidige gedrag behouden. Controleer bij implementatie FTS5-ondersteuning in de gebundelde Node/SQLite-runtime. [SQLite FTS5](https://www.sqlite.org/fts5.html).
+
+De bron is de actuele opgeslagen paginarevisie. Concepten, prullenbak en historische revisies vallen buiten standaardzoeken; OCR en zoeken in PDF-/bijlagebytes volgen later. Bij save, hernoemen, prullenbak/herstel en revisieherstel worden brongegevens en bijbehorende indexrecords in één SQLite-transactie bijgewerkt. De index is afgeleid en volledig herbouwbaar; bij migratie, ongeldigheid of herstel kan PRC hem opnieuw opbouwen uit de bronrevisies. Een tijdelijke onvolledige index krijgt een zichtbare melding. Gebruikersquery's worden volgens UC-008 geparseerd en als gequote tokens met gebonden parameters naar FTS5 vertaald; geen rechtstreekse SQL/FTS-expressies uit de zoekbalk. Snippets worden veilig als tekst getoond. Een later rechtenmodel filtert vóór snippets en aantallen worden teruggegeven.
+
+### Back-up, herstel en groeipad
+
+De bestaande back-up wordt uitgebreid met alle wiki-pagina's, paginarevisies, verwijzingen, opgeslagen concepten/prullenbak en alle gerefereerde wiki-bestandsobjecten. Oude paginarevisies houden hun bijlagen beschikbaar. Een databasekopie alleen volstaat niet: de objectinventaris voor back-up moet ook `wiki_assets` volgen. De FTS-index mag worden meegekopieerd, maar is geen herstelbron en wordt na restore/merge gecontroleerd of herbouwd.
+
+De bestaande merge-regel blijft leidend: overlappende Part numbers nemen de volledige wiki uit de back-up over, inclusief revisies en relaties; andere lokale Parts behouden hun wiki. Wis daarbij oude indexrecords en voeg actuele toe, zonder pagina's op titel samen te voegen. Stabiele pagina-ID's moeten bij verschillende Parts op botsingen worden gecontroleerd; een onverenigbare botsing breekt de transactie af. Een oude back-up zonder wiki bevat voor vervangen Parts ook geen wiki: preview moet het verlies van aanwezige lokale wiki-pagina's vóór bevestiging expliciet melden. Herstel kan via back-upbrondata volledig worden herhaald, inclusief afbeeldingen en versieverwijzingen.
+
+Eerste scope blijft één lokale gebruiker. Zoekindex en editor zijn vervangbare modules achter de backend; voor latere teams kunnen opslag en zoekservice worden uitgebreid zonder de Part-/pagina-identiteiten te veranderen. Realtime samenwerking, comments en formele publicatie zijn afzonderlijke uitbreidingen. Acceptatievolumes, zoekreactietijd, uploadgrenzen en concept-/prullenbakretentie worden vóór implementatie vastgesteld in UC-020; hier worden geen onbewezen prestaties of huidige functionaliteit geclaimd.
 
 ## Open ontwerpvragen
 
 - Nummergeneratie voor Part numbers, grens na Part version 999, schrijfbeleid en import van bestaande CAD-revisielabels.
 - Niveau en overgangen van status; oude UC-term ‘First printed’ is geen vastgesteld extra statuslabel.
 - Relatie van collecties en projecten; navigatie en selectie van de standaard-Part-version.
-- Betrouwbare bronherkenning en vervanging van STL-geometrie: [[ISSUES#ISS-001]].
+- Betrouwbare bronherkenning en vervanging van STL-geometrie: [[To Do Lijst - Codex Agent#ISS-001]].
 - Bewijs en versieondersteuning voor automatische CAD-/slicerextractie; onbekende relaties niet als zeker presenteren.
 - Technische opslag, connectors en deployments volgen na de POC; hier niet vastgesteld.
 
-## Gerelateerde documentatie
 
-[[USECASES]] · [[POC]] · [[PDM_VERSIONING_RESEARCH]] · [[SOLIDWORKS_JSON_POC]] · [[DJF]]
+## UI onwerp & uitgangspunten
 
-## HTML UI-prototype
+Uit UC-006 t/m UC-009: circa 20% zijbalk met zoeken, filters, collecties en projecten; de overige ruimte toont Part-kaarten. Een kaart toont identiteit, beschikbare versie-/printcontext en tags. Hover/focus kan details tonen; dezelfde functies zijn via klik/toetsenbord bereikbaar.
+
+De 3D-viewer toont welke STL-versie wordt bekeken, met een optionele bounding box en eenheden. Ontbrekende printgegevens blijven onbekend; tijd, materiaal en laatste print krijgen een expliciete 3MF-/Print Report-context binnen de gekozen Part version. Een Part toont zijn expliciete numerieke Part version met de daarin vastgelegde bestandsrevisies.
+
+### HTML UI-prototype
 
 Zie [prototype](../prototype/README.md): visuele bibliotheek, STL-viewer, onafhankelijke documentrevisies, numerieke Part versions, Logbook, versiegebonden attachments en Print Reports. Gegevens blijven in het browsergeheugen; historische versies en relaties zijn demo’s. Geen backend of CAD-/slicerconnector. Volledige UC-acceptatie blijft open.
 
-## UI-feedback — prototype 2
+### UI-feedback — prototype 2
 
 - Part version 001, 002, … bevat vaste referenties naar één of meerdere CAD/STL-documenten en 3MF, elk met eigen letterrevisie. Eén bevestigde wijzigingsactie levert één Part version, ook bij meerdere gewijzigde bestanden.
 - Een ongewijzigde inhoud levert geen nieuwe versie op. Detectie van werkelijke bestandswijzigingen blijft apart onderzoek; de UI-proef simuleert registratie, geen file-watcher.
@@ -158,7 +245,7 @@ Maturity of print:
 
 Design state zegt ie over de status van het design van het part. de maturity zegt iets over het niveau van het part in zijn toepassing.
 
-## Design States
+### Design States
 ### Draft
 Dit is een eerst stap van een design om wat te proberen, het is nog work in progress.
 
@@ -173,24 +260,24 @@ bij released kun je niet zo maar een nieuwe wijziging doen, PRC vraagt expliciet
 ### Obsolete
 er is wat beters bedacht, of het is niet meer nodig , overbodig geworden, you name it. het design eindigt hier. je kunt nu niets meer met het part. als je wilt wijzigen zul je nieuw part number uit moeten trekken.
 
-## Maturity states
+### Maturity states
 
-### Proof of concept
+#### Proof of concept
 De eerst printjes om eens wat te proberen, pas testjes etc. het begin...
 
-### Prototype
+#### Prototype
 Een van de eerste volwaardige prints nadat je wat proof of concepts prints hebt gemaakt.
 Je design en 3MF file hebben wat eerste iteraties door gemaakt in de PoC fase.
 
-## Mature
+### Mature
 Het design is stabiel nadat je de eerste feedback ontvangen hebt, je hebt de print parameters en settings goed onder de knie.
 En het part is in grote getalen probleemloos te maken.
 
-## End of Life
+### End of Life
 Het part wordt niet meer gebruikt om verschillende redenen, beter andere ideeen hebben het overbodig gemaakt. de vraag is er niet meer. De interfacende onderdelen bestaan niet meer of zijn niet meer te koop etc etc.
 bij end of life kan het part niet meer gewijzigd worden. wil je er toch wat mee dan zul je een kopie moeten maken onder een nieuwe nummer.
 
-## State mapping
+### State mapping
 
 bij het creeren van een part begin je altijd met Draft en Proof of concept
 

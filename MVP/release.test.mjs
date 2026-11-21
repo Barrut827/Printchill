@@ -42,7 +42,7 @@ test('0.1.1 workspace migrates once with recoverable legacy backup',t=>{
   try{
     const backup=fs.readdirSync(dir).find(s=>s.startsWith('vault-pre-0.2-'));
     assert.ok(backup);assert.deepEqual(backupPreview(w,path.join(dir,backup)).conflicts,[part]);
-    assert.equal(w.state().reports[0].note,'Before upgrade');assert.equal(w.one('PRAGMA user_version').user_version,3);
+    assert.equal(w.state().reports[0].note,'Before upgrade');assert.equal(w.one('PRAGMA user_version').user_version,4);
   }finally{w.db.close();}
 });
 test('preview and merge replace shared Part, preserve local Part, reject damaged bytes',t=>{

@@ -5,6 +5,7 @@ import { createHash, randomInt, randomUUID } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 
 const hash = data => createHash('sha256').update(data).digest('hex');
+export const reportToken=row=>hash(JSON.stringify([row.id,row.part,row.v,row.outcome,row.note,row.material,row.details]));
 const check = (ok, message) => { if (!ok) throw Error(message); };
 function absolute(p) {
   check(typeof p === 'string' && path.isAbsolute(p) && !p.startsWith('\\\\'), 'Choose an absolute local path.');
@@ -35,7 +36,7 @@ export class Workspace {
           CREATE TABLE reports(id INTEGER PRIMARY KEY,part TEXT,v INTEGER,outcome TEXT,note TEXT,created TEXT,FOREIGN KEY(part,v) REFERENCES versions(part,v));
           PRAGMA application_id=1347568433; PRAGMA user_version=1; COMMIT;`);
       }
-      check(this.one('PRAGMA application_id').application_id===1347568433 && [1,2,3].includes(this.one('PRAGMA user_version').user_version),'Unsupported workspace.');
+      check(this.one('PRAGMA application_id').application_id===1347568433 && [1,2,3,4].includes(this.one('PRAGMA user_version').user_version),'Unsupported workspace.');
       if(version<2){
         if(version===1)this.backup(this.root+'-pre-0.2-'+randomUUID());
         this.transaction(()=>{
@@ -48,7 +49,16 @@ export class Workspace {
         if(version===2)this.backup(this.root+'-pre-reports-'+randomUUID());
         this.db.exec("ALTER TABLE reports ADD COLUMN details TEXT DEFAULT '{}'; PRAGMA user_version=3");
       }
-      this.db.exec('PRAGMA user_version=3');
+      if(version<4){
+        if(version===3)this.backup(this.root+'-pre-0.3-'+randomUUID());
+        this.transaction(()=>this.db.exec(`
+          CREATE TABLE IF NOT EXISTS collections(id TEXT PRIMARY KEY,name TEXT NOT NULL COLLATE NOCASE UNIQUE);
+          CREATE TABLE IF NOT EXISTS part_collections(part TEXT REFERENCES parts(id),collection TEXT REFERENCES collections(id),PRIMARY KEY(part,collection));
+          CREATE TABLE IF NOT EXISTS part_info(part TEXT PRIMARY KEY REFERENCES parts(id),created TEXT NOT NULL,repo TEXT NOT NULL DEFAULT '',parent TEXT,base INTEGER);
+          CREATE TABLE IF NOT EXISTS version_links(part TEXT,v INTEGER,repo TEXT NOT NULL,PRIMARY KEY(part,v),FOREIGN KEY(part,v) REFERENCES versions(part,v));
+          INSERT OR IGNORE INTO part_info(part,created) SELECT id,COALESCE((SELECT min(created) FROM versions WHERE part=parts.id),'') FROM parts;
+          PRAGMA user_version=4;`));
+      }
       for (const dir of ['objects','work','staging']) fs.mkdirSync(path.join(this.root,dir),{recursive:true});
     } catch(e) {this.db.close();throw e;}
   }
@@ -57,6 +67,37 @@ export class Workspace {
   run(q,...a){return this.db.prepare(q).run(...a);}
   transaction(fn){this.db.exec('BEGIN IMMEDIATE');try{const result=fn();this.db.exec('COMMIT');return result;}catch(e){this.db.exec('ROLLBACK');throw e;}}
   object(key){check(/^[0-9a-f]{64}$/.test(key),'Invalid object key.');return path.join(this.root,'objects',key);}
+  collection(id,name,remove=false){
+    if(remove)return this.transaction(()=>{check(this.one('SELECT id FROM collections WHERE id=?',id),'Unknown collection.');this.run('DELETE FROM part_collections WHERE collection=?',id);this.run('DELETE FROM collections WHERE id=?',id);});
+    check(typeof name==='string'&&name.trim().length>0&&name.trim().length<=100,'Enter a collection name (1–100 characters).');
+    check(!this.one('SELECT id FROM collections WHERE name=? COLLATE NOCASE AND id<>?',name.trim(),id||''),'Collection name already exists.');
+    if(id){check(this.one('SELECT id FROM collections WHERE id=?',id),'Unknown collection.');this.run('UPDATE collections SET name=? WHERE id=?',name.trim(),id);return id;}
+    id=randomUUID();this.run('INSERT INTO collections VALUES(?,?)',id,name.trim());return id;
+  }
+  membership(part,ids){
+    check(this.one('SELECT id FROM parts WHERE id=?',part),'Unknown Part.');
+    check(Array.isArray(ids)&&ids.every(id=>typeof id==='string'&&this.one('SELECT id FROM collections WHERE id=?',id)),'Unknown collection.');
+    this.transaction(()=>{this.run('DELETE FROM part_collections WHERE part=?',part);for(const id of new Set(ids))this.run('INSERT INTO part_collections VALUES(?,?)',part,id);});
+  }
+  repository(part,v,repo){
+    this.files(part,v);
+    check(typeof repo==='string'&&repo.length<=2000&&(!repo||/^https?:\/\//i.test(repo)),'Use an http or https repository URL.');
+    if(repo)new URL(repo);
+    this.run('INSERT INTO version_links VALUES(?,?,?) ON CONFLICT(part,v) DO UPDATE SET repo=excluded.repo',part,v,repo);
+  }
+  newPart(name,files={},parent=null,base=null){
+    check(typeof name==='string'&&name.trim()&&name.trim().length<=200,'Enter a Part name (1–200 characters).');
+    let part;do{part=randomInt(1000,10000)+'-'+randomInt(100,1000)+randomInt(1,10);}while(this.one('SELECT id FROM parts WHERE id=?',part));
+    this.run('INSERT INTO parts VALUES(?,?)',part,name.trim());
+    this.run('INSERT INTO part_info(part,created,parent,base) VALUES(?,?,?,?)',part,new Date().toISOString(),parent,base);
+    if(Object.keys(files).length)this.addVersion(part,1,files);
+    return part;
+  }
+  createPart(name){return this.transaction(()=>this.newPart(name));}
+  derive(part,v,name){
+    const files=this.files(part,v);
+    return this.transaction(()=>{const id=this.newPart(name,files,part,v);this.run('INSERT INTO part_tags SELECT ?,tag FROM part_tags WHERE part=?',id,part);return id;});
+  }
   capture(source,role,revision=1){
     source=absolute(source);
     const temp=path.join(this.root,'staging',randomUUID());
@@ -74,7 +115,7 @@ export class Workspace {
   }
   files(part,v){const row=this.one('SELECT files FROM versions WHERE part=? AND v=?',part,v);check(row,'Unknown Part version.');return JSON.parse(row.files);}
   addVersion(part,v,files){check(v<=999,'Version limit reached.');this.run('INSERT INTO versions VALUES(?,?,?,?)',part,v,JSON.stringify(files),new Date().toISOString());}
-  importPart(name,paths){
+  importPart(name,paths,existing){
     check(name?.trim() && paths.length,'Enter a Part name and select files.');
     const files={};
     for(const source of paths){
@@ -83,9 +124,27 @@ export class Workspace {
       files[role]=this.capture(source,role);
     }
     return this.transaction(()=>{
-      let part;
-      do {part=randomInt(1000,10000)+'-'+randomInt(100,1000)+randomInt(1,10);}while(this.one('SELECT id FROM parts WHERE id=?',part));
-      this.run('INSERT INTO parts VALUES(?,?)',part,name.trim());this.addVersion(part,1,files);return part;
+      if(existing){check(this.one('SELECT id FROM parts WHERE id=?',existing)&&!this.one('SELECT v FROM versions WHERE part=?',existing),'Select an empty Part.');this.addVersion(existing,1,files);return existing;}
+      return this.newPart(name,files);
+    });
+  }
+  updateFiles(part,expected,paths){
+    check(this.one('SELECT id FROM parts WHERE id=?',part),'Unknown Part.');
+    const latest=this.one('SELECT max(v) AS v FROM versions WHERE part=?',part).v||0;
+    check(Number.isInteger(expected)&&expected===latest,'Part version changed. Reopen Edit related objects.');
+    const files=latest?this.files(part,latest):{},roles=new Set();
+    check(Array.isArray(paths)&&paths.length,'Add at least one file.');
+    let changed=false;
+    for(const source of paths){
+      const role=({'.3mf':'3MF','.stl':'STL','.sldprt':'CAD','.step':'CAD','.stp':'CAD'})[path.extname(source).toLowerCase()];
+      check(role&&!roles.has(role),'Choose one supported file per role (CAD, STL, 3MF).');roles.add(role);
+      const next=this.capture(source,role,(files[role]?.revision||0)+1);
+      if(next.key!==files[role]?.key){files[role]=next;changed=true;}
+    }
+    return this.transaction(()=>{
+      check((this.one('SELECT max(v) AS v FROM versions WHERE part=?',part).v||0)===expected,'Part version changed. Reopen Edit related objects.');
+      if(!changed)return latest;
+      this.addVersion(part,latest+1,files);return latest+1;
     });
   }
   work(part,v){
@@ -111,11 +170,23 @@ export class Workspace {
       this.run('UPDATE jobs SET base=? WHERE id=?',v,id);return v;
     });
   }
-  report(part,v,outcome,note,material='',details={}){
+  reportDetails(part,v,outcome,note,material='',details={}){
     const files=this.files(part,v);
     check(['Success','Failed','Aborted'].includes(outcome),'Choose an outcome.');
     check(typeof note==='string'&&typeof material==='string','Invalid report.');
     check(details&&typeof details==='object'&&!Array.isArray(details),'Invalid report details.');
+    if(details.suggestions!=null)check(typeof details.suggestions==='object'&&!Array.isArray(details.suggestions)&&Object.entries(details.suggestions).every(([key,value])=>typeof value==='string'&&Object.hasOwn(details.parameters||{},key)),'Suggestions must refer to captured parameters.');
+    if(details.measurements!=null){
+      check(typeof details.measurements==='string'||Array.isArray(details.measurements),'Invalid measurements.');
+      if(Array.isArray(details.measurements)){
+        const ids=new Set();
+        for(const m of details.measurements){
+          check(m&&/^M[1-9]\d*$/.test(m.id)&&!ids.has(m.id)&&typeof m.position==='string'&&m.position.trim()&&typeof m.value==='string'&&m.value.trim(),'Each measurement needs a unique M number, measured position and value.');
+          check(m.nominal==null||typeof m.nominal==='string','Invalid nominal measurement value.');
+          ids.add(m.id);
+        }
+      }
+    }
     const images=details.images||[];
     check(Array.isArray(images)&&images.length<=8,'Maximum eight images.');
     for(const img of images){
@@ -127,8 +198,24 @@ export class Workspace {
     }
     const encoded=JSON.stringify({...details,sourceFiles:files});
     check(Buffer.byteLength(encoded)<5000000,'Report exceeds 5 MB. Use smaller images.');
+    return encoded;
+  }
+  report(part,v,outcome,note,material='',details={}){
+    const encoded=this.reportDetails(part,v,outcome,note,material,details);
     if(typeof details.id==='string'&&this.one("SELECT id FROM reports WHERE part=? AND v=? AND json_extract(details,'$.id')=?",part,v,details.id))return;
     this.run('INSERT INTO reports(part,v,outcome,note,created,material,details) VALUES(?,?,?,?,?,?,?)',part,v,outcome,note,new Date().toISOString(),material,encoded);
+  }
+  editReport(id,expected,outcome,note,material,details){
+    check(Number.isInteger(id),'Unknown print report.');
+    return this.transaction(()=>{
+      const row=this.one('SELECT * FROM reports WHERE id=?',id);check(row,'Unknown print report.');
+      const original=JSON.parse(row.details||'{}');
+      const encoded=this.reportDetails(row.part,row.v,outcome,note,material,{...original,...details,id:original.id||details?.id,sourceName:original.sourceName??details?.sourceName});
+      if(row.outcome===outcome&&row.note===note&&row.material===material&&row.details===encoded)return true;
+      check(expected===reportToken(row),'Print report changed in another window. Reload the saved report before editing again.');
+      this.run('UPDATE reports SET outcome=?,note=?,material=?,details=? WHERE id=?',outcome,note,material,encoded,id);
+      return true;
+    });
   }
   state(){
     return {root:this.root,parts:this.all('SELECT * FROM parts ORDER BY name'),versions:this.all('SELECT * FROM versions ORDER BY v DESC').map(r=>({...r,files:JSON.parse(r.files)})),reports:this.all('SELECT * FROM reports ORDER BY id DESC'),jobs:this.all('SELECT * FROM jobs').map(j=>{
